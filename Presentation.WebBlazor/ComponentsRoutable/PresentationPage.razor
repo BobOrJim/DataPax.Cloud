@@ -91,6 +91,14 @@
     }
 
 
+    public void _ParagraphComponents_LeftPictureStackNumberParagraph()
+    {
+        Debug.WriteLine($"value : {_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue} / {_RangeSliderComponents.LeftPictureRangeSlider.MaxValue}");
+
+        
+    }
+
+
     public void Mupp()
     {
         MyTestComponent.TimeCallBack2();
@@ -104,32 +112,15 @@
 
 <div class="grid-container">
     <div class="Row1">
-        <div class="Row1Col1">
-            <!-- SignalTreeView <p>Row1Col1</p> -->
-            <p>@MyTestComponent.elapsedTicks</p>
+        <div class="Row1Col1"> <!-- SignalTreeView -->
         </div>
-        <div class="Row1Col2">
-            <!-- DeviationListView <p>Row1Col2</p> -->
-            <TestComponent @ref=MyTestComponent>
-
-            </TestComponent>
-
-
-
-
+        <div class="Row1Col2"> <!-- DeviationListView -->
         </div>
-        <div class="Row1Col3">
-            <!-- LeftPicture <p>Row1Col3</p> -->
-            <p>@MyTestComponent.elapsedTicks</p>
-
-
-            @*<img src="@GlobalPath" class="MyAutoSizeKeepRatio">*@
-
+        <div class="Row1Col3"> <!-- LeftPicture -->
+            <img src="@GlobalPath" class="MyAutoSizeKeepRatio">
         </div>
-        <div class="Row1Col4">
-            <!-- RightPicture -->
+        <div class="Row1Col4"> <!-- RightPicture -->
             <img src="Cam1KeepPictures/Camera1_1611872350240.jpeg" class="MyAutoSizeKeepRatio">
-
         </div>
     </div>
 
@@ -230,7 +221,7 @@
                                   ThisComponentInstanceName="_RangeSliderComponents.LeftPictureRangeSlider"
                                   MinValue="1"
                                   MaxValue="66"
-                                  ActionEventCallback="Mupp">
+                                  ActionEventCallback="_ParagraphComponents_LeftPictureStackNumberParagraph">
             </RangeSliderComponent>
         </div>
         <div class="Row3Col7">

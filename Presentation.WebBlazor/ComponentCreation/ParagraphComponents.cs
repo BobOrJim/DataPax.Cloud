@@ -12,9 +12,5 @@ namespace Presentation.WebBlazor.ComponentCreation
         public ParagraphComponent LeftPictureStackNumberParagraph = new ParagraphComponent();
         public ParagraphComponent RightPictureTimeStampParagraph = new ParagraphComponent();
         public ParagraphComponent RightPictureStackNumberParagraph = new ParagraphComponent();
-        //public TestComponent MyTestComponent = new TestComponent();
-
-
-
     }
 }
