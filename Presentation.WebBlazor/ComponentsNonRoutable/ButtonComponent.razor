@@ -1,0 +1,29 @@
+﻿<div>
+    <button class=@CssClassStyle @onclick="OnClick">
+        @ButtonText
+    </button>
+</div>
+
+@code {
+    [Parameter]
+    public string ButtonText { get; set; }
+
+    [Parameter]
+    public Action ActionEventCallback { get; set; } //Input här kopplas till detta Event.
+
+    [Parameter]
+    public string CssClassStyle { get; set; }
+
+    private async Task OnClick(MouseEventArgs e) //This call hirarcy will end in the ButtonUseCases in Layer Application
+    {
+        ActionEventCallback?.Invoke();
+    }
+
+    public void MyStateHasChanged()
+    {
+        StateHasChanged();
+        Debug.WriteLine("MyStateHasChanged TEST");
+    }
+}
+
+

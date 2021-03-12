@@ -1,0 +1,43 @@
+﻿@inject ProtectedLocalStorage LocalStorage
+@inject ProtectedSessionStorage SessionStorage
+
+<div>
+    <input 
+           type="range"
+           id="points"
+           min="@MinValue"
+           max="@MaxValue"
+           step="1"
+           class="@CssClassStyle"
+           @bind-value="CurrentValue"
+           @oninput="OnInput"/>
+</div>
+
+
+
+@code {
+    [Parameter]
+    public Action ActionEventCallback { get; set; } //Input här kopplas till detta Event.
+    [Parameter]
+    public string CssClassStyle { get; set; }
+    [Parameter]
+    public int MinValue { get; set; }
+    [Parameter]
+    public int MaxValue { get; set; }
+    [Parameter]
+    public int CurrentValue { get; set; }
+    [Parameter]
+    public string ThisComponentInstanceName { get; set; } //Används för LocalStorage namn i Browser.
+
+
+    private async Task OnInput()
+    {
+        //Debug.WriteLine("RangeSliderComponent...OnInput..");
+        Debug.WriteLine($"MyStateHasChanged CurrentValue = {CurrentValue}");
+        await SessionStorage.SetAsync(ThisComponentInstanceName, CurrentValue);
+        //await Task.Delay(3000);
+        ActionEventCallback?.Invoke();
+
+    }
+
+}

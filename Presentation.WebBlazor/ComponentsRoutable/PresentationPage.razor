@@ -1,0 +1,452 @@
+﻿@page "/PresentationPage"
+
+@using System
+@using System.Diagnostics
+@using Application.UseCases
+@using Presentation.WebBlazor.ComponentCreation
+@using Presentation.WebBlazor
+@using Infrastructure.Models
+
+@inject Presentation.WebBlazor.ComponentCreation.NumericTextBoxComponents _NumericTextBoxComponents
+@inject Application.UseCases.NumericTextBoxUseCases _NumericTextBoxUseCases
+
+@inject Presentation.WebBlazor.ComponentCreation.ButtonComponents _ButtonComponents
+@inject Application.UseCases.ButtonUseCases _ButtonUseCases
+
+@inject Presentation.WebBlazor.ComponentCreation.RangeSliderComponents _RangeSliderComponents
+@inject Application.UseCases.RangeSliderUseCases _RangeSliderUseCases
+
+@inject Presentation.WebBlazor.ComponentCreation.ParagraphComponents _ParagraphComponents
+
+@inject Infrastructure.DataAccess.MyDataAccess _MyDataAccess
+
+@code{
+    public static TestComponent MyTestComponent;// = new TestComponent();
+
+    public static void injectParagraph(TestComponent _MyTestComponent)
+    {
+        MyTestComponent = _MyTestComponent;
+        Debug.WriteLine("injectParagraph körs nu ");
+    }
+
+    public string GlobalPath = "ASDF";
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Debug.WriteLine($"Dep inject woop woop");
+        _NumericTextBoxUseCases.Hej();
+        _NumericTextBoxUseCases.DepInjection(_NumericTextBoxComponents);
+        _ButtonUseCases.DepInjection(_NumericTextBoxComponents);
+
+
+
+        List<Picture> PictureList = _MyDataAccess.Cam1KeepTable.ToList();
+        Picture[] PicturesArray = _MyDataAccess.Cam1KeepTable.ToArray();
+
+        foreach (Picture picture in PictureList)
+        {
+            GlobalPath = "Cam1KeepPictures/" + picture.FileNameCurrent_TEXT + ".jpeg";
+
+        }
+        GlobalPath = "Cam1KeepPictures/" + PicturesArray[PicturesArray.Length - 1].FileNameCurrent_TEXT + ".jpeg";
+
+
+        //Debug.WriteLine($"Slider VALUE = {_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue}");
+
+        //GlobalPath = Environment.CurrentDirectory + "\\w3schools_green.jpg";
+        //GlobalPath = AppDomain.CurrentDomain.BaseDirectory + @"w3schools_green.jpg";
+
+        //Debug.WriteLine($"TEST path = {AppDomain.CurrentDomain.BaseDirectory}");
+
+
+        //1. Skriv ut en siffra på hmi, från slider
+        //1.5 Fundera på, och rita enkelt i paint, hur anrops strukturen ser ut neråt i hirarkin!!!
+
+        //On time change, eller on filter change. Skicka up/anropa en ny bild stack.
+        //Jag vill egenteligen inte ha en array med sökvägar här...ty det traslar till det med filter mm, och kanske även signalR.
+
+
+        //2.  Koppla visad bild till scroll bar grejen
+
+        //3. Treeview eller plot grejen.
+
+        //Till stories, att presentation nu ser Infrastructure och EF... Dapper är trevligare här....
+        //Förvisso är jag nybörjare, men jag känner att jag tappar kontrollen lite med EF. Med dapper har
+        //jag åtmistånde en illusion av kontroll....
+
+        //Till stories. Det kostade mig ett par dagar innan jag hittade felet med varför en components callback inte kunde
+        //gå in i en annan components metod. Problemet var här att @ref utfördes i en annan livscykel.
+        //Lösingen är inte vacker men den är att en dedikterad funktion får agera mellanhand.
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Debug.WriteLine($"ASDFASDF {MyTestComponent.elapsedTicks}"); //DET VAR SOM FAN, HÄR ÄR REFERENSEN LYCKAD
+        }
+        Debug.WriteLine($"ASDFASDF {MyTestComponent.elapsedTicks}"); //DET VAR SOM FAN, HÄR ÄR REFERENSEN LYCKAD
+    }
+
+
+    public void Mupp()
+    {
+        MyTestComponent.TimeCallBack2();
+        Debug.WriteLine($"MUPP");
+    }
+
+}
+
+
+
+
+<div class="grid-container">
+    <div class="Row1">
+        <div class="Row1Col1">
+            <!-- SignalTreeView <p>Row1Col1</p> -->
+            <p>@MyTestComponent.elapsedTicks</p>
+        </div>
+        <div class="Row1Col2">
+            <!-- DeviationListView <p>Row1Col2</p> -->
+            <TestComponent @ref=MyTestComponent>
+
+            </TestComponent>
+
+
+
+
+        </div>
+        <div class="Row1Col3">
+            <!-- LeftPicture <p>Row1Col3</p> -->
+            <p>@MyTestComponent.elapsedTicks</p>
+
+
+            @*<img src="@GlobalPath" class="MyAutoSizeKeepRatio">*@
+
+        </div>
+        <div class="Row1Col4">
+            <!-- RightPicture -->
+            <img src="Cam1KeepPictures/Camera1_1611872350240.jpeg" class="MyAutoSizeKeepRatio">
+
+        </div>
+    </div>
+
+    <div class="Row2">
+        <div class="Row2Col1">
+            <!-- -->
+            <p>Row2Col1</p>
+        </div>
+        <div class="Row2Col2">
+            <!-- -->
+            <p>Row2Col2</p>
+        </div>
+        <div class="Row2Col3">
+            <!-- -->
+            <p>Row2Col3</p>
+        </div>
+        <div class="Row2Col4">
+            <!-- -->
+
+        </div>
+        <div class="Row2Col5">
+            <!--Row2Col5-->
+
+            <p>före</p>
+        </div>
+        <div class="Row2Col6">
+            <!-- Row2Col6 -->
+
+
+
+        </div>
+        <div class="Row2Col7">
+            <!-- Row2Col7 -->
+            <p>efter</p>
+        </div>
+        <div class="Row2Col8">
+            <!-- -->
+            <p>Row2Col8</p>
+        </div>
+        <div class="Row2Col9">
+            <!-- -->
+            <p>Row2Col9</p>
+        </div>
+    </div>
+
+    <div class="Row3">
+        <div class="Row3Col1">
+            <!-- Space -->
+            <p>Row3Col1</p>
+        </div>
+
+        <div class="Row3Col2">
+            <!-- DeviationYear <p>Row3Col2</p>       -->
+            <NumericTextBoxComponent CssClassStyle="My5"
+                                     @ref="_NumericTextBoxComponents.DeviationYear"
+                                     ThisComponentInstanceName="_NumericTextBoxComponents.DeviationYear"
+                                     MinValue="20"
+                                     MaxValue="30"
+                                     ActionEventCallback="_NumericTextBoxUseCases.DeviationYearValueChangedEvent">
+            </NumericTextBoxComponent>
+        </div>
+
+        <div class="Row3Col3">
+            <!-- DeviationMonth <p>Row3Col3</p> -->
+            <NumericTextBoxComponent CssClassStyle="My5"
+                                     @ref="_NumericTextBoxComponents.DeviationMonth"
+                                     ThisComponentInstanceName="_NumericTextBoxComponents.DeviationYear"
+                                     MinValue="1"
+                                     MaxValue="12"
+                                     ActionEventCallback="_NumericTextBoxUseCases.DeviationMonthValueChangedEvent">
+            </NumericTextBoxComponent>
+        </div>
+
+        <div class="Row3Col4">
+            <!-- DeviationDay <p>Row3Col4</p> -->
+            <NumericTextBoxComponent CssClassStyle="My5"
+                                     @ref="_NumericTextBoxComponents.DeviationDay"
+                                     ThisComponentInstanceName="_NumericTextBoxComponents.DeviationYear"
+                                     MinValue="1"
+                                     MaxValue="31"
+                                     ActionEventCallback="_NumericTextBoxUseCases.DeviationDayValueChangedEvent">
+            </NumericTextBoxComponent>
+        </div>
+
+        <div class="Row3Col5">
+            <!-- DeviationTimePeriod -->
+            <div class="dropdown">
+                <span>Mouse over me</span>
+                <div class="dropdown-content">
+                    <p>Hello World!</p>
+                </div>
+            </div>
+        </div>
+        <div class="Row3Col6">
+            <!-- LeftPictureSlider ActionEventCallback="_RangeSliderUseCases.LeftPictureRangeSliderChangedEvent"> -->
+            <RangeSliderComponent CssClassStyle="My5"
+                                  @ref="_RangeSliderComponents.LeftPictureRangeSlider"
+                                  ThisComponentInstanceName="_RangeSliderComponents.LeftPictureRangeSlider"
+                                  MinValue="1"
+                                  MaxValue="66"
+                                  ActionEventCallback="Mupp">
+            </RangeSliderComponent>
+        </div>
+        <div class="Row3Col7">
+            <!-- RightPictureSlider-->
+            <RangeSliderComponent CssClassStyle="My5"
+                                  @ref="_RangeSliderComponents.RightPictureRangeSlider"
+                                  ThisComponentInstanceName="_RangeSliderComponents.RightPictureRangeSlider"
+                                  MinValue="1"
+                                  MaxValue="66"
+                                  ActionEventCallback="_RangeSliderUseCases.RightPictureRangeSliderChangedEvent">
+            </RangeSliderComponent>
+        </div>
+    </div>
+
+    <div class="Row4">
+        <div class="Row4Col1">
+            <!-- Luft Row4Col1-->
+            <p>@_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue</p>
+        </div>
+        <div class="Row4Col2">
+            <!-- MakeLeftSyncMasterCheckBox -->
+            <p>Row4Col2</p>
+        </div>
+        <div class="Row4Col3">
+            <!-- Luft -->
+            <p>Row4Col3</p>
+        </div>
+        <div class="Row4Col4">
+            <!-- MakeRightSyncMasterCheckBox -->
+            <p>Row4Col4</p>
+        </div>
+        <div class="Row4Col5">
+            <!-- Luft -->
+            <p>Row4Col5</p>
+        </div>
+    </div>
+
+
+
+    <div class="Row5">
+        <div class="Row5Col1">
+            <!-- StartTimeYear -->
+            <NumericTextBoxComponent CssClassStyle="My5"
+                                     @ref="_NumericTextBoxComponents.StartTimeYear"
+                                     ThisComponentInstanceName="_NumericTextBoxComponents.StartTimeYear"
+                                     MinValue="20"
+                                     MaxValue="30"
+                                     ActionEventCallback="_NumericTextBoxUseCases.StartTimeYearValueChangedEvent">
+            </NumericTextBoxComponent>
+        </div>
+        <div class="Row5Col2">
+            <!-- StartTimeMonth -->
+            <NumericTextBoxComponent CssClassStyle="My5"
+                                     @ref="_NumericTextBoxComponents.StartTimeMonth"
+                                     ThisComponentInstanceName="_NumericTextBoxComponents.StartTimeMonth"
+                                     MinValue="1"
+                                     MaxValue="12"
+                                     ActionEventCallback="_NumericTextBoxUseCases.StartTimeMonthValueChangedEvent">
+            </NumericTextBoxComponent>
+        </div>
+        <div class="Row5Col3">
+            <!-- StartTimeDay -->
+            <NumericTextBoxComponent CssClassStyle="My5"
+                                     @ref="_NumericTextBoxComponents.StartTimeDay"
+                                     ThisComponentInstanceName="_NumericTextBoxComponents.StartTimeDay"
+                                     MinValue="1"
+                                     MaxValue="31"
+                                     ActionEventCallback="_NumericTextBoxUseCases.StartTimeDayValueChangedEvent">
+            </NumericTextBoxComponent>
+        </div>
+        <div class="Row5Col4">
+            <!-- StartTimeHour -->
+            <NumericTextBoxComponent CssClassStyle="My5"
+                                     @ref="_NumericTextBoxComponents.StartTimeHour"
+                                     ThisComponentInstanceName="_NumericTextBoxComponents.StartTimeHour"
+                                     MinValue="0"
+                                     MaxValue="23"
+                                     ActionEventCallback="_NumericTextBoxUseCases.StartTimeHourValueChangedEvent">
+            </NumericTextBoxComponent>
+        </div>
+        <div class="Row5Col5">
+            <!-- StartTimeMinute -->
+            <NumericTextBoxComponent CssClassStyle="My5"
+                                     @ref="_NumericTextBoxComponents.StartTimeMinute"
+                                     ThisComponentInstanceName="_NumericTextBoxComponents.StartTimeMinute"
+                                     MinValue="0"
+                                     MaxValue="59"
+                                     ActionEventCallback="_NumericTextBoxUseCases.StartTimeMinuteValueChangedEvent">
+            </NumericTextBoxComponent>
+        </div>
+        <div class="Row5Col6">
+            <!-- StartTimeSecond -->
+            <NumericTextBoxComponent CssClassStyle="My5"
+                                     @ref="_NumericTextBoxComponents.StartTimeSecond"
+                                     ThisComponentInstanceName="_NumericTextBoxComponents.StartTimeSecond"
+                                     MinValue="0"
+                                     MaxValue="59"
+                                     ActionEventCallback="_NumericTextBoxUseCases.StartTimeSecondValueChangedEvent">
+            </NumericTextBoxComponent>
+        </div>
+        <div class="Row5Col7">
+            <!-- FullBack -->
+            <ButtonComponent CssClassStyle="My5 btn-primary"
+                             @ref="_ButtonComponents.FullBack"
+                             ButtonText="FullBack"
+                             ActionEventCallback="_ButtonUseCases.FullBackClickedEvent">
+            </ButtonComponent>
+        </div>
+        <div class="Row5Col8">
+            <!-- HalfBack -->
+            <ButtonComponent CssClassStyle="My5 btn-primary"
+                             @ref="_ButtonComponents.HalfBack"
+                             ButtonText="HalfBack"
+                             ActionEventCallback="_ButtonUseCases.HalfBackClickedEvent">
+            </ButtonComponent>
+        </div>
+        <div class="Row5Col9">
+            <!-- HalfForw-->
+            <ButtonComponent CssClassStyle="My5 btn-primary"
+                             @ref="_ButtonComponents.HalfForw"
+                             ButtonText="HalfForw"
+                             ActionEventCallback="_ButtonUseCases.HalfForwClickedEvent">
+            </ButtonComponent>
+        </div>
+        <div class="Row5Col10">
+            <!-- FullForw -->
+            <ButtonComponent CssClassStyle="My5 btn-primary"
+                             @ref="_ButtonComponents.FullForw"
+                             ButtonText="FullForw"
+                             ActionEventCallback="_ButtonUseCases.FullForwClickedEvent">
+            </ButtonComponent>
+        </div>
+        <div class="Row5Col11">
+            <!-- EndTimeYear -->
+            <NumericTextBoxComponent CssClassStyle="My5"
+                                     @ref="_NumericTextBoxComponents.EndTimeYear"
+                                     ThisComponentInstanceName="_NumericTextBoxComponents.EndTimeYear"
+                                     MinValue="20"
+                                     MaxValue="30"
+                                     ActionEventCallback="_NumericTextBoxUseCases.EndTimeYearValueChangedEvent">
+            </NumericTextBoxComponent>
+        </div>
+        <div class="Row5Col12">
+            <!-- EndTimeMonth -->
+            <NumericTextBoxComponent CssClassStyle="My5"
+                                     @ref="_NumericTextBoxComponents.EndTimeMonth"
+                                     ThisComponentInstanceName="_NumericTextBoxComponents.EndTimeMonth"
+                                     MinValue="1"
+                                     MaxValue="12"
+                                     ActionEventCallback="_NumericTextBoxUseCases.EndTimeMonthValueChangedEvent">
+            </NumericTextBoxComponent>
+        </div>
+        <div class="Row5Col13">
+            <!-- EndTimeDay -->
+            <NumericTextBoxComponent CssClassStyle="My5"
+                                     @ref="_NumericTextBoxComponents.EndTimeDay"
+                                     ThisComponentInstanceName="_NumericTextBoxComponents.EndTimeDay"
+                                     MinValue="1"
+                                     MaxValue="31"
+                                     ActionEventCallback="_NumericTextBoxUseCases.EndTimeDayValueChangedEvent">
+            </NumericTextBoxComponent>
+        </div>
+        <div class="Row5Col14">
+            <!-- EndTimeHour -->
+            <NumericTextBoxComponent CssClassStyle="My5"
+                                     @ref="_NumericTextBoxComponents.EndTimeHour"
+                                     ThisComponentInstanceName="_NumericTextBoxComponents.EndTimeHour"
+                                     MinValue="1"
+                                     MaxValue="31"
+                                     ActionEventCallback="_NumericTextBoxUseCases.EndTimeHourValueChangedEvent">
+            </NumericTextBoxComponent>
+        </div>
+        <div class="Row5Col15">
+            <!-- EndTimeMinute -->
+            <NumericTextBoxComponent CssClassStyle="My5"
+                                     @ref="_NumericTextBoxComponents.EndTimeMinute"
+                                     ThisComponentInstanceName="_NumericTextBoxComponents.EndTimeMinute"
+                                     MinValue="1"
+                                     MaxValue="31"
+                                     ActionEventCallback="_NumericTextBoxUseCases.EndTimeMinuteValueChangedEvent">
+            </NumericTextBoxComponent>
+        </div>
+        <div class="Row5Col16">
+            <!-- EndTimeSecond -->
+            <NumericTextBoxComponent CssClassStyle="My5"
+                                     @ref="_NumericTextBoxComponents.EndTimeSecond"
+                                     ThisComponentInstanceName="_NumericTextBoxComponents.EndTimeSecond"
+                                     MinValue="1"
+                                     MaxValue="31"
+                                     ActionEventCallback="_NumericTextBoxUseCases.EndTimeSecondValueChangedEvent">
+            </NumericTextBoxComponent>
+        </div>
+    </div>
+
+    <div class="Row6">
+        <div class="Row6Col1">
+            <!-- -->
+            <p>Row6Col1</p>
+        </div>
+    </div>
+</div>
+
+
+
+
+@*@code {
+
+        protected async Task MyTestTask() //dvs när sidan läses in??
+        {
+            Debug.WriteLine($"Temp är ASDF");
+            //MyTest.WriteToConsole();
+        }
+    }*@
+
+
+
+
+
+

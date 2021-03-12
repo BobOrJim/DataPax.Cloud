@@ -1,0 +1,435 @@
+@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+a, .btn-link {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.content {
+    padding-top: 1.1rem;
+}
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+
+/* Detta är CSS Grid, vilket är nyare gentemot Flexbox */
+
+/*.grid-container {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 50% 5% 5% 5% 5% 30%;
+    gap: 0px 0px;
+    grid-template-areas: "Row1" "." "." "." "." "Row6Col1";
+}
+
+.Row1 {
+    display: grid;
+    grid-template-columns: 15% 25% 30% 30%;
+    grid-template-rows: 100%;
+    gap: 0px 0px;
+    grid-template-areas: "Row1Col1 Row1Col2 Row1Col3 Row1Col4";
+    grid-area: Row1;
+}
+
+.Row1Col1 {
+    grid-area: Row1Col1;
+    background-color: #001111;
+}
+.Row1Col2 {
+    grid-area: Row1Col2;
+    background-color: #003333;
+}
+
+.Row1Col3 {
+    grid-area: Row1Col3;
+    background-color: #005555;
+}
+
+.Row1Col4 {
+    grid-area: Row1Col4;
+    background-color: #007777;
+}
+
+.Row6Col1 {
+    grid-area: Row6Col1;
+    background-color: #009999;
+}*/
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.MySlider {
+    -webkit-appearance: none; /* Override default CSS styles */
+    appearance: none;
+    width: 100%; /* Full-width */
+    height: 25px; /* Specified height */
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+}
+
+.My5 {
+    /* This is a know issue, and thus i have to use a simple workaround. */
+    /*    height: 100vh;*/
+    /*    height: 100%;*/
+    /*    height: inherit;*/
+    height: 5vh;
+    width: 100%;
+}
+
+.My45 { 
+    /* This is a know issue, and thus i have to use a simple workaround. */
+    /*    height: 100%;*/
+    /*    height: inherit;*/
+    height: 45vh;
+    width: 100%;
+}
+
+.MyAutoSize {
+    height: 100%;
+    width: 100%;
+}
+
+.MyAutoSizeKeepRatio {
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+}
+
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 100%;
+    /*    grid-template-rows: 130% 130% 140%;*/
+    grid-template-rows: 45% 5% 5% 5% 5% 35%;
+    height: 95vh; /*Refererar till viewport*/
+    width: 95vw; /*Refererar till viewport, skall såklart ändras när vänster menyn är borta */
+    gap: 0px 0px;
+}
+
+.Row1 {
+    display: grid;
+    grid-template-columns: 15% 25% 30% 30%;
+    grid-template-rows: 100%;
+    gap: 0px 0px;
+    grid-template-areas: "Row1Col1 Row1Col2 Row1Col3 Row1Col4";
+    grid-area: 1 / 1 / span 1 / span 4; /* Make "item1" start on row 2 column 1, and span 2 rows and 3 columns: */
+}
+
+.Row1Col1 { /* SignalTreeView */
+    grid-area: Row1Col1;
+    background-color: #c6e8f7;
+    border: 3px solid black;
+}
+
+.Row1Col2 { /* DeviationListView */
+    grid-area: Row1Col2;
+    background-color: #c6e8f7;
+    /*flex-wrap: wrap;*/
+    /*justify-self: stretch; */  /*width:100%;*/
+}
+
+.Row1Col3 { /* LeftPicture */
+    grid-area: Row1Col3;
+    background-color: #c6e8f7;
+}
+
+.Row1Col4 { /* RightPicture */
+    grid-area: Row1Col4;
+    background-color: #c6e8f7;
+    /* I detta hörn skulle jag kunna stoppa in en liten drop down meny. Typ som https://grid.layoutit.com/*/
+    /* https://www.youtube.com/watch?v=TBoUetqLnps */
+}
+
+.Row2 {
+    display: grid;
+    grid-template-columns: 10% 10% 20% 10% 10% 10% 10% 10% 10%; /* 10%% är en skärm, dvs jag kan överskrkrida och då får jag scrolla */
+    grid-template-rows: 100%;
+    gap: 0px 0px;
+    grid-template-areas: "Row2Col1 Row2Col2 Row2Col3 Row2Col4 Row2Col5 Row2Col6 Row2Col7 Row2Col8 Row2Col9";
+    grid-area: 2 / 1 / span 1 / span 9;
+}
+
+.Row2Col1 { /* Space */
+    grid-area: Row2Col1;
+    background-color: #220000;
+}
+
+.Row2Col2 { /* LeftPictureTimestamp*/
+    grid-area: Row2Col2;
+    background-color: #222222;
+}
+
+.Row2Col3 { /* LeftPictureCamSelector */
+    grid-area: Row2Col3;
+    background-color: #224444;
+}
+
+.Row2Col4 { /* LeftPictureCamFilter */
+    grid-area: Row2Col4;
+    background-color: #225555;
+}
+
+.Row2Col5 { /* LeftPicturePictureCounter */
+    grid-area: Row2Col5;
+    background-color: #226666;
+}
+
+.Row2Col6 { /* RightPictureTimestamp */
+    grid-area: Row2Col6;
+    background-color: #228888;
+}
+
+.Row2Col7 { /* RightPictureCamSelector */
+    grid-area: Row2Col7;
+    background-color: #229999;
+}
+
+.Row2Col8 { /* RightPictureCamFilter */
+    grid-area: Row2Col8;
+    background-color: #22bbbb;
+}
+
+.Row2Col9 { /* RightPicturePictureCounter */
+    grid-area: Row2Col9;
+    background-color: #22eeee;
+}
+
+.Row3 {
+    display: grid;
+    grid-template-columns: 10% 10% 10% 10% 20% 20% 20%; /* 10%% är en skärm, dvs jag kan överskrkrida och då får jag scrolla */
+    grid-template-rows: 100%;
+    gap: 0px 0px;
+    grid-template-areas: "Row3Col1 Row3Col2 Row3Col3 Row3Col4 Row3Col5 Row3Col6 Row3Col7";
+    grid-area: 3 / 1 / span 1 / span 7;
+}
+
+.Row3Col1 { /* Space */
+    grid-area: Row3Col1;
+    background-color: #440000;
+}
+
+.Row3Col2 { /* DeviationYear */
+    grid-area: Row3Col2;
+    background-color: #c6e8f7;
+    border: 3px solid black;
+    
+
+    /*margin-right: 12%;
+    margin-left: 12%;*/
+    /*    padding-right: 12%;
+    padding-left: 12%;*/
+    /*    padding-top: 12%;
+    padding-right: 12%;
+    padding-bottom: 12%;
+    padding-left: 12%;*/
+}
+
+.Row3Col3 { /* DeviationMonth */
+    grid-area: Row3Col3;
+    background-color: #c6e8f7;
+    border: 3px solid black;
+    /*    margin-top: 12%;
+    margin-bottom: 12%;
+    margin-right: 12%;
+    margin-left: 12%;*/
+}
+
+.Row3Col4 { /* DeviationDay */
+    grid-area: Row3Col4;
+    background-color: #446666;
+}
+
+.Row3Col5 { /* DeviationTimePeriod */
+    grid-area: Row3Col5;
+    background-color: #448888;
+}
+
+.Row3Col6 { /* LeftPictureSlider */
+    grid-area: Row3Col6;
+    background-color: #44aaaa;
+}
+
+.Row3Col7 { /* RightPictureSlider */
+    grid-area: Row3Col7;
+    background-color: #44cccc;
+}
+
+.Row4 {
+    display: grid;
+    grid-template-columns: 30% 30% 20% 10% 10%; /* 10%% är en skärm, dvs jag kan överskrkrida och då får jag scrolla */
+    grid-template-rows: 100%;
+    gap: 0px 0px;
+    grid-template-areas: "Row4Col1 Row4Col2 Row4Col3 Row4Col4 Row4Col5";
+    grid-area: 4 / 1 / span 1 / span 5;
+}
+
+.Row4Col1 { /* Space */
+    grid-area: Row4Col1;
+    background-color: #660000;
+}
+
+.Row4Col2 { /* LeftPictureSync */
+    grid-area: Row4Col2;
+    background-color: #662222;
+}
+
+.Row4Col3 { /* Space */
+    grid-area: Row4Col3;
+    background-color: #664444;
+}
+
+.Row4Col4 { /* RightPictureSync */
+    grid-area: Row4Col4;
+    background-color: #666666;
+}
+
+.Row4Col5 { /* Space */
+    grid-area: Row4Col5;
+    background-color: #668888;
+}
+
+.Row5 {
+    display: grid;
+    grid-template-columns: 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 25%; /* 10% är en skärm, dvs jag kan överskrkrida och då får jag scrolla */
+    grid-template-rows: 100%;
+    gap: 0px 0px;
+    grid-template-areas: "Row5Col1 Row5Col2 Row5Col3 Row5Col4 Row5Col5 Row5Col6 Row5Col7 Row5Col8 Row5Col9 Row5Col10 Row5Col11 Row5Col12 Row5Col13 Row5Col14 Row5Col15 Row5Col16";
+    grid-area: 5 / 1 / span 1 / span 16;
+    min-width: 100px; /* Troligen felplacerad, tror inte den gör något... */
+}
+.Row5Col1 { /* StartYear */
+    grid-area: Row5Col1;
+    background-color: #880000;
+}
+.Row5Col2 { /* StartMonth */
+    grid-area: Row5Col2;
+    background-color: #882222;
+}
+.Row5Col3 { /* StartDay */
+    grid-area: Row5Col3;
+    background-color: #884444;
+}
+.Row5Col4 { /* StartHour */
+    grid-area: Row5Col4;
+    background-color: #886666;
+}
+.Row5Col5 { /* StartMinute */
+    grid-area: Row5Col5;
+    background-color: #888888;
+}
+.Row5Col6 { /* StartSecond */
+    grid-area: Row5Col6;
+    background-color: #88aaaa;
+}
+.Row5Col7 { /* FullBack */
+    grid-area: Row5Col7;
+    background-color: #88cccc;
+}
+.Row5Col8 { /* HalfBack */
+    grid-area: Row5Col8;
+    background-color: #aa0000;
+}
+.Row5Col9 { /* HalfForw */
+    grid-area: Row5Col9;
+    background-color: #aa2222;
+}
+.Row5Col10 { /* FullForw */
+    grid-area: Row5Col10;
+    background-color: #aa4444;
+}
+.Row5Col11 { /* EndYear */
+    grid-area: Row5Col11;
+    background-color: #aa6666;
+}
+.Row5Col12 { /* EndMonth */
+    grid-area: Row5Col12;
+    background-color: #aa8888;
+}
+.Row5Col13 { /* EndDay */
+    grid-area: Row5Col13;
+    background-color: #aa9999;
+}
+.Row5Col14 { /* EndHour */
+    grid-area: Row5Col14;
+    background-color: #aaaaaa;
+}
+.Row5Col15 { /* EndMinute */
+    grid-area: Row5Col15;
+    background-color: #aacccc;
+}
+.Row5Col16 { /* EndSecond */
+    grid-area: Row5Col16;
+    background-color: #eeeeee;
+}
+
+.Row6 {
+    display: grid;
+    grid-template-columns: 100%; /* 10%% är en skärm, dvs jag kan överskrkrida och då får jag scrolla */
+    grid-template-rows: 100%;
+    gap: 0px 0px;
+    grid-template-areas: "Row6Col1";
+    grid-area: 6 / 1 / span 1 / span 1;
+}
+
+.Row6Col1 { /* Plot */
+    grid-area: Row6Col1;
+    background-color: #aa0000;
+}

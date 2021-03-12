@@ -1,0 +1,59 @@
+﻿@inject ProtectedLocalStorage LocalStorage
+@inject ProtectedSessionStorage SessionStorage
+
+<!-- Spinners = always show -->
+<style>
+    input[type=number]::-webkit-inner-spin-button { opacity: 1 }
+</style>
+
+<div>
+    <input class=@CssClassStyle type="number" min=@MinValue max="@MaxValue" value="@CurrentValue" required @oninput="OnInput">
+</div>
+
+@code {
+
+    DateTime currentDate = DateTime.Now;
+    public long elapsedTicks { get; private set; }
+
+    public NumericTextBoxComponent()
+    {
+        elapsedTicks = currentDate.Ticks;
+        //Debug.WriteLine($"Im a NumericTextBoxComponent and i was born on Tick: {elapsedTicks} ");
+    }
+
+    public long ObjectCreatedAtTick()
+    {
+        return elapsedTicks;
+    }
+
+    [Parameter]
+    public string CssClassStyle { get; set; }
+    [Parameter]
+    public string ThisComponentInstanceName { get; set; } //Används för LocalStorage namn i Browser.
+    [Parameter]
+    public int MinValue { get; set; }
+    [Parameter]
+    public int MaxValue { get; set; }
+    [Parameter]
+    public int CurrentValue { get; set; } = 1;
+    [Parameter]
+    public Action ActionEventCallback { get; set; }
+
+    private async Task OnInput()
+    {
+        //Debug.WriteLine("MyNumericSpinBoxComponent...OnInput..");
+        await LocalStorage.SetAsync(ThisComponentInstanceName, CurrentValue);
+        ActionEventCallback?.Invoke();
+    }
+
+    public void ExternalUpdate()
+    {
+        Debug.WriteLine($"ExternalUpdate.........and my name is {ThisComponentInstanceName} ");
+        CurrentValue = 25;
+    }
+
+    //Lite olika triggers att välja på
+    //     <input type="number" min=@MinValue max="31" value="16" required @onclick="OnClick" @onchange="OnChange" @oninput="OnInput">
+}
+
+

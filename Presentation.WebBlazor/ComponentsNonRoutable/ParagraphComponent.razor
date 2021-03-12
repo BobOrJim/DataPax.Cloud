@@ -1,0 +1,34 @@
+﻿@inject ProtectedLocalStorage LocalStorage
+@inject ProtectedSessionStorage SessionStorage
+
+<div>
+    <p>@MyString </p>
+</div>
+
+
+
+
+@functions {
+    //class="@CssClassStyle" "@CurrentPictureNumber"
+    //[Parameter]
+    //public int CurrentPictureNumber { get; set; }
+    //[Parameter]
+    public string MyString { get; set; } = "aaa";
+    //[Parameter]
+    //public string CssClassStyle { get; set; }
+
+
+    //InvokeAsync
+    public void MyStateHasChanged()
+    {
+        MyString = "qwerty"; // CurrentPictureNumber.ToString();
+
+        //Debug.WriteLine($"MyStateHasChanged CurrentPictureNumber = {CurrentPictureNumber}   ");
+        Debug.WriteLine($"NOW !!!!  ");
+
+        InvokeAsync(StateHasChanged);
+        MyString = "ggg2";
+        //StateHasChanged();
+    }
+
+}

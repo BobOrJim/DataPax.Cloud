@@ -1,0 +1,64 @@
+﻿@using System.Threading;
+
+
+<div>
+
+    <h1>Hello, world!</h1>
+    <p>Ticks: @elapsedTicks</p>
+    <p>Counter: @Count</p>
+    <button @onclick=@Countdown>Start</button>
+
+
+</div>
+
+
+
+
+
+@code {
+
+    public int myComponent = 0;
+    //private ElementReference MyElementReference;
+
+    DateTime currentDate = DateTime.Now;
+    public long elapsedTicks { get; set; }
+    public TestComponent()
+    {
+        elapsedTicks = currentDate.Ticks;
+        Debug.WriteLine($"Im a TestComponent and i was born on Tick: {elapsedTicks} ");
+    }
+
+
+    public int Count;
+    void Countdown()
+    {
+        var timer = new Timer(TimeCallBack, null, 1000, 1000);
+        Debug.WriteLine($"Countdown ");
+    }
+
+    public void TimeCallBack(object state)
+    {
+        Count--;
+        Debug.WriteLine($"Countdown1. I am {elapsedTicks} and my count is {Count} and my reference is {myComponent}");
+        InvokeAsync(StateHasChanged);
+        Debug.WriteLine($"Countdown2. I am {elapsedTicks} and my count is {Count} and my reference is {myComponent}");
+    }
+
+    public void TimeCallBack2()
+    {
+        Count--;
+        Debug.WriteLine($"Countdown3. I am {elapsedTicks} and my count is {Count} and my reference is {myComponent}");
+        InvokeAsync(StateHasChanged);
+        Debug.WriteLine($"Countdown4. I am {elapsedTicks} and my count is {Count} and my reference is {myComponent}");
+        Countdown();
+        //myComponent.FocusAsync();
+    }
+
+    public void SomeFunction()
+    {
+
+
+    }
+
+
+}
