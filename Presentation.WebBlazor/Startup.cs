@@ -33,7 +33,7 @@ namespace Presentation.WebBlazor
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<MyDataAccess>(options =>
+            services.AddDbContext<EFAccess>(options =>          //Jimmy
             {
                 options.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
@@ -41,8 +41,6 @@ namespace Presentation.WebBlazor
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-            //services.AddSingleton<NumericTextBoxComponents>(); //JIMMY
-            //services.AddSingleton<TreeViewComponents>(); //JIMMY
             services.AddSyncfusionBlazor(); //Jimmy
 
             //JAG TROR ALLT NEDAN SKALL RENSAS BORT. DET ENDA SOM SKALL VARA HÄR, ÄR SÅDANT SOM BEHÖVS PÅ FLERA STÄLLEN.
@@ -67,7 +65,7 @@ namespace Presentation.WebBlazor
 
 
 
-            //I hope you want to share a beer with me in Borås :) Jimmy.Nordin.1979@gmail.com
+            
 
 
 

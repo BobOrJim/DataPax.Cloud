@@ -14,13 +14,18 @@ namespace Application.UseCases
     public class RangeSliderUseCases
     {
         private Bitmap WorkBitmap;
-        private PictureService _PictureController;
+        private PictureService pictureService;
 
         public RangeSliderUseCases(PictureService p)
         {
-            _PictureController = p;
+            pictureService = p;
         }
-        //Alternativ 1. skapa en service, och injecta ett PictureController interface till denna fil OCH TimeIntervallChangedController
+        
+        public void Test()
+        {
+            List<string> Test2 = pictureService.ReturnUnmoddedListOfPathsFixaSenare();
+            Debug.WriteLine($"210315: {Test2}");
+        }
 
         public void LeftPictureRangeSliderChangedEvent()
         {
@@ -55,10 +60,6 @@ namespace Application.UseCases
         //Men va fan då:
         //1. Hämta en jäkla bild, ur bildstacken jag skapat.
         //
-
-
-
-
 
     }
 }

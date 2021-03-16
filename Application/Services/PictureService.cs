@@ -8,11 +8,18 @@ using Domain.Services;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Diagnostics;
+using Interfaces.Interfaces;
 
 namespace Application.Controllers
 {
     public class PictureService
     {
+        public IPictureDataAccess _PictureDataAccess;
+        public PictureService(IPictureDataAccess p)
+        {
+         //   _PictureDataAccess = p; Här är ett fel!!!!!!!
+        }
+
         private PictureFilters _PictureFilters;
         public PictureStackModel LeftPictureStack { get; private set; }
         public PictureStackModel RightPictureStack { get; private set; }
@@ -20,20 +27,20 @@ namespace Application.Controllers
         public PictureModel RightPictureToBlazorComponent { get; private set; }
 
 
+        //här kan det även finnas return paths with filter osv osv.
+        public List<string> ReturnUnmoddedListOfPathsFixaSenare()
+        {
+            return _PictureDataAccess.PicturePathsListFrom_Cam1KeepTable();
+        }
 
-        public PictureService()
-        {
-            _PictureFilters = new PictureFilters();
-            //Debug.WriteLine($"PictureController is being created, only one should be CREATED  ");
-        }
-        public void Test()
-        {
-            Debug.WriteLine($"TEST from picture Controller ");
-        }
+
+
         public void UpdatePictureStacks(TimeModel StartTime, TimeModel EndTime, string Camera1Name, string Camera2Name)
         {
             LeftPictureStack = new PictureStackModel(StartTime, EndTime, Camera1Name);
             RightPictureStack = new PictureStackModel(StartTime, EndTime, Camera2Name);
+
+
         }
 
         //Funk nedan skall snyggas till... efter att EF rullar..., om null kan jag använda någon typ av loga bild med DataPax

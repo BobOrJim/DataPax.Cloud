@@ -18,9 +18,11 @@
 
 @inject Presentation.WebBlazor.ComponentCreation.ParagraphComponents _ParagraphComponents
 
-@inject Infrastructure.DataAccess.MyDataAccess _MyDataAccess
+@*@inject Infrastructure.DataAccess.EFAccess _MyDataAccess*@
 
 @code{
+
+
     public static TestComponent MyTestComponent;// = new TestComponent();
 
     public static void injectParagraph(TestComponent _MyTestComponent)
@@ -42,15 +44,15 @@
 
 
 
-        List<Picture> PictureList = _MyDataAccess.Cam1KeepTable.ToList();
-        Picture[] PicturesArray = _MyDataAccess.Cam1KeepTable.ToArray();
+        //List<Picture> PictureList = _MyDataAccess.Cam1KeepTable.ToList();
+        //Picture[] PicturesArray = _MyDataAccess.Cam1KeepTable.ToArray();
 
-        foreach (Picture picture in PictureList)
-        {
-            GlobalPath = "Cam1KeepPictures/" + picture.FileNameCurrent_TEXT + ".jpeg";
+        //foreach (Picture picture in PictureList)
+        //{
+        //    GlobalPath = "Cam1KeepPictures/" + picture.FileNameCurrent_TEXT + ".jpeg";
 
-        }
-        GlobalPath = "Cam1KeepPictures/" + PicturesArray[PicturesArray.Length - 1].FileNameCurrent_TEXT + ".jpeg";
+        //}
+        //GlobalPath = "Cam1KeepPictures/" + PicturesArray[PicturesArray.Length - 1].FileNameCurrent_TEXT + ".jpeg";
 
 
         //Debug.WriteLine($"Slider VALUE = {_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue}");
@@ -93,9 +95,20 @@
 
     public void _ParagraphComponents_LeftPictureStackNumberParagraph()
     {
-        Debug.WriteLine($"value : {_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue} / {_RangeSliderComponents.LeftPictureRangeSlider.MaxValue}");
+        string current = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue.ToString();
+        string total = _RangeSliderComponents.LeftPictureRangeSlider.MaxValue.ToString();
+        _ParagraphComponents.LeftPictureStackNumberParagraph.CurrentPictureNumber = current;
+        _ParagraphComponents.LeftPictureStackNumberParagraph.TotalPictureNumber = total;
+        _ParagraphComponents.LeftPictureStackNumberParagraph.UpdateState();
+    }
 
-        
+    public void _ParagraphComponents_RightPictureStackNumberParagraph()
+    {
+        string current = _RangeSliderComponents.RightPictureRangeSlider.CurrentValue.ToString();
+        string total = _RangeSliderComponents.RightPictureRangeSlider.MaxValue.ToString();
+        _ParagraphComponents.RightPictureStackNumberParagraph.CurrentPictureNumber = current;
+        _ParagraphComponents.RightPictureStackNumberParagraph.TotalPictureNumber = total;
+        _ParagraphComponents.RightPictureStackNumberParagraph.UpdateState();
     }
 
 
@@ -113,6 +126,17 @@
 <div class="grid-container">
     <div class="Row1">
         <div class="Row1Col1"> <!-- SignalTreeView -->
+        <ButtonComponent CssClassStyle="My5"
+                         ButtonText ="DAS KNAPP"
+                         ActionEventCallback = "_RangeSliderUseCases.Test"
+
+                         
+                         
+                         />
+
+
+
+
         </div>
         <div class="Row1Col2"> <!-- DeviationListView -->
         </div>
@@ -146,34 +170,26 @@
 
             <p>före</p>
         </div>
-        <div class="Row2Col6">
-            <!-- Row2Col6 -->
-
-
-
+        <div class="Row2Col6"> <!-- LeftPictureStackNumberParagraph -->
+            <ParagraphComponent CssClassStyle="My5"
+                                @ref="_ParagraphComponents.LeftPictureStackNumberParagraph" />
         </div>
         <div class="Row2Col7">
             <!-- Row2Col7 -->
             <p>efter</p>
         </div>
-        <div class="Row2Col8">
-            <!-- -->
-            <p>Row2Col8</p>
+        <div class="Row2Col8"> <!-- Space -->
         </div>
-        <div class="Row2Col9">
-            <!-- -->
-            <p>Row2Col9</p>
+        <div class="Row2Col9"> <!-- LeftPictureStackNumberParagraph -->
+            <ParagraphComponent CssClassStyle="My5"
+                                @ref="_ParagraphComponents.RightPictureStackNumberParagraph" />
         </div>
     </div>
 
     <div class="Row3">
-        <div class="Row3Col1">
-            <!-- Space -->
-            <p>Row3Col1</p>
+        <div class="Row3Col1"> <!-- Space -->
         </div>
-
-        <div class="Row3Col2">
-            <!-- DeviationYear <p>Row3Col2</p>       -->
+        <div class="Row3Col2"> <!-- DeviationYear -->
             <NumericTextBoxComponent CssClassStyle="My5"
                                      @ref="_NumericTextBoxComponents.DeviationYear"
                                      ThisComponentInstanceName="_NumericTextBoxComponents.DeviationYear"
@@ -182,9 +198,7 @@
                                      ActionEventCallback="_NumericTextBoxUseCases.DeviationYearValueChangedEvent">
             </NumericTextBoxComponent>
         </div>
-
-        <div class="Row3Col3">
-            <!-- DeviationMonth <p>Row3Col3</p> -->
+        <div class="Row3Col3"> <!-- DeviationMonth -->
             <NumericTextBoxComponent CssClassStyle="My5"
                                      @ref="_NumericTextBoxComponents.DeviationMonth"
                                      ThisComponentInstanceName="_NumericTextBoxComponents.DeviationYear"
@@ -193,9 +207,7 @@
                                      ActionEventCallback="_NumericTextBoxUseCases.DeviationMonthValueChangedEvent">
             </NumericTextBoxComponent>
         </div>
-
-        <div class="Row3Col4">
-            <!-- DeviationDay <p>Row3Col4</p> -->
+        <div class="Row3Col4"> <!-- DeviationDay -->
             <NumericTextBoxComponent CssClassStyle="My5"
                                      @ref="_NumericTextBoxComponents.DeviationDay"
                                      ThisComponentInstanceName="_NumericTextBoxComponents.DeviationYear"
@@ -214,25 +226,19 @@
                 </div>
             </div>
         </div>
-        <div class="Row3Col6">
-            <!-- LeftPictureSlider ActionEventCallback="_RangeSliderUseCases.LeftPictureRangeSliderChangedEvent"> -->
+        <div class="Row3Col6"> <!-- LeftPictureSlider  -->
             <RangeSliderComponent CssClassStyle="My5"
                                   @ref="_RangeSliderComponents.LeftPictureRangeSlider"
-                                  ThisComponentInstanceName="_RangeSliderComponents.LeftPictureRangeSlider"
                                   MinValue="1"
                                   MaxValue="66"
-                                  ActionEventCallback="_ParagraphComponents_LeftPictureStackNumberParagraph">
-            </RangeSliderComponent>
+                                  ActionEventCallback="_ParagraphComponents_LeftPictureStackNumberParagraph" />
         </div>
-        <div class="Row3Col7">
-            <!-- RightPictureSlider-->
+        <div class="Row3Col7"> <!-- RightPictureSlider-->
             <RangeSliderComponent CssClassStyle="My5"
                                   @ref="_RangeSliderComponents.RightPictureRangeSlider"
-                                  ThisComponentInstanceName="_RangeSliderComponents.RightPictureRangeSlider"
                                   MinValue="1"
                                   MaxValue="66"
-                                  ActionEventCallback="_RangeSliderUseCases.RightPictureRangeSliderChangedEvent">
-            </RangeSliderComponent>
+                                  ActionEventCallback="_ParagraphComponents_RightPictureStackNumberParagraph" />
         </div>
     </div>
 

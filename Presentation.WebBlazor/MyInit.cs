@@ -7,13 +7,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Infrastructure.DataAccess;
 
 namespace Presentation.WebBlazor
 {
     public class MyInit
     {
 
-        private readonly MyDataAccess myDataAccess;
+        //private readonly EFAccess _EFAccess;
+        private IEFAccess _IEFAccess;
+
         public List<Picture> Pictures = new List<Picture>();
         public List<Picture> PicturePaths = new List<Picture>();
         public string TestPath { get; set; }
@@ -22,12 +25,13 @@ namespace Presentation.WebBlazor
         public MyInit()
         {
             TestComponent MyTestComponent = new TestComponent();
-
             Presentation.WebBlazor.ComponentsRoutable.PresentationPage.injectParagraph(MyTestComponent);
 
 
 
-            
+
+
+
             //Debug.WriteLine("MyInit is now running.");
 
             //Debug.WriteLine("MyInit is now running.!!!!!!!!!!!!!!!!!!!!!!!");
