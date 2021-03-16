@@ -5,13 +5,13 @@
 @code {
     [Parameter]
     public string CssClassStyle { get; set; }
-    public string CurrentPictureNumber { get; set; }
-    public string TotalPictureNumber { get; set; }
+    public string FirstString { get; set; }
+    public string SecondString { get; set; }
     public string ParagraphString { get; private set; }
 
     public void UpdateState()
     {
-        ParagraphString = CurrentPictureNumber + "/" + TotalPictureNumber;
+        ParagraphString = FirstString + SecondString;
         InvokeAsync(StateHasChanged);
     }
 }

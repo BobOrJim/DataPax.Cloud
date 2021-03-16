@@ -1,14 +1,8 @@
-﻿
-
-<div >
-    <img src="@PicturePathString" class="@CssClassStyle">
-</div>
-
+﻿<img src="@PicturePathString" class="@CssClassStyle">
 
 @code {
     [Parameter]
     public string CssClassStyle { get; set; }
-    [Parameter]
     public string PicturePathString { get; set; }
 
     public void UpdateState()
@@ -16,7 +10,6 @@
         InvokeAsync(StateHasChanged);
         Debug.WriteLine($"UpdateState körs i ImgSrcComponent ");
     }
-
 }
 
 

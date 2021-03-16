@@ -22,7 +22,6 @@
 
 @inject Presentation.WebBlazor.ComponentCreation.ImgSrcComponents _ImgSrcComponents
 
-
 @inject Infrastructure.DataAccess.EFAccess _EFAccess
 
 
@@ -33,14 +32,7 @@
 
     public string GlobalPath = "ASDF";
 
-    protected override void OnInitialized()
-    {
-        PictureDataAccess pictureDataAccess;
-        pictureDataAccess = new PictureDataAccess(_EFAccess);
-        pictureService = new PictureService(pictureDataAccess);
-        //Debug.WriteLine($"OnInitialized : Bilder i stack är : {pictureService.NumberOfPicturesInStack()} ");
-        pictureService.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
-    }
+    public static TestComponent MyTestComponent;// = new TestComponent();
 
 
     //Method invoked when the component is ready to start, having recieved its initial parameters from its parrent renderer tree
@@ -52,19 +44,20 @@
     //4: protected override Task OnParametersSetAsync()
     //Returns a flag to indicate wheter the component should renderer.
     //5: protected override bool ShouldRender()
+    protected override void OnInitialized()
+    {
+        PictureDataAccess pictureDataAccess;
+        pictureDataAccess = new PictureDataAccess(_EFAccess);
+        pictureService = new PictureService(pictureDataAccess);
+        //Debug.WriteLine($"OnInitialized : Bilder i stack är : {pictureService.NumberOfPicturesInStack()} ");
+        pictureService.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
 
-
-
-
-    public static TestComponent MyTestComponent;// = new TestComponent();
-
+    }
     public static void injectParagraph(TestComponent _MyTestComponent)
     {
         MyTestComponent = _MyTestComponent;
         Debug.WriteLine("injectParagraph körs nu ");
     }
-
-
     protected override async Task OnInitializedAsync()
     {
         //Debug.WriteLine($"Dep inject woop woop");
@@ -73,46 +66,7 @@
         _ButtonUseCases.DepInjection(_NumericTextBoxComponents);
 
 
-
-        //List<Picture> PictureList = _MyDataAccess.Cam1KeepTable.ToList();
-        //Picture[] PicturesArray = _MyDataAccess.Cam1KeepTable.ToArray();
-
-        //foreach (Picture picture in PictureList)
-        //{
-        //    GlobalPath = "Cam1KeepPictures/" + picture.FileNameCurrent_TEXT + ".jpeg";
-
-        //}
-        //GlobalPath = "Cam1KeepPictures/" + PicturesArray[PicturesArray.Length - 1].FileNameCurrent_TEXT + ".jpeg";
-
-
-        //Debug.WriteLine($"Slider VALUE = {_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue}");
-
-        //GlobalPath = Environment.CurrentDirectory + "\\w3schools_green.jpg";
-        //GlobalPath = AppDomain.CurrentDomain.BaseDirectory + @"w3schools_green.jpg";
-
-        //Debug.WriteLine($"TEST path = {AppDomain.CurrentDomain.BaseDirectory}");
-
-
-        //1. Skriv ut en siffra på hmi, från slider
-        //1.5 Fundera på, och rita enkelt i paint, hur anrops strukturen ser ut neråt i hirarkin!!!
-
-        //On time change, eller on filter change. Skicka up/anropa en ny bild stack.
-        //Jag vill egenteligen inte ha en array med sökvägar här...ty det traslar till det med filter mm, och kanske även signalR.
-
-
-        //2.  Koppla visad bild till scroll bar grejen
-
-        //3. Treeview eller plot grejen.
-
-        //Till stories, att presentation nu ser Infrastructure och EF... Dapper är trevligare här....
-        //Förvisso är jag nybörjare, men jag känner att jag tappar kontrollen lite med EF. Med dapper har
-        //jag åtmistånde en illusion av kontroll....
-
-        //Till stories. Det kostade mig ett par dagar innan jag hittade felet med varför en components callback inte kunde
-        //gå in i en annan components metod. Problemet var här att @ref utfördes i en annan livscykel.
-        //Lösingen är inte vacker men den är att en dedikterad funktion får agera mellanhand.
     }
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -121,38 +75,42 @@
         }
         //Debug.WriteLine($"ASDFASDF {MyTestComponent.elapsedTicks}"); //DET VAR SOM FAN, HÄR ÄR REFERENSEN LYCKAD
     }
-
-
-    public void _ParagraphComponents_LeftPictureStackNumberParagraph() //Skall få nytt namn.
+    protected override void OnAfterRender(bool firstRender)
     {
-        _ParagraphComponents.LeftPictureStackNumberParagraph.CurrentPictureNumber = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue.ToString();
-        _ParagraphComponents.LeftPictureStackNumberParagraph.TotalPictureNumber = _RangeSliderComponents.LeftPictureRangeSlider.MaxValue.ToString();
-        _ParagraphComponents.LeftPictureStackNumberParagraph.UpdateState();
+    }
+    protected override void OnParametersSet()
+    {
+    }
 
-        pictureService.LeftPictureNumberInStackToShow = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue;
-        pictureService.LeftPicturePathToShow();
 
+
+    //Denna funktion körs av rangeSlider eventCallback funktion. Eftersom jag har 2 objekt av alla objekt (ett som skapas av markup, och ett blazor som jag skapar
+    //så måste dessa kopplas samman. Detta görs med @ref, vilket innebär att markup objektet använder mitt objekts inställningar.
+    //Därför ligger merparten av denna kod här.
+    //Orsaken till att UpdateState ligger här, är för att det finns en bugg(?) i blazor, map på hur grejorna kopplas map lifecycle
+    //Dvs, enda sättet att få ett event i tex en rangeSlider, att trigga en rerender av ett paragraph objekt, är att anropa det via denna funktion.
+    public void ActionEventCallback_LeftPictureRangeSlider()
+    {
+        _ParagraphComponents.LeftPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue.ToString();
+        _ParagraphComponents.LeftPictureShowNumberOfTotal.SecondString = "/ " + _RangeSliderComponents.LeftPictureRangeSlider.MaxValue.ToString();
+        _ParagraphComponents.LeftPictureShowNumberOfTotal.UpdateState();
+
+        _ParagraphComponents.LeftPictureTimeStamp.FirstString = "ASDF";
+        _ParagraphComponents.LeftPictureTimeStamp.UpdateState();
+        _ImgSrcComponents.LeftPicture.PicturePathString = pictureService.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue);
         _ImgSrcComponents.LeftPicture.UpdateState();
     }
 
-
-
-    //Detta är en eventCallback funktion, som triggars när user drar i höger RangeSlider. Här flyttas info från höger RangeSlider till höger Paragraph.
-    //Tyvärr måste detta göras här då jag har ett olöst problem. Problemet uppstår endast då en blazorcomponents callback, skall påverka en annan blazor komponents uppdate.
-    //1: När detta program körs, skapas två objekt för varje Blazor component. Ett skapas av Markupen nedan, och ett skapas under "kontrollerade" former av mig i ComponentCreation mappen.
-    //2: Önskat är att koppla mitt objekt, till markup objekt med @ref
-    //3: Och sedan ansluta input för paragraph (i markup), till output för RangeSlider (från Component Creation mapp) med @ref kommando.
-    //4: Tyvär sker referens kopplingarna i fel livscykel (???) i förhållande till ballbacks funktions kopplingen.
-    //5: Detta gör att callback funktionen i RangeSlider componenten inte träffar rött UpdateStatus funktion i paragraph componenten.
-    //6: Detta verkar vara en känd bugg, kanske är Blazor funktionaliteten pushad till sin gräns här.
-    //7: Nedan är alltså en workaround som länkar rätt callback från rätt objekt , till rätt uppdate i rätt objekt.
-    public void _ParagraphComponents_RightPictureStackNumberParagraph()
+    public void ActionEventCallback_RightPictureRangeSlider()
     {
-        _ParagraphComponents.RightPictureStackNumberParagraph.CurrentPictureNumber = _RangeSliderComponents.RightPictureRangeSlider.CurrentValue.ToString();
-        _ParagraphComponents.RightPictureStackNumberParagraph.TotalPictureNumber = _RangeSliderComponents.RightPictureRangeSlider.MaxValue.ToString();
-        _ParagraphComponents.RightPictureStackNumberParagraph.UpdateState();
+        _ParagraphComponents.RightPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.RightPictureRangeSlider.CurrentValue.ToString();
+        _ParagraphComponents.RightPictureShowNumberOfTotal.SecondString = "/ " +_RangeSliderComponents.RightPictureRangeSlider.MaxValue.ToString();
+        _ParagraphComponents.RightPictureShowNumberOfTotal.UpdateState();
+        _ParagraphComponents.RightPictureTimeStamp.FirstString = "ASDF2";
+        _ParagraphComponents.RightPictureTimeStamp.UpdateState();
+        _ImgSrcComponents.RightPicture.PicturePathString = pictureService.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
+        _ImgSrcComponents.RightPicture.UpdateState();
     }
-
 }
 
 
@@ -164,24 +122,18 @@
             <!-- SignalTreeView -->
 
 
-            <img src="@pictureService.LeftPicturePathToShow()" class="MyAutoSizeKeepRatio">
+
 
         </div>
-        <div class="Row1Col2">
-            <!-- DeviationListView -->
+        <div class="Row1Col2"> <!-- DeviationListView -->
         </div>
-        <div class="Row1Col3">
-            <!-- LeftPicture -->
-            <ImgSrcComponent CssClassStyle="MyAutoSizeKeepRatio"
-                             PicturePathString="@pictureService.LeftPicturePathToShow()"
-                             @ref="_ImgSrcComponents.LeftPicture" />
+        <div class="Row1Col3"> <!-- LeftPicture -->
+            <ImgSrcComponent CssClassStyle="MyAutoSizeKeepRatio" @ref="_ImgSrcComponents.LeftPicture" />
         </div>
-        <div class="Row1Col4">
-            <!-- RightPicture -->
-            <img src="Cam1KeepPictures/Camera1_1611872350240.jpeg" class="MyAutoSizeKeepRatio">
+        <div class="Row1Col4"> <!-- RightPicture -->
+            <ImgSrcComponent CssClassStyle="MyAutoSizeKeepRatio" @ref="_ImgSrcComponents.RightPicture" />
         </div>
     </div>
-
     <div class="Row2">
         <div class="Row2Col1">
             <!-- -->
@@ -196,30 +148,20 @@
             <p>Row2Col3</p>
         </div>
         <div class="Row2Col4">
-            <!-- -->
-
+            <ParagraphComponent CssClassStyle="My5" @ref="_ParagraphComponents.LeftPictureTimeStamp" />
         </div>
-        <div class="Row2Col5">
-            <!--Row2Col5-->
-
-            <p>före</p>
+        <div class="Row2Col5"> <!-- Space -->
         </div>
         <div class="Row2Col6">
-            <!-- LeftPictureStackNumberParagraph -->
-            <ParagraphComponent CssClassStyle="My5"
-                                @ref="_ParagraphComponents.LeftPictureStackNumberParagraph" />
+            <ParagraphComponent CssClassStyle="My5" @ref="_ParagraphComponents.LeftPictureShowNumberOfTotal" />
         </div>
         <div class="Row2Col7">
-            <!-- Row2Col7 -->
-            <p>efter</p>
+            <ParagraphComponent CssClassStyle="My5" @ref="_ParagraphComponents.RightPictureTimeStamp" />
         </div>
-        <div class="Row2Col8">
-            <!-- Space -->
+        <div class="Row2Col8"> <!-- Space -->
         </div>
         <div class="Row2Col9">
-            <!-- RightPictureStackNumberParagraph -->
-            <ParagraphComponent CssClassStyle="My5"
-                                @ref="_ParagraphComponents.RightPictureStackNumberParagraph" />
+            <ParagraphComponent CssClassStyle="My5" @ref="_ParagraphComponents.RightPictureShowNumberOfTotal" />
         </div>
     </div>
 
@@ -273,7 +215,7 @@
                                   @ref="_RangeSliderComponents.LeftPictureRangeSlider"
                                   MinValue="1"
                                   MaxValue="@pictureService.NumberOfPicturesInStack()"
-                                  ActionEventCallback="_ParagraphComponents_LeftPictureStackNumberParagraph" />
+                                  ActionEventCallback="ActionEventCallback_LeftPictureRangeSlider" />
         </div>
         <div class="Row3Col7">
             <!-- RightPictureSlider-->
@@ -281,7 +223,7 @@
                                   @ref="_RangeSliderComponents.RightPictureRangeSlider"
                                   MinValue="1"
                                   MaxValue="@pictureService.NumberOfPicturesInStack()"
-                                  ActionEventCallback="_ParagraphComponents_RightPictureStackNumberParagraph" />
+                                  ActionEventCallback="ActionEventCallback_RightPictureRangeSlider" />
         </div>
     </div>
 

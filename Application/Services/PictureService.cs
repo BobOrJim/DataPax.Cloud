@@ -14,12 +14,9 @@ namespace Application.Service
 {
     public class PictureService
     {
-
-        public int LeftPictureNumberInStackToShow { get; set; } = 0;
-
-
         private List<string> PicturePathsList = new List<string>();
         private string[] PicturePathsArray;
+        private string[] PictureTimeStampsArray;
 
         public IPictureDataAccess _PictureDataAccess;
         public PictureService(IPictureDataAccess p)
@@ -27,29 +24,48 @@ namespace Application.Service
             _PictureDataAccess = p;
             Debug.WriteLine($"PictureService konstruktor Körs");
         }
-
         public int NumberOfPicturesInStack()
         {
             return _PictureDataAccess.PicturePathsListFrom_Cam1KeepTable().Count();
         }
-
         public void UpdatePictureStack()
         {
             PicturePathsList = _PictureDataAccess.PicturePathsListFrom_Cam1KeepTable();
             PicturePathsArray = PicturePathsList.ToArray();
+            //PictureTimeStampsArray = 
         }
-
-
-        public string LeftPicturePathToShow()
+        public string LeftPicturePathToShow(int LeftPictureNumberInStackToShow)
         {
             if (PicturePathsArray != null)
             {
-                Debug.WriteLine($"LeftPicturePathToShow path to show ::::: {PicturePathsArray[LeftPictureNumberInStackToShow]}");
                 return PicturePathsArray[LeftPictureNumberInStackToShow];
             }
-            
             return "Cam1KeepPictures/Camera1_1611872350240.jpeg"; //Skall ersättas med någon logga eller något mer neutralt kanske, vill ju inte reta vingebro mer än nödvändigt.
         }
+        public string LeftPictureTimestampToShow(int LeftPictureNumberInStackToShow)
+        {
+            string tmp1 = PicturePathsArray[LeftPictureNumberInStackToShow]; //Här skall vi använda sista tre siffrorna
+            string tmp2 = 
+
+            return "";
+        }
+        public string RightPicturePathToShow(int RightPictureNumberInStackToShow)
+        {
+            if (PicturePathsArray != null)
+            {
+                //Debug.WriteLine($"RightPicturePathToShow path to show ::::: {PicturePathsArray[RightPictureNumberInStackToShow]}");
+                return PicturePathsArray[RightPictureNumberInStackToShow];
+            }
+            return "Cam1KeepPictures/Camera1_1611872350240.jpeg"; //Skall ersättas med någon logga eller något mer neutralt kanske, vill ju inte reta vingebro mer än nödvändigt.
+        }
+        public string RightPictureTimestampToShow()
+        {
+            return "";
+        }
+
+
+
+
 
         //private PictureFilters _PictureFilters;
         //public PictureStackModel LeftPictureStack { get; private set; }
