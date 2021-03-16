@@ -14,9 +14,12 @@ namespace Application.Service
 {
     public class PictureService
     {
-        //Önskat syfte:
-        //Köra pathStack genom ett bild filter
 
+        public int LeftPictureNumberInStackToShow { get; set; } = 0;
+
+
+        private List<string> PicturePathsList = new List<string>();
+        private string[] PicturePathsArray;
 
         public IPictureDataAccess _PictureDataAccess;
         public PictureService(IPictureDataAccess p)
@@ -30,9 +33,22 @@ namespace Application.Service
             return _PictureDataAccess.PicturePathsListFrom_Cam1KeepTable().Count();
         }
 
+        public void UpdatePictureStack()
+        {
+            PicturePathsList = _PictureDataAccess.PicturePathsListFrom_Cam1KeepTable();
+            PicturePathsArray = PicturePathsList.ToArray();
+        }
+
+
         public string LeftPicturePathToShow()
         {
-            return "Cam1KeepPictures/Camera1_1611872350240.jpeg";
+            if (PicturePathsArray != null)
+            {
+                Debug.WriteLine($"LeftPicturePathToShow path to show ::::: {PicturePathsArray[LeftPictureNumberInStackToShow]}");
+                return PicturePathsArray[LeftPictureNumberInStackToShow];
+            }
+            
+            return "Cam1KeepPictures/Camera1_1611872350240.jpeg"; //Skall ersättas med någon logga eller något mer neutralt kanske, vill ju inte reta vingebro mer än nödvändigt.
         }
 
         //private PictureFilters _PictureFilters;

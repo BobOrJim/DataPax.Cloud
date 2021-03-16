@@ -20,6 +20,9 @@
 
 @inject Presentation.WebBlazor.ComponentCreation.ParagraphComponents _ParagraphComponents
 
+@inject Presentation.WebBlazor.ComponentCreation.ImgSrcComponents _ImgSrcComponents
+
+
 @inject Infrastructure.DataAccess.EFAccess _EFAccess
 
 
@@ -34,8 +37,9 @@
     {
         PictureDataAccess pictureDataAccess;
         pictureDataAccess = new PictureDataAccess(_EFAccess);
-        pictureService = new PictureService(pictureDataAccess); //Framtida information om ev valda bild Filter, skall skickas med här.
-        Debug.WriteLine($"OnInitialized : Bilder i stack är : {pictureService.NumberOfPicturesInStack()} ");
+        pictureService = new PictureService(pictureDataAccess);
+        //Debug.WriteLine($"OnInitialized : Bilder i stack är : {pictureService.NumberOfPicturesInStack()} ");
+        pictureService.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
     }
 
 
@@ -119,16 +123,21 @@
     }
 
 
-    public void _ParagraphComponents_LeftPictureStackNumberParagraph()
+    public void _ParagraphComponents_LeftPictureStackNumberParagraph() //Skall få nytt namn.
     {
-        string current = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue.ToString();
-        string total = _RangeSliderComponents.LeftPictureRangeSlider.MaxValue.ToString();
-        _ParagraphComponents.LeftPictureStackNumberParagraph.CurrentPictureNumber = current;
-        _ParagraphComponents.LeftPictureStackNumberParagraph.TotalPictureNumber = total;
+        _ParagraphComponents.LeftPictureStackNumberParagraph.CurrentPictureNumber = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue.ToString();
+        _ParagraphComponents.LeftPictureStackNumberParagraph.TotalPictureNumber = _RangeSliderComponents.LeftPictureRangeSlider.MaxValue.ToString();
         _ParagraphComponents.LeftPictureStackNumberParagraph.UpdateState();
+
+        pictureService.LeftPictureNumberInStackToShow = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue;
+        pictureService.LeftPicturePathToShow();
+
+        _ImgSrcComponents.LeftPicture.UpdateState();
     }
 
-    //Detta är en eventCallback funktion, som triggars när user drar i höger RangeSlider. Här flyttas info från höger RangeSlider till höger Paragraph. 
+
+
+    //Detta är en eventCallback funktion, som triggars när user drar i höger RangeSlider. Här flyttas info från höger RangeSlider till höger Paragraph.
     //Tyvärr måste detta göras här då jag har ett olöst problem. Problemet uppstår endast då en blazorcomponents callback, skall påverka en annan blazor komponents uppdate.
     //1: När detta program körs, skapas två objekt för varje Blazor component. Ett skapas av Markupen nedan, och ett skapas under "kontrollerade" former av mig i ComponentCreation mappen.
     //2: Önskat är att koppla mitt objekt, till markup objekt med @ref
@@ -139,19 +148,10 @@
     //7: Nedan är alltså en workaround som länkar rätt callback från rätt objekt , till rätt uppdate i rätt objekt.
     public void _ParagraphComponents_RightPictureStackNumberParagraph()
     {
-        string current = _RangeSliderComponents.RightPictureRangeSlider.CurrentValue.ToString();
-        string total = _RangeSliderComponents.RightPictureRangeSlider.MaxValue.ToString();
-        _ParagraphComponents.RightPictureStackNumberParagraph.CurrentPictureNumber = current;
-        _ParagraphComponents.RightPictureStackNumberParagraph.TotalPictureNumber = total;
+        _ParagraphComponents.RightPictureStackNumberParagraph.CurrentPictureNumber = _RangeSliderComponents.RightPictureRangeSlider.CurrentValue.ToString();
+        _ParagraphComponents.RightPictureStackNumberParagraph.TotalPictureNumber = _RangeSliderComponents.RightPictureRangeSlider.MaxValue.ToString();
         _ParagraphComponents.RightPictureStackNumberParagraph.UpdateState();
     }
-
-
-    //public void Mupp()
-    //{
-    //    MyTestComponent.TimeCallBack2();
-    //    Debug.WriteLine($"MUPP");
-    //}
 
 }
 
@@ -164,7 +164,7 @@
             <!-- SignalTreeView -->
 
 
-
+            <img src="@pictureService.LeftPicturePathToShow()" class="MyAutoSizeKeepRatio">
 
         </div>
         <div class="Row1Col2">
@@ -172,7 +172,9 @@
         </div>
         <div class="Row1Col3">
             <!-- LeftPicture -->
-            <img src="@pictureService.LeftPicturePathToShow()" class="MyAutoSizeKeepRatio">
+            <ImgSrcComponent CssClassStyle="MyAutoSizeKeepRatio"
+                             PicturePathString="@pictureService.LeftPicturePathToShow()"
+                             @ref="_ImgSrcComponents.LeftPicture" />
         </div>
         <div class="Row1Col4">
             <!-- RightPicture -->
