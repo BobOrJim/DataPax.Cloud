@@ -2,6 +2,7 @@
 using Interfaces.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -10,20 +11,22 @@ namespace Infrastructure.DataAccess
 {
     public class PictureDataAccess : IPictureDataAccess
     {
-        private List<string> PicturePathsList;
+        private List<string> PicturePathsList = new List<string>();
         private string[] PicturePathsArray;
         private IEFAccess _IEFAccess;
 
         public PictureDataAccess(EFAccess _iEFAccess)
         {
             _IEFAccess = _iEFAccess;
+            Debug.WriteLine($"PictureDataAccess konstruktor Körs");
         }
 
-        //Metod0. Util. Read new data from database
+        //Metod0. Utils. Private.
         private void ReadFrom_Cam1KeepTableAndPrepData()
         {
             List<Picture> PictureList = _IEFAccess.Cam1KeepTable.ToList();
             Picture[] PicturesArray = _IEFAccess.Cam1KeepTable.ToArray();
+            PicturePathsList.Clear();
             foreach (Picture picture in PictureList)
             {
                 string tmpPath = "Cam1KeepPictures/" + picture.FileNameCurrent_TEXT + ".jpeg";

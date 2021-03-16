@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Models;
-namespace Application.Controllers
+
+namespace Application.Service
 {
     public class TimeIntervallService
     {
@@ -18,8 +19,8 @@ namespace Application.Controllers
 
         public void TimeIntervallChanged(TimeIntervallModel _timeIntervallModel)
         {
-            _TimeIntervallModel = _timeIntervallModel;
-            _PictureService.UpdatePictureStacks(_TimeIntervallModel.StartTime, _TimeIntervallModel.EndTime, "Cam1", "Cam2");
+            //_TimeIntervallModel = _timeIntervallModel;
+            //_PictureService.UpdatePictureStacks(_TimeIntervallModel.StartTime, _TimeIntervallModel.EndTime, "Cam1", "Cam2");
             //Framöver får jag testa om själva blazor uppdaten skall ske här
             //Här skall det till något med plott
         }

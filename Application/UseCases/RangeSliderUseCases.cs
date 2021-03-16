@@ -7,24 +7,17 @@ using System.Threading.Tasks;
 using System.Drawing.Imaging;
 using System.Drawing;
 using Domain;
-using Application.Controllers;
 
 namespace Application.UseCases
 {
     public class RangeSliderUseCases
     {
-        private Bitmap WorkBitmap;
-        private PictureService pictureService;
 
-        public RangeSliderUseCases(PictureService p)
-        {
-            pictureService = p;
-        }
         
         public void Test()
         {
-            List<string> Test2 = pictureService.ReturnUnmoddedListOfPathsFixaSenare();
-            Debug.WriteLine($"210315: {Test2}");
+            //List<string> Test2 = pictureService.ReturnUnmoddedListOfPathsFixaSenare();
+            //Debug.WriteLine($"210315: {Test2}");
         }
 
         public void LeftPictureRangeSliderChangedEvent()

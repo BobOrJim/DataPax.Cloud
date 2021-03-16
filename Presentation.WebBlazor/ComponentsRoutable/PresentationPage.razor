@@ -6,6 +6,8 @@
 @using Presentation.WebBlazor.ComponentCreation
 @using Presentation.WebBlazor
 @using Infrastructure.Models
+@using Application.Service
+@using Infrastructure.DataAccess
 
 @inject Presentation.WebBlazor.ComponentCreation.NumericTextBoxComponents _NumericTextBoxComponents
 @inject Application.UseCases.NumericTextBoxUseCases _NumericTextBoxUseCases
@@ -18,9 +20,36 @@
 
 @inject Presentation.WebBlazor.ComponentCreation.ParagraphComponents _ParagraphComponents
 
-@*@inject Infrastructure.DataAccess.EFAccess _MyDataAccess*@
+@inject Infrastructure.DataAccess.EFAccess _EFAccess
+
+
 
 @code{
+
+    public PictureService pictureService;
+
+    public string GlobalPath = "ASDF";
+
+    protected override void OnInitialized()
+    {
+        PictureDataAccess pictureDataAccess;
+        pictureDataAccess = new PictureDataAccess(_EFAccess);
+        pictureService = new PictureService(pictureDataAccess); //Framtida information om ev valda bild Filter, skall skickas med här.
+        Debug.WriteLine($"OnInitialized : Bilder i stack är : {pictureService.NumberOfPicturesInStack()} ");
+    }
+
+
+    //Method invoked when the component is ready to start, having recieved its initial parameters from its parrent renderer tree
+    //1: protected override void OnInitialized()
+    //Method invoked after each time the component has been redered
+    //2: protected override void OnAfterRender(bool firstRender)
+    //Method invoked when the component has recieved parameters from its parent in the renderer tree and the incomming values has been assigned to properties
+    //3: protected override void OnParametersSet()
+    //4: protected override Task OnParametersSetAsync()
+    //Returns a flag to indicate wheter the component should renderer.
+    //5: protected override bool ShouldRender()
+
+
 
 
     public static TestComponent MyTestComponent;// = new TestComponent();
@@ -30,9 +59,6 @@
         MyTestComponent = _MyTestComponent;
         Debug.WriteLine("injectParagraph körs nu ");
     }
-
-    public string GlobalPath = "ASDF";
-
 
 
     protected override async Task OnInitializedAsync()
@@ -87,9 +113,9 @@
     {
         if (firstRender)
         {
-            Debug.WriteLine($"ASDFASDF {MyTestComponent.elapsedTicks}"); //DET VAR SOM FAN, HÄR ÄR REFERENSEN LYCKAD
+            //Debug.WriteLine($"ASDFASDF {MyTestComponent.elapsedTicks}"); //DET VAR SOM FAN, HÄR ÄR REFERENSEN LYCKAD
         }
-        Debug.WriteLine($"ASDFASDF {MyTestComponent.elapsedTicks}"); //DET VAR SOM FAN, HÄR ÄR REFERENSEN LYCKAD
+        //Debug.WriteLine($"ASDFASDF {MyTestComponent.elapsedTicks}"); //DET VAR SOM FAN, HÄR ÄR REFERENSEN LYCKAD
     }
 
 
@@ -102,6 +128,15 @@
         _ParagraphComponents.LeftPictureStackNumberParagraph.UpdateState();
     }
 
+    //Detta är en eventCallback funktion, som triggars när user drar i höger RangeSlider. Här flyttas info från höger RangeSlider till höger Paragraph. 
+    //Tyvärr måste detta göras här då jag har ett olöst problem. Problemet uppstår endast då en blazorcomponents callback, skall påverka en annan blazor komponents uppdate.
+    //1: När detta program körs, skapas två objekt för varje Blazor component. Ett skapas av Markupen nedan, och ett skapas under "kontrollerade" former av mig i ComponentCreation mappen.
+    //2: Önskat är att koppla mitt objekt, till markup objekt med @ref
+    //3: Och sedan ansluta input för paragraph (i markup), till output för RangeSlider (från Component Creation mapp) med @ref kommando.
+    //4: Tyvär sker referens kopplingarna i fel livscykel (???) i förhållande till ballbacks funktions kopplingen.
+    //5: Detta gör att callback funktionen i RangeSlider componenten inte träffar rött UpdateStatus funktion i paragraph componenten.
+    //6: Detta verkar vara en känd bugg, kanske är Blazor funktionaliteten pushad till sin gräns här.
+    //7: Nedan är alltså en workaround som länkar rätt callback från rätt objekt , till rätt uppdate i rätt objekt.
     public void _ParagraphComponents_RightPictureStackNumberParagraph()
     {
         string current = _RangeSliderComponents.RightPictureRangeSlider.CurrentValue.ToString();
@@ -112,11 +147,11 @@
     }
 
 
-    public void Mupp()
-    {
-        MyTestComponent.TimeCallBack2();
-        Debug.WriteLine($"MUPP");
-    }
+    //public void Mupp()
+    //{
+    //    MyTestComponent.TimeCallBack2();
+    //    Debug.WriteLine($"MUPP");
+    //}
 
 }
 
@@ -125,25 +160,22 @@
 
 <div class="grid-container">
     <div class="Row1">
-        <div class="Row1Col1"> <!-- SignalTreeView -->
-        <ButtonComponent CssClassStyle="My5"
-                         ButtonText ="DAS KNAPP"
-                         ActionEventCallback = "_RangeSliderUseCases.Test"
-
-                         
-                         
-                         />
+        <div class="Row1Col1">
+            <!-- SignalTreeView -->
 
 
 
 
         </div>
-        <div class="Row1Col2"> <!-- DeviationListView -->
+        <div class="Row1Col2">
+            <!-- DeviationListView -->
         </div>
-        <div class="Row1Col3"> <!-- LeftPicture -->
-            <img src="@GlobalPath" class="MyAutoSizeKeepRatio">
+        <div class="Row1Col3">
+            <!-- LeftPicture -->
+            <img src="@pictureService.LeftPicturePathToShow()" class="MyAutoSizeKeepRatio">
         </div>
-        <div class="Row1Col4"> <!-- RightPicture -->
+        <div class="Row1Col4">
+            <!-- RightPicture -->
             <img src="Cam1KeepPictures/Camera1_1611872350240.jpeg" class="MyAutoSizeKeepRatio">
         </div>
     </div>
@@ -170,7 +202,8 @@
 
             <p>före</p>
         </div>
-        <div class="Row2Col6"> <!-- LeftPictureStackNumberParagraph -->
+        <div class="Row2Col6">
+            <!-- LeftPictureStackNumberParagraph -->
             <ParagraphComponent CssClassStyle="My5"
                                 @ref="_ParagraphComponents.LeftPictureStackNumberParagraph" />
         </div>
@@ -178,18 +211,22 @@
             <!-- Row2Col7 -->
             <p>efter</p>
         </div>
-        <div class="Row2Col8"> <!-- Space -->
+        <div class="Row2Col8">
+            <!-- Space -->
         </div>
-        <div class="Row2Col9"> <!-- LeftPictureStackNumberParagraph -->
+        <div class="Row2Col9">
+            <!-- RightPictureStackNumberParagraph -->
             <ParagraphComponent CssClassStyle="My5"
                                 @ref="_ParagraphComponents.RightPictureStackNumberParagraph" />
         </div>
     </div>
 
     <div class="Row3">
-        <div class="Row3Col1"> <!-- Space -->
+        <div class="Row3Col1">
+            <!-- Space -->
         </div>
-        <div class="Row3Col2"> <!-- DeviationYear -->
+        <div class="Row3Col2">
+            <!-- DeviationYear -->
             <NumericTextBoxComponent CssClassStyle="My5"
                                      @ref="_NumericTextBoxComponents.DeviationYear"
                                      ThisComponentInstanceName="_NumericTextBoxComponents.DeviationYear"
@@ -198,7 +235,8 @@
                                      ActionEventCallback="_NumericTextBoxUseCases.DeviationYearValueChangedEvent">
             </NumericTextBoxComponent>
         </div>
-        <div class="Row3Col3"> <!-- DeviationMonth -->
+        <div class="Row3Col3">
+            <!-- DeviationMonth -->
             <NumericTextBoxComponent CssClassStyle="My5"
                                      @ref="_NumericTextBoxComponents.DeviationMonth"
                                      ThisComponentInstanceName="_NumericTextBoxComponents.DeviationYear"
@@ -207,7 +245,8 @@
                                      ActionEventCallback="_NumericTextBoxUseCases.DeviationMonthValueChangedEvent">
             </NumericTextBoxComponent>
         </div>
-        <div class="Row3Col4"> <!-- DeviationDay -->
+        <div class="Row3Col4">
+            <!-- DeviationDay -->
             <NumericTextBoxComponent CssClassStyle="My5"
                                      @ref="_NumericTextBoxComponents.DeviationDay"
                                      ThisComponentInstanceName="_NumericTextBoxComponents.DeviationYear"
@@ -226,18 +265,20 @@
                 </div>
             </div>
         </div>
-        <div class="Row3Col6"> <!-- LeftPictureSlider  -->
+        <div class="Row3Col6">
+            <!-- LeftPictureSlider  -->
             <RangeSliderComponent CssClassStyle="My5"
                                   @ref="_RangeSliderComponents.LeftPictureRangeSlider"
                                   MinValue="1"
-                                  MaxValue="66"
+                                  MaxValue="@pictureService.NumberOfPicturesInStack()"
                                   ActionEventCallback="_ParagraphComponents_LeftPictureStackNumberParagraph" />
         </div>
-        <div class="Row3Col7"> <!-- RightPictureSlider-->
+        <div class="Row3Col7">
+            <!-- RightPictureSlider-->
             <RangeSliderComponent CssClassStyle="My5"
                                   @ref="_RangeSliderComponents.RightPictureRangeSlider"
                                   MinValue="1"
-                                  MaxValue="66"
+                                  MaxValue="@pictureService.NumberOfPicturesInStack()"
                                   ActionEventCallback="_ParagraphComponents_RightPictureStackNumberParagraph" />
         </div>
     </div>
@@ -245,7 +286,6 @@
     <div class="Row4">
         <div class="Row4Col1">
             <!-- Luft Row4Col1-->
-            <p>@_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue</p>
         </div>
         <div class="Row4Col2">
             <!-- MakeLeftSyncMasterCheckBox -->

@@ -58,7 +58,7 @@ namespace Presentation.WebBlazor
             services.AddSingleton<Presentation.WebBlazor.ComponentCreation.ParagraphComponents>(); //JIMMY
 
 
-            services.AddSingleton<Application.Controllers.PictureService>(); //JIMMY
+            //services.AddSingleton<Application.Controllers.PictureService>(); //JIMMY
 
             MyInit myInit = new MyInit();
             //services.AddSingleton<Application.Controllers.PictureController>();
