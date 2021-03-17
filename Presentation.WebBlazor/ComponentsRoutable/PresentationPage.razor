@@ -6,7 +6,7 @@
 @using Presentation.WebBlazor.ComponentCreation
 @using Presentation.WebBlazor
 @using Infrastructure.Models
-@using Application.Service
+@using Application.Services
 @using Infrastructure.DataAccess
 
 @inject Presentation.WebBlazor.ComponentCreation.NumericTextBoxComponents _NumericTextBoxComponents
@@ -29,11 +29,10 @@
 @code{
 
     public PictureService pictureService;
-
+    public IOService iOService;
     public string GlobalPath = "ASDF";
 
     public static TestComponent MyTestComponent;// = new TestComponent();
-
 
     //Method invoked when the component is ready to start, having recieved its initial parameters from its parrent renderer tree
     //1: protected override void OnInitialized()
@@ -64,8 +63,6 @@
         _NumericTextBoxUseCases.Hej();
         _NumericTextBoxUseCases.DepInjection(_NumericTextBoxComponents);
         _ButtonUseCases.DepInjection(_NumericTextBoxComponents);
-
-
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -82,8 +79,6 @@
     {
     }
 
-
-
     //Denna funktion körs av rangeSlider eventCallback funktion. Eftersom jag har 2 objekt av alla objekt (ett som skapas av markup, och ett blazor som jag skapar
     //så måste dessa kopplas samman. Detta görs med @ref, vilket innebär att markup objektet använder mitt objekts inställningar.
     //Därför ligger merparten av denna kod här.
@@ -91,22 +86,20 @@
     //Dvs, enda sättet att få ett event i tex en rangeSlider, att trigga en rerender av ett paragraph objekt, är att anropa det via denna funktion.
     public void ActionEventCallback_LeftPictureRangeSlider()
     {
-        _ParagraphComponents.LeftPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue.ToString();
-        _ParagraphComponents.LeftPictureShowNumberOfTotal.SecondString = "/ " + _RangeSliderComponents.LeftPictureRangeSlider.MaxValue.ToString();
+        _ParagraphComponents.LeftPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue.ToString() + " / " + _RangeSliderComponents.LeftPictureRangeSlider.MaxValue.ToString();
         _ParagraphComponents.LeftPictureShowNumberOfTotal.UpdateState();
-
-        _ParagraphComponents.LeftPictureTimeStamp.FirstString = "ASDF";
+        _ParagraphComponents.LeftPictureTimeStamp.FirstString = pictureService.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(0, 10);
+        _ParagraphComponents.LeftPictureTimeStamp.SecondString = pictureService.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(pictureService.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Length - 13);
         _ParagraphComponents.LeftPictureTimeStamp.UpdateState();
         _ImgSrcComponents.LeftPicture.PicturePathString = pictureService.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue);
         _ImgSrcComponents.LeftPicture.UpdateState();
     }
-
     public void ActionEventCallback_RightPictureRangeSlider()
     {
-        _ParagraphComponents.RightPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.RightPictureRangeSlider.CurrentValue.ToString();
-        _ParagraphComponents.RightPictureShowNumberOfTotal.SecondString = "/ " +_RangeSliderComponents.RightPictureRangeSlider.MaxValue.ToString();
+        _ParagraphComponents.RightPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.RightPictureRangeSlider.CurrentValue.ToString() + " / " + _RangeSliderComponents.RightPictureRangeSlider.MaxValue.ToString();
         _ParagraphComponents.RightPictureShowNumberOfTotal.UpdateState();
-        _ParagraphComponents.RightPictureTimeStamp.FirstString = "ASDF2";
+        _ParagraphComponents.RightPictureTimeStamp.FirstString = pictureService.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Substring(0, 10);
+        _ParagraphComponents.RightPictureTimeStamp.SecondString = pictureService.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Substring(pictureService.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Length - 13);
         _ParagraphComponents.RightPictureTimeStamp.UpdateState();
         _ImgSrcComponents.RightPicture.PicturePathString = pictureService.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
         _ImgSrcComponents.RightPicture.UpdateState();
@@ -120,7 +113,7 @@
     <div class="Row1">
         <div class="Row1Col1">
             <!-- SignalTreeView -->
-
+            @*@iOService.IONames();*@
 
 
 

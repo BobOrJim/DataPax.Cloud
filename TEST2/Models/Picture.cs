@@ -12,7 +12,6 @@ namespace Infrastructure.Models
         public Int64 Timestamp_unix_BIGINT { get; set; }
         public string FileNameCurrent_TEXT { get; set; }
         public string FileEndingCurrent_TEXT { get; set; }
-
-
+        public string Datestamp_TEXT { get; set; }
     }
 }

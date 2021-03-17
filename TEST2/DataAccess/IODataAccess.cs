@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Infrastructure.DataAccess
 {
-    class IODataAccess
+    public class IODataAccess
     {
     }
 }

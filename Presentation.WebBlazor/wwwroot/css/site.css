@@ -189,11 +189,13 @@ a, .btn-link {
 .Row1Col3 { /* LeftPicture */
     grid-area: Row1Col3;
     background-color: #c6e8f7;
+    border: 1px solid black;
 }
 
 .Row1Col4 { /* RightPicture */
     grid-area: Row1Col4;
     background-color: #c6e8f7;
+    border: 1px solid black;
     /* I detta hörn skulle jag kunna stoppa in en liten drop down meny. Typ som https://grid.layoutit.com/*/
     /* https://www.youtube.com/watch?v=TBoUetqLnps */
 }
@@ -209,52 +211,63 @@ a, .btn-link {
 
 .Row2Col1 { /* Space */
     grid-area: Row2Col1;
-    background-color: #220000;
+    background-color: #c6e8f7;
+    border: 1px solid black;
 }
 
-.Row2Col2 { /* LeftPictureTimestamp*/
+.Row2Col2 { /* Space */
     grid-area: Row2Col2;
-    background-color: #222222;
+    background-color: #c6e8f7;
+    border: 1px solid black;
 }
 
-.Row2Col3 { /* LeftPictureCamSelector */
+.Row2Col3 { /* Space */
     grid-area: Row2Col3;
-    background-color: #224444;
+    background-color: #c6e8f7;
+    border: 1px solid black;
 }
 
-.Row2Col4 { /* LeftPictureCamFilter */
+.Row2Col4 { /* LeftPictureTimestamp  */
     grid-area: Row2Col4;
-    background-color: #225555;
+    background-color: #c6e8f7;
+    border: 1px solid black;
+    font-size: 1.5vh; /* Paragraph i html lägger på en radbrytning, dvs om jag har 2 rader text, o en radbryt. så är 1.5vh the magic number. */
 }
 
-.Row2Col5 { /* LeftPicturePictureCounter */
+.Row2Col5 { /* LeftPicture_CamAndFilterSelector */
     grid-area: Row2Col5;
-    background-color: #226666;
+    background-color: #c6e8f7;
+    border: 1px solid black;
 }
 
-.Row2Col6 { /* RightPictureTimestamp */
+.Row2Col6 { /* LeftPicturePictureCounter */
     grid-area: Row2Col6;
-    background-color: #228888;
+    background-color: #c6e8f7;
+    border: 1px solid black;
 }
 
-.Row2Col7 { /* RightPictureCamSelector */
+.Row2Col7 { /* RightPictureTimestamp */
     grid-area: Row2Col7;
-    background-color: #229999;
+    background-color: #c6e8f7;
+    border: 1px solid black;
+    font-size: 1.5vh;
 }
 
-.Row2Col8 { /* RightPictureCamFilter */
+.Row2Col8 { /* RightPicture_CamAndFilterSelector */
     grid-area: Row2Col8;
-    background-color: #22bbbb;
+    background-color: #c6e8f7;
+    border: 1px solid black;
 }
 
 .Row2Col9 { /* RightPicturePictureCounter */
     grid-area: Row2Col9;
-    background-color: #22eeee;
+    background-color: #c6e8f7;
+    border: 1px solid black;
 }
 
 .Row3 {
     display: grid;
-    grid-template-columns: 10% 10% 10% 10% 20% 20% 20%; /* 10%% är en skärm, dvs jag kan överskrkrida och då får jag scrolla */
+    grid-template-columns: 15% 5% 5% 5% 10% 30% 30%; /* 10%% är en skärm, dvs jag kan överskrkrida och då får jag scrolla */
     grid-template-rows: 100%;
     gap: 0px 0px;
     grid-template-areas: "Row3Col1 Row3Col2 Row3Col3 Row3Col4 Row3Col5 Row3Col6 Row3Col7";
@@ -304,12 +317,14 @@ a, .btn-link {
 
 .Row3Col6 { /* LeftPictureSlider */
     grid-area: Row3Col6;
-    background-color: #44aaaa;
+    background-color: #c6e8f7;
+    border: 1px solid black;
 }
 
 .Row3Col7 { /* RightPictureSlider */
     grid-area: Row3Col7;
-    background-color: #44cccc;
+    background-color: #c6e8f7;
+    border: 1px solid black;
 }
 
 .Row4 {

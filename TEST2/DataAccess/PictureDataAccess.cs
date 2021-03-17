@@ -13,6 +13,8 @@ namespace Infrastructure.DataAccess
     {
         private List<string> PicturePathsList = new List<string>();
         private string[] PicturePathsArray;
+        private List<string> PictureTimeStampStringList = new List<string>();
+        private string[] PictureTimeStampStringArray;
         private IEFAccess _IEFAccess;
 
         public PictureDataAccess(EFAccess _iEFAccess)
@@ -27,12 +29,15 @@ namespace Infrastructure.DataAccess
             List<Picture> PictureList = _IEFAccess.Cam1KeepTable.ToList();
             Picture[] PicturesArray = _IEFAccess.Cam1KeepTable.ToArray();
             PicturePathsList.Clear();
+            Debug.WriteLine($"Nu sker anrop till DB från PictureDataAccess, kolla så det inte blir för många av dessa, bortsett från init, bör de bara köras när någon tidModell ändras");
             foreach (Picture picture in PictureList)
             {
-                string tmpPath = "Cam1KeepPictures/" + picture.FileNameCurrent_TEXT + ".jpeg";
-                PicturePathsList.Add(tmpPath);
+                PicturePathsList.Add("Cam1KeepPictures/" + picture.FileNameCurrent_TEXT + ".jpeg");
+                //Building a label(string), that will show the timestamp with 3 decimals after the second.
+                PictureTimeStampStringList.Add(picture.Datestamp_TEXT + "." + picture.FileNameCurrent_TEXT.Substring(picture.FileNameCurrent_TEXT.Length - 3));
             }
             PicturePathsArray = PicturePathsList.ToArray();
+            PictureTimeStampStringArray = PictureTimeStampStringList.ToArray();
         }
 
         //Metod 1. Returnerar alla paths, i anropad tabell som lista.
@@ -41,15 +46,32 @@ namespace Infrastructure.DataAccess
             ReadFrom_Cam1KeepTableAndPrepData();
             return PicturePathsList;
         }
-
-        //Metod 2. Returnerar alla paths, i anropad tabell som lista.
+        //Metod 2. Returnerar alla paths, i anropad tabell som array
         public string[] PicturePathsArrayFrom_Cam1KeepTable()
         {
             ReadFrom_Cam1KeepTableAndPrepData();
             return PicturePathsArray;
         }
+        //Metod 3. Returnerar alla timestamp, i anropad tabell som lista.
+        public List<string> PictureTimeStampStringListFrom_Cam1KeepTable()
+        {
+            ReadFrom_Cam1KeepTableAndPrepData();
+            return PictureTimeStampStringList;
+        }
+        //Metod 4. Returnerar alla timestamp, i anropad tabell som array
+        public string[] PictureTimeStampStringArrayFrom_Cam1KeepTable()
+        {
+            ReadFrom_Cam1KeepTableAndPrepData();
+            return PictureTimeStampStringArray;
+        }
 
-        //Metod 2. Returnerar alla bildern i anropad tabell mellan tid 1 och tid 2
+
+
+
+
+
+
+        //Metod 3. Returnerar alla bildern i anropad tabell mellan tid 1 och tid 2
 
     }
 }

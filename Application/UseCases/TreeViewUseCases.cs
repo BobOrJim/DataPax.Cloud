@@ -29,42 +29,6 @@ namespace Application.UseCases
     }
 }
 
-//Obs, underscore är radbrytare, inte mellanslag. Dvs det är fyra kategorier.
 
-//# print("TEST PROTOTYPE TREE IS NOW CREATED AND COMPLETE")
-//# ADDING AN OBJECT TO MY TREE, IF ALREADY IN TREE, IT WILL NOT BE ADDED AGAIN
-//self.addToTree("Line 3_Machine 1_IO group 12_IO 666") #WORKS
-//        self.addToTree("Line 3_Machine 2_IO group 1_IO 666") #WORKS
-//        self.addToTree("Line 3_Machine 2_IO group 2_IO 666") #WORKS
-//        self.addToTree("Line 3_Machine 2_IO group 3_IO 1") #WORKS
-//        self.addToTree("Line 3_Machine 2_IO group 3_IO 2") #WORKS
-//        self.addToTree("Line 3_Machine 2_IO group 3_IO 3") #WORKS
-//        self.addToTree("Line 3_Machine 2_IO group 3_IO 3") #WORKS
-//        self.addToTree("Line 3_Machine 2_IO group 3_IO 3") #WORKS
-
-//        self.addToTree("Line 3_Machine 3_IO group 12_IO 666") #WORKS
-//        self.addToTree("Line 3_Machine 1_IO group 12_IO 666") #WORKS
-//        self.addToTree("Line 3_Machine 1_IO group 12_IO 666") #WORKS
-//        self.addToTree("Line 3_Machine 2_IO group 12_IO 666") #WORKS
-//        self.addToTree("Line 3_Machine 3_IO group 12_IO 666") #WORKS
-//        self.addToTree("Line 3_Machine 3_IO group 12_IO 6") #WORKS
-//        self.addToTree("Line 3_Machine 3_IO group 12_IO 5") #WORKS
-//        self.addToTree("Line 3_Machine 3_IO group 12_IO 2") #WORKS
-//        self.addToTree("Line 3_Machine 3_IO group 12_IO 4") #WORKS
-
-//        self.addToTree("Line 3_Machine 1_IO group 12_IO 666") #WORKS
-//        self.addToTree("Line 3_Machine 4_IO group 12_IO 666") #WORKS
-//        self.addToTree("Line 3_Machine 2_IO group 12_IO 666") #WORKS
-//        self.addToTree("Line 3_Machine 3_IO group 12_IO 666") #WORKS
-
-//        self.addToTree("Line 3_Machine 4_IO group 12_IO 0") #WORKS
-//        self.addToTree("Line 3_Machine 3_IO group 12_IO 0") #WORKS
-//        self.addToTree("Line 3_Machine 2_IO group 12_IO 0") #WORKS
-//        self.addToTree("Line 3_Machine 1_IO group 12_IO 0") #WORKS
-
-//        self.addToTree("Line 3_Machine 1_IO group 12_IO 4") #WORKS
-//        self.addToTree("Line 3_Machine 1_IO group 12_IO 1") #WORKS
-//        self.addToTree("Line 3_Machine 1_IO group 12_IO 3") #WORKS
-//        self.addToTree("Line 3_Machine 1_IO group 12_IO 2") #WORKS
 
 

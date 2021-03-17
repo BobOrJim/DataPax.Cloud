@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\IOService.cs" />
     <Compile Include="Services\PictureService.cs" />
     <Compile Include="Services\TimeIntervallService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

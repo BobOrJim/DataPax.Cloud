@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain.Models;
 
-namespace Application.Service
+namespace Application.Services
 {
     public class TimeIntervallService
     {
