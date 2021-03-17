@@ -22,6 +22,9 @@
 
 @inject Presentation.WebBlazor.ComponentCreation.ImgSrcComponents _ImgSrcComponents
 
+@inject Presentation.WebBlazor.ComponentCreation.TreeViewComponents _TreeViewComponents
+
+
 @inject Infrastructure.DataAccess.EFAccess _EFAccess
 
 
@@ -50,7 +53,7 @@
         pictureService = new PictureService(pictureDataAccess);
         //Debug.WriteLine($"OnInitialized : Bilder i stack är : {pictureService.NumberOfPicturesInStack()} ");
         pictureService.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
-
+        iOService = new IOService();
     }
     public static void injectParagraph(TestComponent _MyTestComponent)
     {
@@ -103,6 +106,21 @@
         _ParagraphComponents.RightPictureTimeStamp.UpdateState();
         _ImgSrcComponents.RightPicture.PicturePathString = pictureService.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
         _ImgSrcComponents.RightPicture.UpdateState();
+
+        _TreeViewComponents.IOTreeView2Component.IONameList = iOService.IONames();
+        _TreeViewComponents.IOTreeView2Component.UpdateState();
+    }
+
+    //public void ActionEventCallback_TreeView()
+    //{
+
+    //    _TreeViewComponents.IOTreeView2Component.UpdateState();
+    //}
+    public void EventCallback_TreeView(string tmp)
+    {
+        Debug.WriteLine($"In EventCallback_TreeView : {tmp}");
+        _TreeViewComponents.IOTreeView2Component.UpdateState();
+
     }
 }
 
@@ -113,17 +131,27 @@
     <div class="Row1">
         <div class="Row1Col1">
             <!-- SignalTreeView -->
-            @*@iOService.IONames();*@
+            <TreeView2Component CssClassStyle="MyInvisibleButton"
+                                @ref="_TreeViewComponents.IOTreeView2Component"
+
+                                MyCallback="EventCallback_TreeView"
+                                />
 
 
 
         </div>
-        <div class="Row1Col2"> <!-- DeviationListView -->
+        <div class="Row1Col2">
+            <!-- DeviationListView -->
+            @*<TreeViewComponent>
+
+                </TreeViewComponent>*@
         </div>
-        <div class="Row1Col3"> <!-- LeftPicture -->
+        <div class="Row1Col3">
+            <!-- LeftPicture -->
             <ImgSrcComponent CssClassStyle="MyAutoSizeKeepRatio" @ref="_ImgSrcComponents.LeftPicture" />
         </div>
-        <div class="Row1Col4"> <!-- RightPicture -->
+        <div class="Row1Col4">
+            <!-- RightPicture -->
             <ImgSrcComponent CssClassStyle="MyAutoSizeKeepRatio" @ref="_ImgSrcComponents.RightPicture" />
         </div>
     </div>
@@ -143,7 +171,8 @@
         <div class="Row2Col4">
             <ParagraphComponent CssClassStyle="My5" @ref="_ParagraphComponents.LeftPictureTimeStamp" />
         </div>
-        <div class="Row2Col5"> <!-- Space -->
+        <div class="Row2Col5">
+            <!-- Space -->
         </div>
         <div class="Row2Col6">
             <ParagraphComponent CssClassStyle="My5" @ref="_ParagraphComponents.LeftPictureShowNumberOfTotal" />
@@ -151,7 +180,8 @@
         <div class="Row2Col7">
             <ParagraphComponent CssClassStyle="My5" @ref="_ParagraphComponents.RightPictureTimeStamp" />
         </div>
-        <div class="Row2Col8"> <!-- Space -->
+        <div class="Row2Col8">
+            <!-- Space -->
         </div>
         <div class="Row2Col9">
             <ParagraphComponent CssClassStyle="My5" @ref="_ParagraphComponents.RightPictureShowNumberOfTotal" />

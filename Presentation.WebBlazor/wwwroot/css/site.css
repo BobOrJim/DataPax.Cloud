@@ -92,6 +92,15 @@ a, .btn-link {
     background-color: #009999;
 }*/
 
+.MyInvisibleButton {
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+}
+
 .dropdown {
     position: relative;
     display: inline-block;
@@ -176,14 +185,16 @@ a, .btn-link {
 .Row1Col1 { /* SignalTreeView */
     grid-area: Row1Col1;
     background-color: #c6e8f7;
-    border: 3px solid black;
+    border: 1px solid black;
+    font-size: 0.8vw
 }
 
 .Row1Col2 { /* DeviationListView */
     grid-area: Row1Col2;
     background-color: #c6e8f7;
     /*flex-wrap: wrap;*/
-    /*justify-self: stretch; */  /*width:100%;*/
+    /*justify-self: stretch; */ /*width:100%;*/
+    border: 1px solid black;
 }
 
 .Row1Col3 { /* LeftPicture */
@@ -231,7 +242,7 @@ a, .btn-link {
     grid-area: Row2Col4;
     background-color: #c6e8f7;
     border: 1px solid black;
-    font-size: 1.5vh; /* Paragraph i html lägger på en radbrytning, dvs om jag har 2 rader text, o en radbryt. så är 1.5vh the magic number. */
+    font-size: 1.5vh; /* Paragraph i html lägger på en radbrytning, dvs om jag har 2 rader text, o en radbryt. så är 1.5vh the magic number. SPAN gör ingen radbryt DUH*/
 }
 
 .Row2Col5 { /* LeftPicture_CamAndFilterSelector */

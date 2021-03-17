@@ -1,0 +1,42 @@
+﻿@using System.Diagnostics
+
+<p>start</p>
+<span class="@CssClassStyle">
+    @if (IONameList != null)
+    {
+        @foreach (string todo in IONameList)
+        {
+            <button class="@CssClassStyle" 
+                @onclick="@(() => MyCallback.InvokeAsync("Hello from ChildComponent" + @todo))">
+                    
+                >
+                @todo
+            </button>
+        }
+    }
+</span>
+<p>end</p>
+
+
+
+@code {
+    [Parameter]
+    public string CssClassStyle { get; set; }
+    public List<string> IONameList { get; set; }
+    //[Parameter]
+    //public Action ActionEventCallback { get; set; }
+    [Parameter]
+    public EventCallback<string> MyCallback { get; set; }
+
+    //public void CallbackClick(string tmp)
+    //{
+    //    Debug.WriteLine($"In TreeView2Component: {tmp}");
+    //    ActionEventCallback.Invoke();
+    //}
+
+    public void UpdateState()
+    {
+        InvokeAsync(StateHasChanged);
+        Debug.WriteLine($"UpdateState körs i TreeView2Component ");
+    }
+}

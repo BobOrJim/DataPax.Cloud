@@ -10,6 +10,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="MW.Blazor.Tree" Version="1.3.0" />
     <PackageReference Include="Syncfusion.Blazor" Version="18.4.0.44" />
   </ItemGroup>
 

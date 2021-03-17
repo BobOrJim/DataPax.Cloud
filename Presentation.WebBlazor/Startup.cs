@@ -59,11 +59,10 @@ namespace Presentation.WebBlazor
 
             services.AddSingleton<Presentation.WebBlazor.ComponentCreation.ImgSrcComponents>(); //Jimmy
 
+            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.TreeViewComponents>(); //JIMMY
 
-            //services.AddSingleton<Application.Controllers.PictureService>(); //JIMMY
 
             MyInit myInit = new MyInit();
-            //services.AddSingleton<Application.Controllers.PictureController>();
 
 
 
@@ -71,7 +70,6 @@ namespace Presentation.WebBlazor
 
 
 
-            //services.AddSingleton<TreeViewComponents>(); //JIMMY
 
         }
 
