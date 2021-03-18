@@ -46,7 +46,7 @@ namespace Application.Services
             tmpList.Add("Line 2_Machine 2_IO group 2_IO C");
             tmpList.Add("Line 2_Machine 2_IO group 2_IO D");
             tmpList.Add("Line 2_Machine 3_IO group 2_IO C");
-            tmpList.Add("Line 2_Machine 3_IO group 2_IO D");
+            tmpList.Add("Line 2_Machine 3_IO group 3_IO D");
             return tmpList;
         }
     }
