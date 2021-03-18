@@ -1,28 +1,29 @@
 ﻿@using System.Diagnostics
+@using Application.Models
 
-<p>start</p>
+
+
 <span class="@CssClassStyle">
-    @if (IONameList != null)
+    @if (TreeNodes != null)
     {
-        @foreach (string todo in IONameList)
+        @foreach (TreeNode treeNode in TreeNodes)
         {
-            <button class="@CssClassStyle" 
-                @onclick="@(() => MyCallback.InvokeAsync("Hello from ChildComponent" + @todo))">
-                    
-                >
-                @todo
+            //Det skall till någon if här, som tar bort ej expanderande träd
+            //Det skall till en span här, som ritar in rätt antal tab baserat på nästa objekts level.
+            <button class="@CssClassStyle" @onclick="@(() => MyCallback.InvokeAsync("Hello from ChildComponent" + @treeNode.Name))">
+            @treeNode.Name
             </button>
+            <br />
         }
     }
 </span>
-<p>end</p>
 
 
 
 @code {
     [Parameter]
     public string CssClassStyle { get; set; }
-    public List<string> IONameList { get; set; }
+    public List<TreeNode> TreeNodes { get; set; }
     //[Parameter]
     //public Action ActionEventCallback { get; set; }
     [Parameter]
@@ -37,6 +38,6 @@
     public void UpdateState()
     {
         InvokeAsync(StateHasChanged);
-        Debug.WriteLine($"UpdateState körs i TreeView2Component ");
+        //Debug.WriteLine($"UpdateState körs i TreeView2Component ");
     }
 }

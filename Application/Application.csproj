@@ -45,10 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\TreeNode.cs" />
     <Compile Include="Services\IOService.cs" />
     <Compile Include="Services\PictureService.cs" />
     <Compile Include="Services\TimeIntervallService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TreeBuilderUtils.cs" />
     <Compile Include="UseCases\ButtonUseCases.cs" />
     <Compile Include="UseCases\NumericTextBoxUseCases.cs" />
     <Compile Include="UseCases\RangeSliderUseCases.cs" />

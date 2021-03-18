@@ -36,6 +36,8 @@
     public string GlobalPath = "ASDF";
     public List<string> IONameList = new List<string>(); //Work data, skall hämtas från IOService senare.
 
+
+
     public static TestComponent MyTestComponent;// = new TestComponent();
 
     //Method invoked when the component is ready to start, having recieved its initial parameters from its parrent renderer tree
@@ -55,6 +57,7 @@
         //Debug.WriteLine($"OnInitialized : Bilder i stack är : {pictureService.NumberOfPicturesInStack()} ");
         pictureService.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
         iOService = new IOService();
+        iOService.IOColumnNamesAsTreeNodes();
     }
     public static void injectParagraph(TestComponent _MyTestComponent)
     {
@@ -82,7 +85,6 @@
     protected override void OnParametersSet()
     {
     }
-
     //Denna funktion körs av rangeSlider eventCallback funktion. Eftersom jag har 2 objekt av alla objekt (ett som skapas av markup, och ett blazor som jag skapar
     //så måste dessa kopplas samman. Detta görs med @ref, vilket innebär att markup objektet använder mitt objekts inställningar.
     //Därför ligger merparten av denna kod här.
@@ -108,12 +110,10 @@
         _ImgSrcComponents.RightPicture.PicturePathString = pictureService.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
         _ImgSrcComponents.RightPicture.UpdateState();
 
-        //_TreeViewComponents.IOTreeView2Component.IONameList = iOService.IONames();
-        //_TreeViewComponents.IOTreeView2Component.UpdateState();
-        IONameList.Clear();
-        TreeDataPrep();
-    }
 
+        _TreeViewComponents.IOTreeView2Component.TreeNodes = iOService.IOColumnNamesAsTreeNodes();
+        _TreeViewComponents.IOTreeView2Component.UpdateState();
+    }
     //public void ActionEventCallback_TreeView()
     //{
 
@@ -121,72 +121,25 @@
     //}
     public void EventCallback_TreeView(string tmp)
     {
-        Debug.WriteLine($"In EventCallback_TreeView : {tmp}");
+        //Debug.WriteLine($"In EventCallback_TreeView : {tmp}");
 
         //Expand Node string kommer här, tex innehåller den inga _, eller börjar med två space...
         if (tmp == "ExpandNodeChangedStatus")
         {
             Debug.WriteLine($"In EventCallback_TreeView kör IF");
             //"Bygger om" träd, dvs ändrar expanded properties...
-            _TreeViewComponents.IOTreeView2Component.UpdateState();
+            //_TreeViewComponents.IOTreeView2Component.UpdateState();
         }
         else
         {
             Debug.WriteLine($"In EventCallback_TreeView kör ELSE");
             //Skickar sträng till en array med round robin.
-            _TreeViewComponents.IOTreeView2Component.UpdateState();
+            //_TreeViewComponents.IOTreeView2Component.UpdateState();
 
         }
     }
 
-    public void TreeDataPrep()
-    {
-        IONameList.Sort();
-
-        //List har följande MEtod "public void Insert (int index, T item);" för att knö in items i mitten.
-
-        //Line 1
-        //Machine 1
-        //Group 1
-        IONameList.Add("Line 1_Machine 1_IO group 1_IO A");
-        IONameList.Add("Line 1_Machine 1_IO group 1_IO B");
-        //Group 2
-        IONameList.Add("Line 1_Machine 1_IO group 2_IO C");
-        IONameList.Add("Line 1_Machine 1_IO group 2_IO D");
-        //Machine 2
-        IONameList.Add("Line 1_Machine 2_IO group 2_IO C");
-        IONameList.Add("Line 1_Machine 2_IO group 2_IO D");
-        //Line 2
-        //Machine 2
-        //Group 2
-        IONameList.Add("Line 2_Machine 2_IO group 2_IO C");
-        IONameList.Add("Line 2_Machine 2_IO group 2_IO D");
-        //Machine 2
-        //Group 2
-        IONameList.Add("Line 2_Machine 3_IO group 2_IO C");
-        //Group 3
-        IONameList.Add("Line 2_Machine 3_IO group 3_IO D");
-
-
-
-        /*
-        IONameList.Add("Line 1_Machine 1_IO group 1_IO A");
-        IONameList.Add("Line 1_Machine 1_IO group 1_IO B");
-        IONameList.Add("Line 1_Machine 1_IO group 2_IO C");
-        IONameList.Add("Line 1_Machine 1_IO group 2_IO D");
-        IONameList.Add("Line 1_Machine 2_IO group 2_IO C");
-        IONameList.Add("Line 1_Machine 2_IO group 2_IO D");
-        IONameList.Add("Line 2_Machine 2_IO group 2_IO C");
-        IONameList.Add("Line 2_Machine 2_IO group 2_IO D");
-        IONameList.Add("Line 2_Machine 3_IO group 2_IO C");
-        IONameList.Add("Line 2_Machine 3_IO group 2_IO D");
-        IONameList.Add("Park 1_Verk 12_Växel 2_TempVakt");
-        */
-        //_TreeViewComponents.IOTreeView2Component.IONameList =
-    }
-
 }
-
 
 
 

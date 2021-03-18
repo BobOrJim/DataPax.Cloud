@@ -9,6 +9,8 @@ using System.Drawing.Imaging;
 using System.Drawing;
 using System.Diagnostics;
 using Interfaces.Interfaces;
+using Application.Models;
+
 
 namespace Application.Services
 {
@@ -16,17 +18,28 @@ namespace Application.Services
     {
         private List<string> IONameList = new List<string>();
         private string[] IONameArray;
+        public List<TreeNode> TreeNodeList = new List<TreeNode>(); //Work data, skall hämtas från IOService senare.
+        private TreeBuilderUtils TreeBuilderUtils = new TreeBuilderUtils();
 
-        private void UpdateIOStack()
+        private void ReadIOColumnsFromDB()
         {
             IONameList = myMoqColumn(); //Här skall det in anrop till IODataAccess, vilken inte är skapad ännu.
             IONameArray = IONameList.ToArray();
         }
 
-        public List<string> IONames()
+        public List<TreeNode> IOColumnNamesAsTreeNodes()
         {
-            UpdateIOStack();
-            return IONameList;
+            ReadIOColumnsFromDB();
+            TreeNodeList.Clear();
+            TreeNodeList = TreeBuilderUtils.NameListToNameNodeList(IONameList);
+            TreeNodeList = TreeBuilderUtils.InjectNodesInTreeAtLevel(TreeNodeList, 0);
+            TreeNodeList = TreeBuilderUtils.InjectNodesInTreeAtLevel(TreeNodeList, 1);
+            TreeNodeList = TreeBuilderUtils.InjectNodesInTreeAtLevel(TreeNodeList, 2);
+            foreach (TreeNode t in TreeNodeList)
+            {
+                Debug.WriteLine(t.Name);
+            }
+            return TreeNodeList;
         }
 
         //NOTERING: Detta är kolumn namn. Jag kommer ha två alternativ framöver:
