@@ -9,8 +9,8 @@ namespace Application.Models
     {
         public string Name { get; set; }
         public int Level { get; set; }
-        public Boolean Expanded { get; set; }
-
-
+        public int Id { get; set; }
+        public Boolean PleaseExpand { get; set; }
+        public Boolean ToRenderInMarkup { get; set; }
     }
 }

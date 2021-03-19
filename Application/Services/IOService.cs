@@ -18,8 +18,8 @@ namespace Application.Services
     {
         private List<string> IONameList = new List<string>();
         private string[] IONameArray;
-        public List<TreeNode> TreeNodeList = new List<TreeNode>(); //Work data, skall hämtas från IOService senare.
-        private TreeBuilderUtils TreeBuilderUtils = new TreeBuilderUtils();
+        private List<TreeNode> TreeNodeList = new List<TreeNode>(); //Work data, skall hämtas från IOService senare.
+        private TreeInitUtils TreeBuilderUtils = new TreeInitUtils();
 
         private void ReadIOColumnsFromDB()
         {
@@ -41,6 +41,8 @@ namespace Application.Services
             }
             return TreeNodeList;
         }
+
+
 
         //NOTERING: Detta är kolumn namn. Jag kommer ha två alternativ framöver:
         //1: Försöka plocka ur kolumnnamnen från EF

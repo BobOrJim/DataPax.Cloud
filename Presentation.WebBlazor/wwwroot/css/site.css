@@ -95,10 +95,12 @@ a, .btn-link {
 .MyInvisibleButton {
     background-color: Transparent;
     background-repeat: no-repeat;
-    border: none;
+    /*border: none;*/
+    border = 1px;
     cursor: pointer;
     overflow: hidden;
     outline: none;
+/*    font-size: 0.875em;*/
 }
 
 .dropdown {
@@ -162,7 +164,6 @@ a, .btn-link {
     height: auto;
 }
 
-
 .grid-container {
     display: grid;
     grid-template-columns: 100%;
@@ -175,7 +176,7 @@ a, .btn-link {
 
 .Row1 {
     display: grid;
-    grid-template-columns: 15% 25% 30% 30%;
+    grid-template-columns: 25% 15% 30% 30%;
     grid-template-rows: 100%;
     gap: 0px 0px;
     grid-template-areas: "Row1Col1 Row1Col2 Row1Col3 Row1Col4";
@@ -186,7 +187,7 @@ a, .btn-link {
     grid-area: Row1Col1;
     background-color: #c6e8f7;
     border: 1px solid black;
-    font-size: 0.8vw
+    font-size: 1.5vw
 }
 
 .Row1Col2 { /* DeviationListView */

@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Application
 {
-    internal class TreeBuilderUtils
+    internal class TreeInitUtils
     {
         public List<TreeNode> TreeNodeList = new List<TreeNode>(); 
         public List<TreeNode> WorkTreeNodeList = new List<TreeNode>();
 
-        //Create list with level 4 Nodes.
+        //Create TreeNode list (leafs) from a string list.
         public List<TreeNode> NameListToNameNodeList(List<string> IONameList)
         {
             foreach (string s in IONameList)
@@ -21,8 +21,10 @@ namespace Application
                 TreeNode treeNode = new TreeNode()
                 {
                     Name = s.ToString(),
-                    Level = 4,
-                    Expanded = false
+                    Level = 3,
+                    Id = 0,
+                    PleaseExpand = false,
+                    ToRenderInMarkup = false
                 };
                 TreeNodeList.Add(treeNode);
             }
@@ -59,7 +61,9 @@ namespace Application
                     {
                         Name = LevelName,
                         Level = _Level,
-                        Expanded = false
+                        Id = 0,
+                        PleaseExpand = false,
+                        ToRenderInMarkup = false
                     };
                     TreeNodeList.Add(treeNode);
                     TreeNodeList.Add(t);
@@ -70,9 +74,15 @@ namespace Application
                 }
                 LatestUniqueLevelNodeName = LevelName;
             }
-            foreach (TreeNode t in TreeNodeList)
+            int i = 0;
+            foreach (TreeNode treeNode in TreeNodeList)
             {
-                //Debug.WriteLine(t.Name);
+                treeNode.Id = i;
+                i++;
+                if (treeNode.Level == 0)
+                {
+                    treeNode.ToRenderInMarkup = true;
+                }
             }
             //Debug.WriteLine($"__________________Antalet noder i TreeNodeList.Count() = {TreeNodeList.Count()} ");
             return TreeNodeList;

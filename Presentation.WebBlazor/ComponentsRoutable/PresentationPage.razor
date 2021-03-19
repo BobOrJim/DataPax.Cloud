@@ -8,6 +8,8 @@
 @using Infrastructure.Models
 @using Application.Services
 @using Infrastructure.DataAccess
+@using Application.Models
+@using Application 
 
 @inject Presentation.WebBlazor.ComponentCreation.NumericTextBoxComponents _NumericTextBoxComponents
 @inject Application.UseCases.NumericTextBoxUseCases _NumericTextBoxUseCases
@@ -33,9 +35,11 @@
 
     public PictureService pictureService;
     public IOService iOService;
+    public TreeUpdateUtils treeUpdateUtils;
     public string GlobalPath = "ASDF";
     public List<string> IONameList = new List<string>(); //Work data, skall hämtas från IOService senare.
-
+    private List<TreeNode> TreeNodeList = new List<TreeNode>();
+    private FixedSizedQueue<string> signalsToPlotQueue = new FixedSizedQueue<string>(4);
 
 
     public static TestComponent MyTestComponent;// = new TestComponent();
@@ -58,6 +62,7 @@
         pictureService.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
         iOService = new IOService();
         iOService.IOColumnNamesAsTreeNodes();
+        treeUpdateUtils = new TreeUpdateUtils();
     }
     public static void injectParagraph(TestComponent _MyTestComponent)
     {
@@ -71,16 +76,18 @@
         _NumericTextBoxUseCases.DepInjection(_NumericTextBoxComponents);
         _ButtonUseCases.DepInjection(_NumericTextBoxComponents);
     }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
         {
-            //Debug.WriteLine($"ASDFASDF {MyTestComponent.elapsedTicks}"); //DET VAR SOM FAN, HÄR ÄR REFERENSEN LYCKAD
+            TreeNodeList = iOService.IOColumnNamesAsTreeNodes();
+            _TreeViewComponents.IOTreeView2Component.TreeNodes = TreeNodeList;
+            _TreeViewComponents.IOTreeView2Component.UpdateState();
+            _ImgSrcComponents.LeftPicture.PicturePathString = "a.jpeg"; //Skall ändras till glad gubbe, eller något annat trevligt.
+            _ImgSrcComponents.LeftPicture.UpdateState();
+            _ImgSrcComponents.RightPicture.PicturePathString = "a.jpeg"; //Skall ändras till glad gubbe, eller något annat trevligt.
+            _ImgSrcComponents.RightPicture.UpdateState();
         }
-        //Debug.WriteLine($"ASDFASDF {MyTestComponent.elapsedTicks}"); //DET VAR SOM FAN, HÄR ÄR REFERENSEN LYCKAD
-    }
-    protected override void OnAfterRender(bool firstRender)
-    {
     }
     protected override void OnParametersSet()
     {
@@ -109,36 +116,23 @@
         _ParagraphComponents.RightPictureTimeStamp.UpdateState();
         _ImgSrcComponents.RightPicture.PicturePathString = pictureService.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
         _ImgSrcComponents.RightPicture.UpdateState();
-
-
-        _TreeViewComponents.IOTreeView2Component.TreeNodes = iOService.IOColumnNamesAsTreeNodes();
-        _TreeViewComponents.IOTreeView2Component.UpdateState();
     }
-    //public void ActionEventCallback_TreeView()
-    //{
 
-    //    _TreeViewComponents.IOTreeView2Component.UpdateState();
-    //}
-    public void EventCallback_TreeView(string tmp)
+    public void EventCallback_TreeView(TreeNode UserClickedOnThisTreeNode)
     {
-        //Debug.WriteLine($"In EventCallback_TreeView : {tmp}");
-
-        //Expand Node string kommer här, tex innehåller den inga _, eller börjar med två space...
-        if (tmp == "ExpandNodeChangedStatus")
+        if (UserClickedOnThisTreeNode.Level == 3) //This is a child/leaf.
         {
-            Debug.WriteLine($"In EventCallback_TreeView kör IF");
-            //"Bygger om" träd, dvs ändrar expanded properties...
-            //_TreeViewComponents.IOTreeView2Component.UpdateState();
+            Debug.WriteLine($"In EventCallback_TreeView. Denna sträng kommer skickas till RoundRobin = {UserClickedOnThisTreeNode.Name}");
+            signalsToPlotQueue.Push(UserClickedOnThisTreeNode.Name);
+            //Här skall updateStatus till ploter ligga.
         }
-        else
+        else //This is a Parent. I.E we invert "IsExpanded"
         {
-            Debug.WriteLine($"In EventCallback_TreeView kör ELSE");
-            //Skickar sträng till en array med round robin.
-            //_TreeViewComponents.IOTreeView2Component.UpdateState();
-
+            Debug.WriteLine($"In EventCallback_TreeView. Denna sträng/nod kommer toggla expanded = {UserClickedOnThisTreeNode.Name} ");
+            _TreeViewComponents.IOTreeView2Component.TreeNodes = treeUpdateUtils.UpdateNodesToExpandInTree(TreeNodeList, UserClickedOnThisTreeNode);
+            _TreeViewComponents.IOTreeView2Component.UpdateState();
         }
     }
-
 }
 
 
@@ -149,7 +143,6 @@
             <!-- SignalTreeView -->
             <TreeView2Component CssClassStyle="MyInvisibleButton"
                                 @ref="_TreeViewComponents.IOTreeView2Component"
-
                                 MyCallback="EventCallback_TreeView"
                                 />
 
