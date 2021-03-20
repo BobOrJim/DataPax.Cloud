@@ -95,8 +95,8 @@ a, .btn-link {
 .MyInvisibleButton {
     background-color: Transparent;
     background-repeat: no-repeat;
-    /*border: none;*/
-    border = 1px;
+    border: none;
+/*    border = 1px;*/
     cursor: pointer;
     overflow: hidden;
     outline: none;

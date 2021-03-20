@@ -40,7 +40,7 @@
     public List<string> IONameList = new List<string>(); //Work data, skall hämtas från IOService senare.
     private List<TreeNode> TreeNodeList = new List<TreeNode>();
     private FixedSizedQueue<string> signalsToPlotQueue = new FixedSizedQueue<string>(4);
-
+    private MyDrawOnImage myDrawOnImage;
 
     public static TestComponent MyTestComponent;// = new TestComponent();
 
@@ -63,6 +63,8 @@
         iOService = new IOService();
         iOService.IOColumnNamesAsTreeNodes();
         treeUpdateUtils = new TreeUpdateUtils();
+        myDrawOnImage = new MyDrawOnImage();
+
     }
     public static void injectParagraph(TestComponent _MyTestComponent)
     {
