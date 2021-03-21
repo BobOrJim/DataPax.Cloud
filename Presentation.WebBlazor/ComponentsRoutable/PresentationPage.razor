@@ -41,7 +41,6 @@
     private List<TreeNode> TreeNodeList = new List<TreeNode>();
     private FixedSizedQueue<string> signalsToPlotQueue = new FixedSizedQueue<string>(4);
     private MyDrawOnImage myDrawOnImage;
-
     public static TestComponent MyTestComponent;// = new TestComponent();
 
     //Method invoked when the component is ready to start, having recieved its initial parameters from its parrent renderer tree
@@ -64,7 +63,6 @@
         iOService.IOColumnNamesAsTreeNodes();
         treeUpdateUtils = new TreeUpdateUtils();
         myDrawOnImage = new MyDrawOnImage();
-
     }
     public static void injectParagraph(TestComponent _MyTestComponent)
     {
@@ -87,7 +85,7 @@
             _TreeViewComponents.IOTreeView2Component.UpdateState();
             _ImgSrcComponents.LeftPicture.PicturePathString = "a.jpeg"; //Skall ändras till glad gubbe, eller något annat trevligt.
             _ImgSrcComponents.LeftPicture.UpdateState();
-            _ImgSrcComponents.RightPicture.PicturePathString = "a.jpeg"; //Skall ändras till glad gubbe, eller något annat trevligt.
+            _ImgSrcComponents.RightPicture.PicturePathString = "PlotStartCanvas.jpeg"; //Skall ändras till glad gubbe, eller något annat trevligt.
             _ImgSrcComponents.RightPicture.UpdateState();
         }
     }
@@ -119,7 +117,6 @@
         _ImgSrcComponents.RightPicture.PicturePathString = pictureService.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
         _ImgSrcComponents.RightPicture.UpdateState();
     }
-
     public void EventCallback_TreeView(TreeNode UserClickedOnThisTreeNode)
     {
         if (UserClickedOnThisTreeNode.Level == 3) //This is a child/leaf.
@@ -135,6 +132,66 @@
             _TreeViewComponents.IOTreeView2Component.UpdateState();
         }
     }
+
+    public void Knapp1() //Restart
+    {
+        //myDrawOnImage.InsertImageInImageAt("wwwroot/PlotStartCanvas.jpeg", "wwwroot/PlotWorkCanvas.jpeg", 0, 0);
+        myDrawOnImage.ResetPlot();
+        _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
+        _ImgSrcComponents.Plot.UpdateState();
+    }
+    public void Knapp2() //Ritar in X axel.
+    {
+        List<Int64> list1 = new List<Int64>()
+        {
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+        };
+        myDrawOnImage.CreateAndPlotXAxis(list1, "wwwroot/PlotWorkCanvas.jpeg");
+        _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
+        _ImgSrcComponents.Plot.UpdateState();
+    }
+
+    public void Knapp3() //ritar in första kurvan
+    {
+        List<Int64> list1 = new List<Int64>()
+        {
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+        };
+        myDrawOnImage.PlotFirstGraph(list1, "wwwroot/PlotWorkCanvas.jpeg");
+        _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
+        _ImgSrcComponents.Plot.UpdateState();
+    }
+    public void Knapp4() //Knapp 4
+    {
+
+        _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
+        _ImgSrcComponents.Plot.UpdateState();
+        Debug.WriteLine("Knapp4");
+    }
+
+
+
+
 }
 
 
@@ -350,32 +407,32 @@
             <!-- FullBack -->
             <ButtonComponent CssClassStyle="My5 btn-primary"
                              @ref="_ButtonComponents.FullBack"
-                             ButtonText="FullBack"
-                             ActionEventCallback="_ButtonUseCases.FullBackClickedEvent">
+                             ButtonText="1"
+                             ActionEventCallback="Knapp1">
             </ButtonComponent>
         </div>
         <div class="Row5Col8">
             <!-- HalfBack -->
             <ButtonComponent CssClassStyle="My5 btn-primary"
                              @ref="_ButtonComponents.HalfBack"
-                             ButtonText="HalfBack"
-                             ActionEventCallback="_ButtonUseCases.HalfBackClickedEvent">
+                             ButtonText="2"
+                             ActionEventCallback="Knapp2">
             </ButtonComponent>
         </div>
         <div class="Row5Col9">
             <!-- HalfForw-->
             <ButtonComponent CssClassStyle="My5 btn-primary"
                              @ref="_ButtonComponents.HalfForw"
-                             ButtonText="HalfForw"
-                             ActionEventCallback="_ButtonUseCases.HalfForwClickedEvent">
+                             ButtonText="3"
+                             ActionEventCallback="Knapp3">
             </ButtonComponent>
         </div>
         <div class="Row5Col10">
             <!-- FullForw -->
             <ButtonComponent CssClassStyle="My5 btn-primary"
                              @ref="_ButtonComponents.FullForw"
-                             ButtonText="FullForw"
-                             ActionEventCallback="_ButtonUseCases.FullForwClickedEvent">
+                             ButtonText="4"
+                             ActionEventCallback="Knapp4">
             </ButtonComponent>
         </div>
         <div class="Row5Col11">
@@ -441,27 +498,10 @@
     </div>
 
     <div class="Row6">
-        <div class="Row6Col1">
-            <!-- -->
-            <p>Row6Col1</p>
+        <div class="Row6Col1"> <!-- Plot -->
+            <ImgSrcComponent CssClassStyle="MyAutoSizeKeepRatio" @ref="_ImgSrcComponents.Plot" />
         </div>
     </div>
 </div>
-
-
-
-
-@*@code {
-
-        protected async Task MyTestTask() //dvs när sidan läses in??
-        {
-            Debug.WriteLine($"Temp är ASDF");
-            //MyTest.WriteToConsole();
-        }
-    }*@
-
-
-
-
 
 

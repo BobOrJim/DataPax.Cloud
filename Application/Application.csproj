@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\PlotData.cs" />
     <Compile Include="Models\TreeNode.cs" />
     <Compile Include="FixedSizedQueue.cs" />
     <Compile Include="MyDrawOnImage.cs" />

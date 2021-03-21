@@ -10,5 +10,6 @@ namespace Presentation.WebBlazor.ComponentCreation
     {
         public ImgSrcComponent LeftPicture = new ImgSrcComponent();
         public ImgSrcComponent RightPicture = new ImgSrcComponent();
+        public ImgSrcComponent Plot = new ImgSrcComponent();
     }
 }
