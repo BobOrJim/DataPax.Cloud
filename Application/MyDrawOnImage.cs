@@ -13,9 +13,29 @@ namespace Application
         private string imageFilePath { get; set; }
         public MyDrawOnImage()
         {
-            imageFilePath = @"path\picture.bmp";
+            imageFilePath = "a.jpeg";
         }
-        public void TestDrawText()
+
+        //Hmm, en intrssant tanke, är att använda 1+x olika bilder.
+        //Där 1 alltid är y-axel bara
+        //Då kan jag även lägga till analog senare........
+        //Då kan jag lätt välja antal bilder.
+
+        public void DrawMainTitleAndStuff()
+        {
+        }
+
+        public void DrawOnePlot() //Tar emot lista med samplingar, och plottar en kurva
+        {
+            SampleListToPlotList();
+        }
+
+        public void SampleListToPlotList()
+        {
+        }
+
+
+        public void TestDrawText() //Skall ta emot text och location och placeras i utils
         {
             string firstText = "Hello";
             string secondText = "World";
@@ -32,18 +52,19 @@ namespace Application
             }
             MyBitmap.Save(imageFilePath);//save the image file
         }
-        public void TestDrawLine()
+        public void TestDrawLine() //Skall ta emot 2st location och placeras i utils
         {
-            //Pen blackPen = new Pen(Color.Black, 3);
-            using (var blackPen = new Pen(Color.Black, 3)) { }
             int x1 = 100;
             int y1 = 100;
             int x2 = 500;
             int y2 = 100;
-            // Draw line to screen.
-            using (var graphics = Graphics.FromImage(imageFilePath))
+            Bitmap MyBitmap = (Bitmap)Image.FromFile(imageFilePath);//load the image file
+            using (Graphics graphics = Graphics.FromImage(MyBitmap))
             {
-                graphics.DrawLine(blackPen, x1, y1, x2, y2);
+                using (var blackPen = new Pen(Color.Black, 3))
+                {
+                    graphics.DrawLine(blackPen, x1, y1, x2, y2);
+                }
             }
         }
     }
