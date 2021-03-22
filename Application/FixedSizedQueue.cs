@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace Application
 {
     public class FixedSizedQueue<T>
     {
-        readonly ConcurrentQueue<T> Queue = new ConcurrentQueue<T>(); //Thread safe FIFO :)
+        public readonly ConcurrentQueue<T> Queue = new ConcurrentQueue<T>(); //Thread safe FIFO :)
         public int Size { get; private set; }
         public FixedSizedQueue(int size)
         {
@@ -22,6 +23,7 @@ namespace Application
             {
                 T ObjectToThrowAway;
                 Queue.TryDequeue(out ObjectToThrowAway);
+                Debug.WriteLine($"In FixedSizedQueue, ett objekt faller ur då kön är full");
             }
         }
     }

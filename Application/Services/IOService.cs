@@ -11,7 +11,6 @@ using System.Diagnostics;
 using Interfaces.Interfaces;
 using Application.Models;
 
-
 namespace Application.Services
 {
     public class IOService

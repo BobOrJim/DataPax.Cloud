@@ -44,7 +44,7 @@ namespace Application.Services
             {
                 return PicturePathsArray[LeftPictureNumberInStackToShow];
             }
-            return "Cam1KeepPictures/Camera1_1611872350240.jpeg"; //Skall ersättas med någon logga eller något mer neutralt kanske, vill ju inte reta vingebro mer än nödvändigt.
+            return "Cam1KeepPictures/Camera1_1611872350240.jpeg"; //Skall ersättas med någon logga eller något mer neutralt kanske
         }
         public string LeftPictureTimestampToShow(int LeftPictureNumberInStackToShow)
         {
@@ -61,7 +61,7 @@ namespace Application.Services
                 //Debug.WriteLine($"RightPicturePathToShow path to show ::::: {PicturePathsArray[RightPictureNumberInStackToShow]}");
                 return PicturePathsArray[RightPictureNumberInStackToShow];
             }
-            return "Cam1KeepPictures/Camera1_1611872350240.jpeg"; //Skall ersättas med någon logga eller något mer neutralt kanske, vill ju inte reta vingebro mer än nödvändigt.
+            return "Cam1KeepPictures/Camera1_1611872350240.jpeg"; //Skall ersättas med någon logga eller något mer neutralt kanske
         }
         public string RightPictureTimestampToShow(int RightPictureNumberInStackToShow)
         {
@@ -73,3 +73,5 @@ namespace Application.Services
         }
     }
 }
+
+

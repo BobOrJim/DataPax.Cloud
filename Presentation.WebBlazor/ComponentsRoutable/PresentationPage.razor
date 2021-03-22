@@ -26,21 +26,19 @@
 
 @inject Presentation.WebBlazor.ComponentCreation.TreeViewComponents _TreeViewComponents
 
-
 @inject Infrastructure.DataAccess.EFAccess _EFAccess
 
 
 
 @code{
 
-    public PictureService pictureService;
-    public IOService iOService;
+    private PictureService pictureService;
+    private IOService iOService;
+    private PlotService plotService;
     public TreeUpdateUtils treeUpdateUtils;
     public string GlobalPath = "ASDF";
     public List<string> IONameList = new List<string>(); //Work data, skall hämtas från IOService senare.
     private List<TreeNode> TreeNodeList = new List<TreeNode>();
-    private FixedSizedQueue<string> signalsToPlotQueue = new FixedSizedQueue<string>(4);
-    private MyDrawOnImage myDrawOnImage;
     public static TestComponent MyTestComponent;// = new TestComponent();
 
     //Method invoked when the component is ready to start, having recieved its initial parameters from its parrent renderer tree
@@ -54,15 +52,16 @@
     //5: protected override bool ShouldRender()
     protected override void OnInitialized()
     {
-        PictureDataAccess pictureDataAccess;
-        pictureDataAccess = new PictureDataAccess(_EFAccess);
-        pictureService = new PictureService(pictureDataAccess);
+
+        pictureService = new PictureService(new PictureDataAccess(_EFAccess));
+        plotService = new PlotService(); //Här skall jag framöver injecera ett Interface 
+
         //Debug.WriteLine($"OnInitialized : Bilder i stack är : {pictureService.NumberOfPicturesInStack()} ");
         pictureService.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
         iOService = new IOService();
         iOService.IOColumnNamesAsTreeNodes();
         treeUpdateUtils = new TreeUpdateUtils();
-        myDrawOnImage = new MyDrawOnImage();
+
     }
     public static void injectParagraph(TestComponent _MyTestComponent)
     {
@@ -122,7 +121,6 @@
         if (UserClickedOnThisTreeNode.Level == 3) //This is a child/leaf.
         {
             Debug.WriteLine($"In EventCallback_TreeView. Denna sträng kommer skickas till RoundRobin = {UserClickedOnThisTreeNode.Name}");
-            signalsToPlotQueue.Push(UserClickedOnThisTreeNode.Name);
             //Här skall updateStatus till ploter ligga.
         }
         else //This is a Parent. I.E we invert "IsExpanded"
@@ -135,54 +133,39 @@
 
     public void Knapp1() //Restart
     {
-        //myDrawOnImage.InsertImageInImageAt("wwwroot/PlotStartCanvas.jpeg", "wwwroot/PlotWorkCanvas.jpeg", 0, 0);
-        myDrawOnImage.ResetPlot();
+        plotService.ResetPlot();
         _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
         _ImgSrcComponents.Plot.UpdateState();
     }
     public void Knapp2() //Ritar in X axel.
     {
-        List<Int64> list1 = new List<Int64>()
-        {
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            10
-        };
-        myDrawOnImage.CreateAndPlotXAxis(list1, "wwwroot/PlotWorkCanvas.jpeg");
+        List<Int64> list1 = new List<Int64>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        plotService.PlotXAxisTo(list1, "wwwroot/PlotWorkCanvas.jpeg");
+
         _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
         _ImgSrcComponents.Plot.UpdateState();
     }
 
     public void Knapp3() //ritar in första kurvan
     {
-        List<Int64> list1 = new List<Int64>()
-        {
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            10
-        };
-        myDrawOnImage.PlotFirstGraph(list1, "wwwroot/PlotWorkCanvas.jpeg");
+        List<Int64> xlist = new List<Int64>() {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; //Simulerad data från DB
+        List<Boolean> ylist = new List<Boolean>() {true, false, true, false, false, false, false, true, true, true}; //Simulerad data från DB
+        List<Coordinate> CoordinateList = plotService.CreateCoordinateList(xlist, ylist);
+        plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 3);
+        CoordinateList.Clear();
+
+
         _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
         _ImgSrcComponents.Plot.UpdateState();
     }
+
+
     public void Knapp4() //Knapp 4
     {
+        List<Int64> xlist = new List<Int64>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }; //Simulerad data från DB
+        List<Boolean> ylist = new List<Boolean>() { true, false, true, false, false, false, false, true, true, true }; //Simulerad data från DB
+        List<Coordinate> CoordinateList = plotService.CreateCoordinateList(xlist, ylist);
+        plotService.Knapp4Test(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg");
 
         _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
         _ImgSrcComponents.Plot.UpdateState();

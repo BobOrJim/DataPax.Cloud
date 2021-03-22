@@ -139,14 +139,16 @@ a, .btn-link {
     /*    height: 100vh;*/
     /*    height: 100%;*/
     /*    height: inherit;*/
+    background-color: #c6e8f7;
     height: 5vh;
     width: 100%;
 }
 
-.My45 { 
+.My45 {
     /* This is a know issue, and thus i have to use a simple workaround. */
     /*    height: 100%;*/
     /*    height: inherit;*/
+    background-color: #c6e8f7;
     height: 45vh;
     width: 100%;
 }

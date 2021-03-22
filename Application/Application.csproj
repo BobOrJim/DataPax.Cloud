@@ -45,10 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Coordinate.cs" />
     <Compile Include="Models\PlotData.cs" />
     <Compile Include="Models\TreeNode.cs" />
     <Compile Include="FixedSizedQueue.cs" />
-    <Compile Include="MyDrawOnImage.cs" />
+    <Compile Include="Services\PlotService.cs" />
     <Compile Include="Services\IOService.cs" />
     <Compile Include="Services\PictureService.cs" />
     <Compile Include="Services\TimeIntervallService.cs" />
