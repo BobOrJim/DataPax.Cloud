@@ -19,7 +19,7 @@ namespace Application
         Color BackgroundColor = System.Drawing.ColorTranslator.FromHtml("#c6e8f7");
         Color PlotPenColor = System.Drawing.ColorTranslator.FromHtml("#1b6ca6");
         Color PlotCircleColor = System.Drawing.ColorTranslator.FromHtml("#1b6ca6");
-
+        //asdf
         public void ResetPlot()
         {
             System.IO.File.Delete("wwwroot/PlotWorkCanvas.jpeg");
