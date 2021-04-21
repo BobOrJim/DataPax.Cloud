@@ -1,0 +1,124 @@
+DATABASER MED TILLHÖRANDE TABELLER
+myDB:
+-Cam1EvenTable
+-Cam1OddTable
+-Cam1KeepTable
+-Cam1ThrowTable
+
+-FactoryTable
+
+-IOEvenTable
+-IOOddTable
+-IOKeepTable
+-IODeviationTable
+
+MY TABELL GRUPERING (DVS SAMMA KOLUMNER/LAYOUT. FÖR STORED PROCEDURE TILLDELNING)
+1A: FactoryTable
+1B: IOEvenTable
+1C: IOOddTable
+1D: IOKeepTable
+1E: IODeviationTable (Notering: Endast DeviationID_TEXT och Timestamp_unix_BIGINT används. Övrig data från template blir dummy)
+2A: Cam1EvenTable
+2B: Cam1OddTable
+2C: Cam1KeepTable
+2D: Cam1ThrowTable (Notering: Endast filnamn + sökväg används. Övrig data blir dummy)
+
+
+STORED PROCEDURES (Notering, om/när *_Insert skall skall slås ihop (DRY) till grupper, behöver _samples i "connection.Execute(_sqlSp, _samples);" bli någon komplexare datatyp...)
+Cam1EvenTable_Insert						(Command) (Input=List<PictureSampleModel>) (Grupp 2)
+Cam1KeepTable_Insert						(Command) (Input=List<PictureSampleModel>) (Grupp 2)
+Cam1OddTable_Insert							(Command) (Input=List<PictureSampleModel>) (Grupp 2)
+Cam1ThrowTable_Insert						(Command) (Input=List<PictureSampleModel>) (Grupp 2)
+FactoryTable_insert							(Command) (Input=List<IOSampleModel>) (Grupp 1)
+IODeviationTable_insert						(Command) (Input=List<IOSampleModel>) (Grupp 1)
+IOEvenTable_insert							(Command) (Input=List<IOSampleModel>) (Grupp 1)
+IOKeepTable_insert							(Command) (Input=List<IOSampleModel>) (Grupp 1)
+IOOddTable_insert							(Command) (Input=List<IOSampleModel>) (Grupp 1)
+IOTable_createIOTemplateTable				(Command) (Input=TableName/string) (Grupp 1)
+IOTable_cutPostsBetweenInTable				(Query)   (Input=TableName/string, startTime/Int64, endTime/Int64, Output=List<IOSampleModel>) (Grupp 1)
+IOTable_deleteAllPostsInTable				(Command) (Input=TableName/string) (Grupp 1 + 2)
+IOTable_deleteTable							(Command) (Input=TableName/string) (Grupp 1 + 2)
+IOTable_getAllPostsInTable					(Query)   (Input=TableName/string, Output=List<IOSampleModel>) (Grupp 1)
+IOTable_getPostCountInTable					(Query)   (Input=TableName/string, Output=int) (Grupp 1+2)
+PictureTable_createPictureTemplateTable		(Command) (Input=TableName/string) (Grupp 2)
+PictureTable_cutPostsBetweenInTable			(Query)   (Input=TableName/string, startTime/Int64, endTime/Int64, Output=List<PictureSampleModel>) (Grupp 2)
+
+
+
+
+
+
+
+
+TESTDATA KOLUMNER
+//Eftersom detta system inte kan anslutas till någon "Fabrik" från hemma kontoret så används en simulator. Vid skarpt läge används en kepEx
+//tredjepartsmjukvara för att lyfta data från "fabrik" till platt databas.
+//Följande påhittade signaler används.
+//Jag splitar på underscore och inte mellanslag
+Hub2Hub_KKS123_SystemVolt_Erratic
+Hub2Hub_KKS123_SystemVolt_Low
+Hub2Hub_KKS123_Retarder_LowCurrent
+Hub2Hub_KKS123_AuxPressure_Low
+
+Panna_flisinmatning_skruv1_Motorskydd
+Panna_flisinmatning_skruv1_Säkerhetsbrytare
+Panna_flisinmatning_skruv1_Varvtalsvakt
+Panna_flisinmatning_skruv1_Nödstop
+
+Panna_Fribord_flisinmating_pt1000 Analog 800-900, med max tick på 10, använd bool för att slumpa rörelse
+Panna_Fribord_askutmating_pt1000 Analog
+Panna_Fribord_FöreBrännare_pt1000 Analog
+Panna_Fribord_EfterBrännare_pt1000 Analog
+
+Karlatornet_Ventilation_Frånluft_HögTemp
+Karlatornet_Ventilation_Frånluft_LågTemp
+Karlatornet_Brandlarm_Hiss1_Aktivt
+Karlatornet_Brandlarm_Hiss2_Aktivt
+
+Vestas_Verk12_Koppling_HögTemp
+Vestas_Verk12_Koppling_LågOljeNivå
+Vestas_Verk12_Koppling_TryckAvvikelse
+Vestas_Verk12_Väderstation_WatchDog
+
+Triggers:
+Retarder Solenoid current below normal
+8 Volt DC Supply short to +batt
+Aux Pressure sensor short to ground
+J1939 Data Link fault
+Engine Speed signal abnormal
+
+Panna låg flisnivå omrörare 1
+Panna låg flisnivå förgasare norr
+Panna hög prim/sek luft kvot
+
+Verk12 Bearings high vibrations
+Verk12 Bearings resonance warning
+Verk12 Cooling circuit low oil level
+Verk12 High bearing temperature
+Verk12 Abnormal (low) power output
+
+
+
+
+Hub2Hub_KKS123_SystemVolt_Erratic
+Hub2Hub_KKS123_SystemVolt_Low
+Hub2Hub_KKS123_Retarder_LowCurrent
+Hub2Hub_KKS123_AuxPressure_Low
+Panna_flisinmatning_skruv1_Motorskydd
+Panna_flisinmatning_skruv1_Sakerhetsbrytare
+Panna_flisinmatning_skruv1_Varvtalsvakt
+Panna_flisinmatning_skruv1_Nodstop
+Panna_Fribord_flisinmating_pt1000
+Panna_Fribord_askutmating_pt1000
+Panna_Fribord_ForeBrannare_pt1000
+Panna_Fribord_EfterBrannare_pt1000
+Karlatornet_Ventilation_Franluft_HogTemp
+Karlatornet_Ventilation_Franluft_LagTemp
+Karlatornet_Brandlarm_Hiss1_Aktivt
+Karlatornet_Brandlarm_Hiss2_Aktivt
+Vestas_Verk12_Koppling_HogTemp
+Vestas_Verk12_Koppling_LagOljeNiva
+Vestas_Verk12_Koppling_TryckAvvikelse
+Vestas_Verk12_Vaderstation_WatchDog
+
+
