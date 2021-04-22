@@ -24,8 +24,8 @@ namespace Presentation.WebBlazor
 
         public MyInit()
         {
-            TestComponent MyTestComponent = new TestComponent();
-            Presentation.WebBlazor.ComponentsRoutable.PresentationPage.injectParagraph(MyTestComponent);
+            //TestComponent MyTestComponent = new TestComponent();
+            //Presentation.WebBlazor.ComponentsRoutable.PresentationPage.injectParagraph(MyTestComponent);
 
 
 

@@ -1,0 +1,30 @@
+﻿@using System.Diagnostics
+@using Application.Models
+
+
+<span class="@CssClassStyle">
+    @if (ListItems != null)
+    {
+        @foreach (ListItem listItem in ListItems)
+        {
+            <button class="@CssClassStyle" @onclick="@(() => MyCallback.InvokeAsync(listItem))">
+            @listItem.Name
+            </button>
+                <br />
+        }
+    }
+</span>
+
+@code {
+    [Parameter]
+    public string CssClassStyle { get; set; }
+    public List<ListItem> ListItems { get; set; }
+    [Parameter]
+    public EventCallback<ListItem> MyCallback { get; set; }
+
+
+    public void UpdateState()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+}

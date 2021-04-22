@@ -9,7 +9,7 @@ namespace Application.Models
     {
         public string Name { get; set; }
         public int Level { get; set; }
-        public int Id { get; set; }
+        public int Id { get; set; }  //Varje nod har ett unikt Id, Namn ovan skulle kunna vara samma.
         public Boolean PleaseExpand { get; set; }
         public Boolean ToRenderInMarkup { get; set; }
     }

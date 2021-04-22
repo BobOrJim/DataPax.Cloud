@@ -41,8 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IIODeviationDataAccess.cs" />
+    <Compile Include="IIOKeepTableDataAccess.cs" />
     <Compile Include="INumericTextBoxComponents.cs" />
     <Compile Include="IPictureDataAccessCam1.cs" />
+    <Compile Include="IPictureDataAccessCam2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

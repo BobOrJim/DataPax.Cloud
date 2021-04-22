@@ -13,7 +13,7 @@ using Interfaces.Interfaces;
 
 namespace Application.Services
 {
-    public class PictureService
+    public class PictureServiceCam1
     {
         private List<string> PicturePathsList = new List<string>();
         private string[] PicturePathsArray;
@@ -21,7 +21,8 @@ namespace Application.Services
         private string[] PictureTimeStampStringArray;
 
         public IPictureDataAccessCam1 _PictureDataAccessCam1;
-        public PictureService(IPictureDataAccessCam1 p)
+
+        public PictureServiceCam1(IPictureDataAccessCam1 p)
         {
             _PictureDataAccessCam1 = p;
         }
@@ -52,23 +53,23 @@ namespace Application.Services
             }
             return "";
         }
-        public string RightPicturePathToShow(int RightPictureNumberInStackToShow)
-        {
-            if (PicturePathsArray != null)
-            {
-                //Debug.WriteLine($"RightPicturePathToShow path to show ::::: {PicturePathsArray[RightPictureNumberInStackToShow]}");
-                return PicturePathsArray[RightPictureNumberInStackToShow];
-            }
-            return "Cam1KeepPictures/Camera1_1611872350240.jpeg"; //Skall ersättas med någon logga eller något mer neutralt kanske
-        }
-        public string RightPictureTimestampToShow(int RightPictureNumberInStackToShow)
-        {
-            if (PictureTimeStampStringArray != null)
-            {
-                return PictureTimeStampStringArray[RightPictureNumberInStackToShow];
-            }
-            return "";
-        }
+        //public string RightPicturePathToShow(int RightPictureNumberInStackToShow)
+        //{
+        //    if (PicturePathsArray != null)
+        //    {
+        //        //Debug.WriteLine($"RightPicturePathToShow path to show ::::: {PicturePathsArray[RightPictureNumberInStackToShow]}");
+        //        return PicturePathsArray[RightPictureNumberInStackToShow];
+        //    }
+        //    return "Cam1KeepPictures/Camera1_1611872350240.jpeg"; //Skall ersättas med någon logga eller något mer neutralt kanske
+        //}
+        //public string RightPictureTimestampToShow(int RightPictureNumberInStackToShow)
+        //{
+        //    if (PictureTimeStampStringArray != null)
+        //    {
+        //        return PictureTimeStampStringArray[RightPictureNumberInStackToShow];
+        //    }
+        //    return "";
+        //}
     }
 }
 

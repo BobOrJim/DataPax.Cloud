@@ -9,15 +9,9 @@ namespace Infrastructure.DataAccess
 {
     public class EFAccessCam1KeepTable : DbContext
     {
-        public EFAccessCam1KeepTable(DbContextOptions options) : base(options) { }
-
+        public EFAccessCam1KeepTable(DbContextOptions<EFAccessCam1KeepTable> options) : base(options) { }
 
         public DbSet<Picture> Cam1KeepTable { get; set; }
-
-
-
-
-
 
     }
 }

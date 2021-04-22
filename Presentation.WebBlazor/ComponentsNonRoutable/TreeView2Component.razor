@@ -39,6 +39,7 @@
     public List<TreeNode> TreeNodes { get; set; }
     [Parameter]
     public EventCallback<TreeNode> MyCallback { get; set; }
+
     public void UpdateState()
     {
         InvokeAsync(StateHasChanged);

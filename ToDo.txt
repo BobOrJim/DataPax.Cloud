@@ -43,6 +43,8 @@ TriggerListClick ->
 
 Städa bort template kod.
 
+In PictureService. Stoppa in logga.
+
 
 ********
 Till Front features

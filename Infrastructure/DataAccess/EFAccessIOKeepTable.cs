@@ -9,7 +9,7 @@ namespace Infrastructure.DataAccess
 {
     public class EFAccessIOKeepTable : DbContext
     {
-        public EFAccessIOKeepTable(DbContextOptions options) : base(options) { }
+        public EFAccessIOKeepTable(DbContextOptions<EFAccessIOKeepTable> options) : base(options) { }
 
 
         public DbSet<IOSample> IOKeepTable { get; set; }

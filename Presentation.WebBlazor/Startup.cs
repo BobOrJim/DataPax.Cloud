@@ -41,7 +41,7 @@ namespace Presentation.WebBlazor
             {
                 options.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
-            services.AddDbContext<EFAccessIODeviationTable>(options =>          
+            services.AddDbContext<EFAccessIODeviationTable>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
@@ -79,12 +79,13 @@ namespace Presentation.WebBlazor
 
             services.AddSingleton<Presentation.WebBlazor.ComponentCreation.TreeViewComponents>(); //JIMMY
 
+            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.ClickableListComponents>(); //JIMMY
 
-            MyInit myInit = new MyInit();
+            //MyInit myInit = new MyInit();
 
 
 
-            
+
 
 
 

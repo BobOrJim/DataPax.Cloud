@@ -9,7 +9,7 @@ namespace Infrastructure.DataAccess
 {
     public class EFAccessCam2KeepTable : DbContext
     {
-        public EFAccessCam2KeepTable(DbContextOptions options) : base(options) { }
+        public EFAccessCam2KeepTable(DbContextOptions<EFAccessCam2KeepTable> options) : base(options) { }
 
 
         public DbSet<Picture> Cam2KeepTable { get; set; }

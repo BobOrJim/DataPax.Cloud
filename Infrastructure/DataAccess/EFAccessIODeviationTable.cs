@@ -9,7 +9,8 @@ namespace Infrastructure.DataAccess
 {
     public class EFAccessIODeviationTable : DbContext
     {
-        public EFAccessIODeviationTable(DbContextOptions options) : base(options) { }
+        public EFAccessIODeviationTable(DbContextOptions<EFAccessIODeviationTable> options) : base(options) { }
+
 
 
         public DbSet<IOSample> IODeviationTable { get; set; }

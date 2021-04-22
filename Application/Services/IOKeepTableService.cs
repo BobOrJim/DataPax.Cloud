@@ -3,27 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Domain.Services;
-using System.Drawing.Imaging;
-using System.Drawing;
+using Application.Models;
 using System.Diagnostics;
 using Interfaces.Interfaces;
-using Application.Models;
+
 
 namespace Application.Services
 {
-    public class IOService
+    public class IOKeepTableService
     {
-        private List<string> IONameList = new List<string>();
-        private string[] IONameArray;
         private List<TreeNode> TreeNodeList = new List<TreeNode>(); //Work data, skall hämtas från IOService senare.
         private TreeInitUtils TreeBuilderUtils = new TreeInitUtils();
+        private List<string> IONameList = new List<string>();
+        private string[] IONameArray;
+
+        private IIOKeepTableDataAccess iIOKeepTableDataAccess;
+
+        public IOKeepTableService(IIOKeepTableDataAccess _iIOKeepTableDataAccess)
+        {
+            iIOKeepTableDataAccess = _iIOKeepTableDataAccess;
+        }
+
 
         private void ReadIOColumnsFromDB()
         {
             IONameList = myMoqColumn(); //Här skall det in anrop till IODataAccess, vilken inte är skapad ännu.
             IONameArray = IONameList.ToArray();
         }
+
+
 
         public List<TreeNode> IOColumnNamesAsTreeNodes()
         {
@@ -62,7 +70,7 @@ namespace Application.Services
             tmpList.Add("Line 2_Machine 3_IO group 3_IO D");
             return tmpList;
         }
+
+
     }
 }
-
-

@@ -9,7 +9,7 @@
 @using Application.Services
 @using Infrastructure.DataAccess
 @using Application.Models
-@using Application 
+@using Application
 
 @inject Presentation.WebBlazor.ComponentCreation.NumericTextBoxComponents _NumericTextBoxComponents
 @inject Application.UseCases.NumericTextBoxUseCases _NumericTextBoxUseCases
@@ -26,20 +26,24 @@
 
 @inject Presentation.WebBlazor.ComponentCreation.TreeViewComponents _TreeViewComponents
 
+@inject Presentation.WebBlazor.ComponentCreation.ClickableListComponents _ClickableListComponents
+
+
 @inject Infrastructure.DataAccess.EFAccessCam1KeepTable eFAccessCam1KeepTable
-
-
+@inject Infrastructure.DataAccess.EFAccessCam2KeepTable eFAccessCam2KeepTable
+@inject Infrastructure.DataAccess.EFAccessIODeviationTable eFAccessIODeviationTable
+@inject Infrastructure.DataAccess.EFAccessIOKeepTable eFAccessIOKeepTable
 
 @code{
 
-    private PictureService pictureService;
-    private IOService iOService;
+    private PictureServiceCam1 pictureServiceCam1;
+    private PictureServiceCam2 pictureServiceCam2;
+    private IOKeepTableService iOKeepTableService;
+    //private IODeviationService iODeviationService;
     private PlotService plotService;
     public TreeUpdateUtils treeUpdateUtils;
-    public string GlobalPath = "ASDF";
-    public List<string> IONameList = new List<string>(); //Work data, skall hämtas från IOService senare.
     private List<TreeNode> TreeNodeList = new List<TreeNode>();
-    public static TestComponent MyTestComponent;// = new TestComponent();
+
 
     //Method invoked when the component is ready to start, having recieved its initial parameters from its parrent renderer tree
     //1: protected override void OnInitialized()
@@ -52,20 +56,16 @@
     //5: protected override bool ShouldRender()
     protected override void OnInitialized()
     {
-        pictureService = new PictureService(new PictureDataAccessCam1(eFAccessCam1KeepTable));
-        plotService = new PlotService(); //Här skall jag framöver injecera ett Interface 
-
-        //Debug.WriteLine($"OnInitialized : Bilder i stack är : {pictureService.NumberOfPicturesInStack()} ");
-        pictureService.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
-        iOService = new IOService();
-        iOService.IOColumnNamesAsTreeNodes();
+        pictureServiceCam1 = new PictureServiceCam1(new PictureDataAccessCam1(eFAccessCam1KeepTable));
+        pictureServiceCam2 = new PictureServiceCam2(new PictureDataAccessCam2(eFAccessCam2KeepTable));
+        pictureServiceCam1.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
+        pictureServiceCam2.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
+        plotService = new PlotService(); //Här skall jag framöver injecera ett Interface
+        iOKeepTableService = new IOKeepTableService(new IODeviationDataAccess(eFAccessIODeviationTable));
+        iOKeepTableService.IOColumnNamesAsTreeNodes();
         treeUpdateUtils = new TreeUpdateUtils();
     }
-    public static void injectParagraph(TestComponent _MyTestComponent)
-    {
-        MyTestComponent = _MyTestComponent;
-        Debug.WriteLine("injectParagraph körs nu ");
-    }
+
     protected override async Task OnInitializedAsync()
     {
         //Debug.WriteLine($"Dep inject ");
@@ -77,13 +77,19 @@
     {
         if (firstRender)
         {
-            TreeNodeList = iOService.IOColumnNamesAsTreeNodes();
+            TreeNodeList = iOKeepTableService.IOColumnNamesAsTreeNodes();
             _TreeViewComponents.IOTreeView2Component.TreeNodes = TreeNodeList;
             _TreeViewComponents.IOTreeView2Component.UpdateState();
+
+            //ListItemList = iODeviationService.
+            //_ClickableListComponents.
+            _ClickableListComponents.DeviationListViewComponent.UpdateState();
+
             _ImgSrcComponents.LeftPicture.PicturePathString = "a.jpeg"; //Skall ändras till glad gubbe, eller något annat trevligt.
             _ImgSrcComponents.LeftPicture.UpdateState();
             _ImgSrcComponents.RightPicture.PicturePathString = "PlotStartCanvas.jpeg"; //Skall ändras till glad gubbe, eller något annat trevligt.
             _ImgSrcComponents.RightPicture.UpdateState();
+
         }
     }
     protected override void OnParametersSet()
@@ -94,26 +100,7 @@
     //Därför ligger merparten av denna kod här.
     //Orsaken till att UpdateState ligger här, är för att det finns en bugg(?) i blazor, map på hur grejorna kopplas map lifecycle
     //Dvs, enda sättet att få ett event i tex en rangeSlider, att trigga en rerender av ett paragraph objekt, är att anropa det via denna funktion.
-    public void ActionEventCallback_LeftPictureRangeSlider()
-    {
-        _ParagraphComponents.LeftPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue.ToString() + " / " + _RangeSliderComponents.LeftPictureRangeSlider.MaxValue.ToString();
-        _ParagraphComponents.LeftPictureShowNumberOfTotal.UpdateState();
-        _ParagraphComponents.LeftPictureTimeStamp.FirstString = pictureService.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(0, 10);
-        _ParagraphComponents.LeftPictureTimeStamp.SecondString = pictureService.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(pictureService.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Length - 13);
-        _ParagraphComponents.LeftPictureTimeStamp.UpdateState();
-        _ImgSrcComponents.LeftPicture.PicturePathString = pictureService.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue);
-        _ImgSrcComponents.LeftPicture.UpdateState();
-    }
-    public void ActionEventCallback_RightPictureRangeSlider()
-    {
-        _ParagraphComponents.RightPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.RightPictureRangeSlider.CurrentValue.ToString() + " / " + _RangeSliderComponents.RightPictureRangeSlider.MaxValue.ToString();
-        _ParagraphComponents.RightPictureShowNumberOfTotal.UpdateState();
-        _ParagraphComponents.RightPictureTimeStamp.FirstString = pictureService.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Substring(0, 10);
-        _ParagraphComponents.RightPictureTimeStamp.SecondString = pictureService.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Substring(pictureService.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Length - 13);
-        _ParagraphComponents.RightPictureTimeStamp.UpdateState();
-        _ImgSrcComponents.RightPicture.PicturePathString = pictureService.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
-        _ImgSrcComponents.RightPicture.UpdateState();
-    }
+
     public void EventCallback_TreeView(TreeNode UserClickedOnThisTreeNode)
     {
         if (UserClickedOnThisTreeNode.Level == 3) //This is a child/leaf.
@@ -128,6 +115,43 @@
             _TreeViewComponents.IOTreeView2Component.UpdateState();
         }
     }
+
+
+    public void EventCallback_ListView(ListItem UserClickedOnThisListItem)
+    {
+        Debug.WriteLine($"Listview klick");
+        //Här skall det in 3st grejor
+        //Träd(plockar kolumnnamn från TriggerDB, typ den är byggd på IO template)
+        //GlobalTime start(trigger-2) stop(trigger + 2) centreras runt TriggerTime
+        //Update spinboxes 1 - 6->
+    }
+
+
+    public void ActionEventCallback_LeftPictureRangeSlider()
+    {
+        _ParagraphComponents.LeftPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue.ToString() + " / " + _RangeSliderComponents.LeftPictureRangeSlider.MaxValue.ToString();
+        _ParagraphComponents.LeftPictureShowNumberOfTotal.UpdateState();
+        _ParagraphComponents.LeftPictureTimeStamp.FirstString = pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(0, 10);
+        _ParagraphComponents.LeftPictureTimeStamp.SecondString = pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Length - 13);
+        _ParagraphComponents.LeftPictureTimeStamp.UpdateState();
+        _ImgSrcComponents.LeftPicture.PicturePathString = pictureServiceCam1.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue);
+        _ImgSrcComponents.LeftPicture.UpdateState();
+    }
+
+    public void ActionEventCallback_RightPictureRangeSlider()
+    {
+        _ParagraphComponents.RightPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.RightPictureRangeSlider.CurrentValue.ToString() + " / " + _RangeSliderComponents.RightPictureRangeSlider.MaxValue.ToString();
+        _ParagraphComponents.RightPictureShowNumberOfTotal.UpdateState();
+        _ParagraphComponents.RightPictureTimeStamp.FirstString = pictureServiceCam2.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Substring(0, 10);
+        _ParagraphComponents.RightPictureTimeStamp.SecondString = pictureServiceCam2.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Substring(pictureServiceCam2.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Length - 13);
+        _ParagraphComponents.RightPictureTimeStamp.UpdateState();
+        _ImgSrcComponents.RightPicture.PicturePathString = pictureServiceCam2.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
+        _ImgSrcComponents.RightPicture.UpdateState();
+    }
+
+
+
+
 
     public void Knapp1() //Restart
     {
@@ -146,13 +170,11 @@
 
     public void Knapp3() //ritar in första kurvan
     {
-        List<Int64> xlist = new List<Int64>() {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; //Simulerad data från DB
-        List<Boolean> ylist = new List<Boolean>() {true, false, true, false, false, false, false, true, true, true}; //Simulerad data från DB
+        List<Int64> xlist = new List<Int64>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }; //Simulerad data från DB
+        List<Boolean> ylist = new List<Boolean>() { true, false, true, false, false, false, false, true, true, true }; //Simulerad data från DB
         List<Coordinate> CoordinateList = plotService.CreateCoordinateList(xlist, ylist);
         plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 3);
         CoordinateList.Clear();
-
-
         _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
         _ImgSrcComponents.Plot.UpdateState();
     }
@@ -169,10 +191,6 @@
         _ImgSrcComponents.Plot.UpdateState();
         Debug.WriteLine("Knapp4");
     }
-
-
-
-
 }
 
 
@@ -183,17 +201,12 @@
             <!-- SignalTreeView -->
             <TreeView2Component CssClassStyle="MyInvisibleButton"
                                 @ref="_TreeViewComponents.IOTreeView2Component"
-                                MyCallback="EventCallback_TreeView"
-                                />
-
-
-
+                                MyCallback="EventCallback_TreeView" />
         </div>
         <div class="Row1Col2">
-            <!-- DeviationListView -->
-            @*<TreeViewComponent>
-
-                </TreeViewComponent>*@
+            <ClickableListComponent CssClassStyle="MyInvisibleButton"
+                                    @ref="_ClickableListComponents.DeviationListViewComponent"
+                                    MyCallback="EventCallback_ListView" />
         </div>
         <div class="Row1Col3">
             <!-- LeftPicture -->
@@ -286,7 +299,7 @@
             <RangeSliderComponent CssClassStyle="My5"
                                   @ref="_RangeSliderComponents.LeftPictureRangeSlider"
                                   MinValue="1"
-                                  MaxValue="@pictureService.NumberOfPicturesInStack()"
+                                  MaxValue="@pictureServiceCam1.NumberOfPicturesInStack()"
                                   ActionEventCallback="ActionEventCallback_LeftPictureRangeSlider" />
         </div>
         <div class="Row3Col7">
@@ -294,7 +307,7 @@
             <RangeSliderComponent CssClassStyle="My5"
                                   @ref="_RangeSliderComponents.RightPictureRangeSlider"
                                   MinValue="1"
-                                  MaxValue="@pictureService.NumberOfPicturesInStack()"
+                                  MaxValue="@pictureServiceCam2.NumberOfPicturesInStack()"
                                   ActionEventCallback="ActionEventCallback_RightPictureRangeSlider" />
         </div>
     </div>
@@ -481,7 +494,8 @@
     </div>
 
     <div class="Row6">
-        <div class="Row6Col1"> <!-- Plot -->
+        <div class="Row6Col1">
+            <!-- Plot -->
             <ImgSrcComponent CssClassStyle="MyAutoSizeKeepRatio" @ref="_ImgSrcComponents.Plot" />
         </div>
     </div>
