@@ -41,25 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\DeviationModel.cs" />
-    <Compile Include="Models\IOSampleModel.cs" />
-    <Compile Include="Models\IOSampleStackModel.cs" />
-    <Compile Include="Models\PictureModel.cs" />
-    <Compile Include="Models\PictureStackModel.cs" />
     <Compile Include="Models\TimeIntervallModel.cs" />
     <Compile Include="Models\TimeModel.cs" />
-    <Compile Include="ServicesOrController\PictureFilters.cs" />
+    <Compile Include="ImageFunctions\MotionFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServicesOrController\PlotController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interfaces\Interfaces.csproj">
       <Project>{466747f4-33be-4777-9139-33fa4794b1b3}</Project>
       <Name>Interfaces</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TextFile1.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

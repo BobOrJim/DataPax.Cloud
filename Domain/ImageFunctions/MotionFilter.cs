@@ -11,13 +11,6 @@ namespace Domain.Services
     {
 
 
-        public PictureStackModel ApplyMotionFilter(PictureStackModel _PictureStack)
-        {
-            //Implement the motion filter algorithm here!!!!!!!!!!!!!!
-            return _PictureStack; 
-        }
-
-        //Denna class skall ändra namn till MotionFilter.cs
 
         // Temp förändring filter
 

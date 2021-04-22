@@ -1,18 +1,36 @@
+* global static för start/stop time. Detta fixar jag till senare.
+
+* Skissa på ef interface
+	- Get triggerList (för trigger listan, från triggerTabell) (utan tid spec initialt)
+	- Get columnList (för trädet, från triggerTabell)
+
+
+* populate trigger lista
+
+* Populate träd
+
+* populate spinboxes
+
+
+
+
+UPPDATERINGS HIRARKI:
+TriggerListClick ->
+	Träd (plockar kolumnnamn från TriggerDB, typ den är byggd på IO template)  
+	GlobalTime start (trigger-2) stop (trigger+2) centreras runt TriggerTime
+	Update spinboxes 1-6 ->
+		GlobalTime start/stop.
+		Update graph (med tidstämpel LastUpdateStartStop property för att undvika 6st updates)
+		Update picture stack (med tidstämpel LastUpdateStartStop property för att undvika 6st updates)
+
+
+
+
+
+
+###############################################################################################################################
 
 Städa bort template kod.
-
-Alternativ 1:
-Gör CSS cell för cell, börja uppe till vänster.
-
-
-Alternativ 2:
-Börja strukturera up projektstrukturen.
-
-
-
-* Gå igenom folders
-
-
 
 
 ********
