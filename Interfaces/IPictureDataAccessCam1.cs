@@ -2,7 +2,7 @@
 
 namespace Interfaces.Interfaces
 {
-    public interface IPictureDataAccess
+    public interface IPictureDataAccessCam1
     {
         List<string> PicturePathsListFrom_Cam1KeepTable();
         string[] PicturePathsArrayFrom_Cam1KeepTable();

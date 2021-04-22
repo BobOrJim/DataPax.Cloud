@@ -7,9 +7,19 @@ using System.Text;
 
 namespace Infrastructure.DataAccess
 {
-    public class EFAccess : DbContext, IEFAccess
+    public class EFAccessCam1KeepTable : DbContext
     {
-        public EFAccess(DbContextOptions options) : base(options) { }
+        public EFAccessCam1KeepTable(DbContextOptions options) : base(options) { }
+
+
         public DbSet<Picture> Cam1KeepTable { get; set; }
+
+
+
+
+
+
     }
 }
+
+

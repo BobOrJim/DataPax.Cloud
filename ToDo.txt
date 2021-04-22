@@ -1,8 +1,19 @@
-* global static för start/stop time. Detta fixar jag till senare.
+
+
+
+
+[Domain Utgår tillsvidare]
+
+
+[KLAR] * global static för start/stop time. Detta fixar jag till senare.
+
 
 * Skissa på ef interface
-	- Get triggerList (för trigger listan, från triggerTabell) (utan tid spec initialt)
-	- Get columnList (för trädet, från triggerTabell)
+	- Cam1keep
+	- Cam2keep
+	- deviation
+	- IOkeep
+
 
 
 * populate trigger lista

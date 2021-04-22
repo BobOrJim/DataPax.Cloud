@@ -1,3 +1,19 @@
+
+
+Stories:
+
+Det verkar som att standard är att en DbContext, mappas mot en tabell.
+* https://entityframeworkcore.com/knowledge-base/52053622/using-a-single-entity-framework-core-dbcontext-to-manage-multiple-database-schemas-with-homonymous-tables
+* https://stackoverflow.com/questions/36576932/using-entity-framework-6-with-multiple-db-schemas-but-using-one-dbcontext
+* https://towardsdatascience.com/solved-one-dbcontext-cant-point-to-multiple-dbset-to-the-same-object-a7231a72ff1d
+* Ovan erbjuder work arounds, som jag kan kolla på när jag har tid.
+
+
+
+
+
+
+
 DATABASER MED TILLHÖRANDE TABELLER
 myDB:
 -Cam1EvenTable

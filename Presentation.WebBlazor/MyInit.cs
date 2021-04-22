@@ -15,7 +15,7 @@ namespace Presentation.WebBlazor
     {
 
         //private readonly EFAccess _EFAccess;
-        private IEFAccess _IEFAccess;
+        //private IEFAccess _IEFAccess;
 
         //public List<Picture> Pictures = new List<Picture>();
         //public List<Picture> PicturePaths = new List<Picture>();

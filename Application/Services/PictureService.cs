@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Domain.Models;
 using Domain.Services;
 using System.Drawing.Imaging;
 using System.Drawing;
@@ -21,21 +20,20 @@ namespace Application.Services
         private List<string> PictureTimeStampStringList = new List<string>();
         private string[] PictureTimeStampStringArray;
 
-        public IPictureDataAccess _PictureDataAccess;
-        public PictureService(IPictureDataAccess p)
+        public IPictureDataAccessCam1 _PictureDataAccessCam1;
+        public PictureService(IPictureDataAccessCam1 p)
         {
-            _PictureDataAccess = p;
-            Debug.WriteLine($"PictureService konstruktor Körs");
+            _PictureDataAccessCam1 = p;
         }
         public int NumberOfPicturesInStack()
         {
-            return _PictureDataAccess.PicturePathsListFrom_Cam1KeepTable().Count();
+            return _PictureDataAccessCam1.PicturePathsListFrom_Cam1KeepTable().Count();
         }
         public void UpdatePictureStack()
         {
-            PicturePathsList = _PictureDataAccess.PicturePathsListFrom_Cam1KeepTable();
+            PicturePathsList = _PictureDataAccessCam1.PicturePathsListFrom_Cam1KeepTable();
             PicturePathsArray = PicturePathsList.ToArray();
-            PictureTimeStampStringList = _PictureDataAccess.PictureTimeStampStringListFrom_Cam1KeepTable();
+            PictureTimeStampStringList = _PictureDataAccessCam1.PictureTimeStampStringListFrom_Cam1KeepTable();
             PictureTimeStampStringArray = PictureTimeStampStringList.ToArray();
         }
         public string LeftPicturePathToShow(int LeftPictureNumberInStackToShow)

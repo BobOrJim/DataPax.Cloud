@@ -26,7 +26,7 @@
 
 @inject Presentation.WebBlazor.ComponentCreation.TreeViewComponents _TreeViewComponents
 
-@inject Infrastructure.DataAccess.EFAccess _EFAccess
+@inject Infrastructure.DataAccess.EFAccessCam1KeepTable eFAccessCam1KeepTable
 
 
 
@@ -52,8 +52,7 @@
     //5: protected override bool ShouldRender()
     protected override void OnInitialized()
     {
-
-        pictureService = new PictureService(new PictureDataAccess(_EFAccess));
+        pictureService = new PictureService(new PictureDataAccessCam1(eFAccessCam1KeepTable));
         plotService = new PlotService(); //Här skall jag framöver injecera ett Interface 
 
         //Debug.WriteLine($"OnInitialized : Bilder i stack är : {pictureService.NumberOfPicturesInStack()} ");
@@ -61,7 +60,6 @@
         iOService = new IOService();
         iOService.IOColumnNamesAsTreeNodes();
         treeUpdateUtils = new TreeUpdateUtils();
-
     }
     public static void injectParagraph(TestComponent _MyTestComponent)
     {

@@ -41,8 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\TimeIntervallModel.cs" />
-    <Compile Include="Models\TimeModel.cs" />
     <Compile Include="ImageFunctions\MotionFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

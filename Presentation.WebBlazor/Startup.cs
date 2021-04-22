@@ -33,10 +33,28 @@ namespace Presentation.WebBlazor
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<EFAccess>(options =>          //Jimmy
+            services.AddDbContext<EFAccessCam1KeepTable>(options =>          
             {
                 options.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
+            services.AddDbContext<EFAccessCam2KeepTable>(options =>          
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("Default"));
+            });
+            services.AddDbContext<EFAccessIODeviationTable>(options =>          
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("Default"));
+            });
+            services.AddDbContext<EFAccessIOKeepTable>(options =>          
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("Default"));
+            });
+
+
+
+
+
+
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
