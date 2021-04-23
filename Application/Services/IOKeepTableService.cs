@@ -14,8 +14,6 @@ namespace Application.Services
     {
         private List<TreeNode> TreeNodeList = new List<TreeNode>(); //Work data, skall hämtas från IOService senare.
         private TreeInitUtils TreeBuilderUtils = new TreeInitUtils();
-        private List<string> IONameList = new List<string>();
-        private string[] IONameArray;
 
         private IIOKeepTableDataAccess iIOKeepTableDataAccess;
 
@@ -25,33 +23,10 @@ namespace Application.Services
         }
 
 
-        private void ReadIOColumnsFromDB()
-        {
-            IONameList = myMoqColumn(); //Här skall det in anrop till IODataAccess, vilken inte är skapad ännu.
-            IONameArray = IONameList.ToArray();
-        }
-
-
         public List<TreeNode> IOColumnNamesAsTreeNodes()
         {
-            TreeNodeList.Clear();
-            List<string> IOColumnNames = iIOKeepTableDataAccess.IOColumnNames_FromIOKeepTable();
-
-            foreach (string s in IOColumnNames)
-            {
-
-                //Debug.WriteLine($"In IOColumnNamesAsTreeNodes: {t.Name}");
-            }
-            return TreeNodeList;
-        }
-
-
-
-
-
-        public List<TreeNode> IOColumnNamesAsTreeNodesOLD()
-        {
-            ReadIOColumnsFromDB();
+            List<string> IONameList = iIOKeepTableDataAccess.IOColumnNames_FromIOKeepTable(); //Här skall det in anrop till IODataAccess, vilken inte är skapad ännu.
+            IONameList.ToArray();
             TreeNodeList.Clear();
             TreeNodeList = TreeBuilderUtils.NameListToNameNodeList(IONameList);
             TreeNodeList = TreeBuilderUtils.InjectNodesInTreeAtLevel(TreeNodeList, 0);
@@ -63,30 +38,5 @@ namespace Application.Services
             }
             return TreeNodeList;
         }
-
-
-
-        //NOTERING: Detta är kolumn namn. Jag kommer ha två alternativ framöver:
-        //1: Försöka plocka ur kolumnnamnen från EF
-        //2: Hårdkoda modell, (samma som för picture, dvs kolumn blir en Model. Jag skall välja den lätta tills Docker grejen är färdig.
-        public List<string> myMoqColumn()
-        {
-            //Obs, underscore är radbrytare, inte mellanslag. Dvs det är fyra kategorier.
-            List<string> tmpList = new List<string>();
-            tmpList.Clear();
-            tmpList.Add("Line 1_Machine 1_IO group 1_IO A");
-            tmpList.Add("Line 1_Machine 1_IO group 1_IO B");
-            tmpList.Add("Line 1_Machine 1_IO group 2_IO C");
-            tmpList.Add("Line 1_Machine 1_IO group 2_IO D");
-            tmpList.Add("Line 1_Machine 2_IO group 2_IO C");
-            tmpList.Add("Line 1_Machine 2_IO group 2_IO D");
-            tmpList.Add("Line 2_Machine 2_IO group 2_IO C");
-            tmpList.Add("Line 2_Machine 2_IO group 2_IO D");
-            tmpList.Add("Line 2_Machine 3_IO group 2_IO C");
-            tmpList.Add("Line 2_Machine 3_IO group 3_IO D");
-            return tmpList;
-        }
-
-
     }
 }
