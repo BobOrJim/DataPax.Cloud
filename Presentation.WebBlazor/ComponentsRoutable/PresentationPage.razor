@@ -45,7 +45,7 @@
     private TreeUpdateUtils treeUpdateUtils;
     private List<TreeNode> TreeNodeList = new List<TreeNode>(); //Kommer länkas ihop med denna blazor komponent: _TreeViewComponents.IOTreeView2Component
     private List<ListItem> ListItemList = new List<ListItem>(); //Kommer länkas ihop med denna blazor komponent: _ClickableListComponents.DeviationListViewComponent
-
+    private TimeController timeController = new TimeController();
 
     //Method invoked when the component is ready to start, having recieved its initial parameters from its parrent renderer tree
     //1: protected override void OnInitialized()
@@ -68,6 +68,9 @@
         plotService = new PlotService(); //Här skall jag framöver injecera ett Interface
         //iOKeepTableService.IOColumnNamesAsTreeNodes();
         treeUpdateUtils = new TreeUpdateUtils();
+        //timeController.WriteUnixToSolartime_StartTime();
+        timeController.WriteSolarTimeToUnix_StartTime();
+
     }
 
     protected override async Task OnInitializedAsync()
@@ -162,7 +165,7 @@
 
 
 
-    
+
 
     public void Knapp1() //Restart
     {

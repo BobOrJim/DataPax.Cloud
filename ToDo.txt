@@ -1,13 +1,3 @@
-Ideer efter en grillad köttbit å ett par bärs:
-
-
-
-* Time objekt, med både start och stop skall skapas i PresentaitonPage. Ev skall start7stop skickas med som parametrar till lager nedanför.
-
-2: Snygga till triggerList
-
-
-3: Spara ner allt detta till extra backup.
 
 
 
@@ -17,23 +7,25 @@ Ideer efter en grillad köttbit å ett par bärs:
 
 
 
-"Bygg en egen ehandels plattform"
-dotNET core 101
-liu
+
+1: Time objekt, med både start och stop skall skapas i PresentaitonPage. Ev skall start7stop skickas med som parametrar till lager nedanför.
+1.1: Klick på trigger, skall update time object.
+2: Klick på trigger, skall populate tree
+3: Klick på trigger, skall uppdate spinboxes.
+
+
+
+
+
 
 
 
 [Domain Utgår tillsvidare]
 
 
-[KLAR] * global static för start/stop time. Detta fixar jag till senare.
+* global static för start/stop time. Detta fixar jag till senare.
 
 
-* Skissa på ef interface
-	- Cam1keep
-	- Cam2keep
-	- deviation
-	- IOkeep
 
 
 
@@ -69,3 +61,8 @@ Till Front features
 * KANSKE SNILLEBLIXT, SUDDA INTE. ALLA TIME SPIN BOXES KAN TRÄFFA SAMMA CALLBACK FUNKTION
 * Step line chart. Skriv in detta namn i någon kommentar i Front.
 * Kanske lägga till färgglidande bakgrund, så som jag gjorde på IQR.
+
+
+"Bygg en egen ehandels plattform"
+dotNET core 101
+liu
