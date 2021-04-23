@@ -43,7 +43,8 @@
 
     private PlotService plotService;
     private TreeUpdateUtils treeUpdateUtils;
-    private List<TreeNode> TreeNodeList = new List<TreeNode>();
+    private List<TreeNode> TreeNodeList = new List<TreeNode>(); //Kommer länkas ihop med denna blazor komponent: _TreeViewComponents.IOTreeView2Component
+    private List<ListItem> ListItemList = new List<ListItem>(); //Kommer länkas ihop med denna blazor komponent: _ClickableListComponents.DeviationListViewComponent
 
 
     //Method invoked when the component is ready to start, having recieved its initial parameters from its parrent renderer tree
@@ -84,8 +85,15 @@
             _TreeViewComponents.IOTreeView2Component.TreeNodes = TreeNodeList;
             _TreeViewComponents.IOTreeView2Component.UpdateState();
 
-            //ListItemList = iODeviationService.
-            //_ClickableListComponents.
+            ListItemList = iODeviationService.DeviationsList();
+            //foreach (ListItem s in ListItemList)
+            //{
+            //    Debug.WriteLine($"in presentaiton page : {s.Id}");
+            //    Debug.WriteLine($"in presentaiton page : {s.Name}");
+            //}
+
+
+            _ClickableListComponents.DeviationListViewComponent.ListItems = ListItemList;
             _ClickableListComponents.DeviationListViewComponent.UpdateState();
 
             _ImgSrcComponents.LeftPicture.PicturePathString = "a.jpeg"; //Skall ändras till glad gubbe, eller något annat trevligt.
@@ -122,7 +130,7 @@
 
     public void EventCallback_ListView(ListItem UserClickedOnThisListItem)
     {
-        Debug.WriteLine($"Listview klick");
+        Debug.WriteLine($"Listview klick, user clicked on {UserClickedOnThisListItem.Name}");
         //Här skall det in 3st grejor
         //Träd(plockar kolumnnamn från TriggerDB, typ den är byggd på IO template)
         //GlobalTime start(trigger-2) stop(trigger + 2) centreras runt TriggerTime

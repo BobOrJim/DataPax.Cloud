@@ -14,7 +14,9 @@ namespace Application.Services
 {
     public class IODeviationService
     {
-        private List<ListItem> ListItemList = new List<ListItem>(); //Work data, skall hämtas från IOService senare.
+        private List<ListItem> ListItemList = new List<ListItem>();
+        private List<string> WorkStringList = new List<string>();
+
         public IIODeviationDataAccess iIODeviationDataAccess;
 
         public IODeviationService(IIODeviationDataAccess _iIODeviationDataAccess)
@@ -23,20 +25,24 @@ namespace Application.Services
         }
 
 
-
-        public List<ListItem> DeviationList()
+        public List<ListItem> DeviationsList()
         {
             ListItemList.Clear();
+            ListItem listItem;
+            int ID = 0;
+            WorkStringList = iIODeviationDataAccess.DeviationStringList_FromIODeviationTable();
+            //Debug.WriteLine($"Antal element i WorkStringList är : {WorkStringList.Count()}");
 
-            foreach (ListItem t in ListItemList)
+            foreach (string s in WorkStringList)
             {
-                //Debug.WriteLine(t.Name);
-
+                listItem = new ListItem();
+                listItem.Id = ID;
+                ID += 1;
+                listItem.Name = s;
+                ListItemList.Add(listItem);
             }
             return ListItemList;
         }
-
-
     }
 }
 

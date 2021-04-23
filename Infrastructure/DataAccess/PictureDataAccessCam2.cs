@@ -30,7 +30,7 @@ namespace Infrastructure.DataAccess
             List<Picture> PictureList = eFAccessCam2KeepTable.Cam2KeepTable.ToList();
             Picture[] PicturesArray = eFAccessCam2KeepTable.Cam2KeepTable.ToArray();
             PicturePathsList.Clear();
-            Debug.WriteLine($"Nu sker anrop till DB från PictureDataAccessCam2, kolla så det inte blir för många av dessa, bortsett från init, bör de bara köras när någon tidModell ändras");
+            //Debug.WriteLine($"Nu sker anrop till DB från PictureDataAccessCam2, kolla så det inte blir för många av dessa, bortsett från init, bör de bara köras när någon tidModell ändras");
             foreach (Picture picture in PictureList)
             {
                 PicturePathsList.Add("Cam2KeepPictures/" + picture.FileNameCurrent_TEXT + ".jpeg");

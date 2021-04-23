@@ -6,7 +6,10 @@ Ideer efter en grillad köttbit å ett par bärs:
 
 * Time objekt, med både start och stop skall skapas i PresentaitonPage. Ev skall start7stop skickas med som parametrar till lager nedanför.
 
+1: Hämta en lista av triggers
+2: Skicka in listan i clickableList.
 
+3: Spara ner allt detta till extra backup.
 
 
 
