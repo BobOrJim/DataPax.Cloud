@@ -32,8 +32,24 @@ namespace Application.Services
         }
 
 
-
         public List<TreeNode> IOColumnNamesAsTreeNodes()
+        {
+            TreeNodeList.Clear();
+            List<string> IOColumnNames = iIOKeepTableDataAccess.IOColumnNames_FromIOKeepTable();
+
+            foreach (string s in IOColumnNames)
+            {
+
+                //Debug.WriteLine($"In IOColumnNamesAsTreeNodes: {t.Name}");
+            }
+            return TreeNodeList;
+        }
+
+
+
+
+
+        public List<TreeNode> IOColumnNamesAsTreeNodesOLD()
         {
             ReadIOColumnsFromDB();
             TreeNodeList.Clear();

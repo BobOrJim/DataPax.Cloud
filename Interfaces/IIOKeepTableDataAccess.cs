@@ -1,7 +1,9 @@
-﻿namespace Interfaces.Interfaces
+﻿using System.Collections.Generic;
+
+namespace Interfaces.Interfaces
 { 
     public interface IIOKeepTableDataAccess
     {
-        void slask();
+        List<string> IOColumnNames_FromIOKeepTable();
     }
 }

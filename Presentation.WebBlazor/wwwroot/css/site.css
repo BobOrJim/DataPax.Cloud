@@ -195,9 +195,8 @@ a, .btn-link {
 .Row1Col2 { /* DeviationListView */
     grid-area: Row1Col2;
     background-color: #c6e8f7;
-    /*flex-wrap: wrap;*/
-    /*justify-self: stretch; */ /*width:100%;*/
     border: 1px solid black;
+    font-size: 0.75vw
 }
 
 .Row1Col3 { /* LeftPicture */
