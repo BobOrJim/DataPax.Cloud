@@ -1,4 +1,24 @@
+Ideer efter en grillad köttbit å ett par bärs:
 
+
+
+
+
+* Time objekt, med både start och stop skall skapas i PresentaitonPage. Ev skall start7stop skickas med som parametrar till lager nedanför.
+
+
+
+
+
+
+
+
+
+
+
+"Bygg en egen ehandels plattform"
+dotNET core 101
+liu
 
 
 
@@ -33,10 +53,6 @@ TriggerListClick ->
 		GlobalTime start/stop.
 		Update graph (med tidstämpel LastUpdateStartStop property för att undvika 6st updates)
 		Update picture stack (med tidstämpel LastUpdateStartStop property för att undvika 6st updates)
-
-
-
-
 
 
 ###############################################################################################################################

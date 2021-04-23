@@ -39,9 +39,10 @@
     private PictureServiceCam1 pictureServiceCam1;
     private PictureServiceCam2 pictureServiceCam2;
     private IOKeepTableService iOKeepTableService;
-    //private IODeviationService iODeviationService;
+    private IODeviationService iODeviationService;
+
     private PlotService plotService;
-    public TreeUpdateUtils treeUpdateUtils;
+    private TreeUpdateUtils treeUpdateUtils;
     private List<TreeNode> TreeNodeList = new List<TreeNode>();
 
 
@@ -58,10 +59,12 @@
     {
         pictureServiceCam1 = new PictureServiceCam1(new PictureDataAccessCam1(eFAccessCam1KeepTable));
         pictureServiceCam2 = new PictureServiceCam2(new PictureDataAccessCam2(eFAccessCam2KeepTable));
+        iOKeepTableService = new IOKeepTableService(new IOKeepTableDataAccess(eFAccessIOKeepTable));
+        iODeviationService = new IODeviationService(new IODeviationDataAccess(eFAccessIODeviationTable));
+
         pictureServiceCam1.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
         pictureServiceCam2.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
         plotService = new PlotService(); //Här skall jag framöver injecera ett Interface
-        iOKeepTableService = new IOKeepTableService(new IODeviationDataAccess(eFAccessIODeviationTable));
         iOKeepTableService.IOColumnNamesAsTreeNodes();
         treeUpdateUtils = new TreeUpdateUtils();
     }

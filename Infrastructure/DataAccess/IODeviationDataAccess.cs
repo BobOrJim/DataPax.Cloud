@@ -10,8 +10,9 @@ namespace Infrastructure.DataAccess
     public class IODeviationDataAccess : IIODeviationDataAccess
     {
         private List<string> DeviationList = new List<string>();
-
         EFAccessIODeviationTable eFAccessIODeviationTable;
+
+
         public IODeviationDataAccess(EFAccessIODeviationTable _eFAccessIODeviationTable)
         {
             eFAccessIODeviationTable = _eFAccessIODeviationTable;
