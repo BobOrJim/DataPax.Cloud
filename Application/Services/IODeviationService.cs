@@ -29,19 +29,18 @@ namespace Application.Services
         {
             ListItemList.Clear();
             ListItem listItem;
-            int ID = 0;
+            int counter = 0;
             WorkStringList = iIODeviationDataAccess.DeviationNameStringList_FromIODeviationTable();
+            WorkInt64List = iIODeviationDataAccess.DeviationTimeStampList_FromIODeviationTable();
             foreach (string s in WorkStringList)
             {
                 listItem = new ListItem();
-                listItem.Id = ID;
-                ID += 1;
+                listItem.Id = counter;
+                listItem.Timestamp_unix_BIGINT = WorkInt64List[counter];
                 listItem.Name = s;
+                counter += 1;
                 ListItemList.Add(listItem);
             }
-
-
-
             return ListItemList;
         }
     }

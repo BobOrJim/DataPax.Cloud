@@ -11,7 +11,7 @@ Metoder att gå igenom:
 3: 
 
 
-
+OBS: kanske kan alla external uppdate utgå...
 
 
 
@@ -55,7 +55,9 @@ TriggerListClick ->
 		GlobalTime start/stop.
 		Update graph (med tidstämpel LastUpdateStartStop property för att undvika 6st updates)
 		Update picture stack (med tidstämpel LastUpdateStartStop property för att undvika 6st updates)
-
+Half Forw etc
+	Update spinboxes
+	-""-
 
 ###############################################################################################################################
 

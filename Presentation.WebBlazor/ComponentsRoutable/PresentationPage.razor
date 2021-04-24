@@ -80,13 +80,13 @@
             _TreeViewComponents.IOTreeView2Component.TreeNodes = TreeNodeList;
             _TreeViewComponents.IOTreeView2Component.UpdateState();
             //Tilldelar trigger list data från db
-            ListItemList = iODeviationService.DeviationsList();
+            ListItemList = iODeviationService.DeviationListItemList();
             _ClickableListComponents.DeviationListViewComponent.ListItems = ListItemList;
             _ClickableListComponents.DeviationListViewComponent.UpdateState();
             //Tilldelar bilder varsing startbild. Logga skall in här
-            _ImgSrcComponents.LeftPicture.PicturePathString = "a.jpeg"; //Skall ändras till glad gubbe, eller något annat trevligt.
+            _ImgSrcComponents.LeftPicture.PicturePathString = "a.jpeg"; //Skall ändras till logga
             _ImgSrcComponents.LeftPicture.UpdateState();
-            _ImgSrcComponents.RightPicture.PicturePathString = "PlotStartCanvas.jpeg"; //Skall ändras till glad gubbe, eller något annat trevligt.
+            _ImgSrcComponents.RightPicture.PicturePathString = "PlotStartCanvas.jpeg"; //logga
             _ImgSrcComponents.RightPicture.UpdateState();
         }
     }
@@ -117,23 +117,25 @@
 
     public void EventCallback_ListView(ListItem UserClickedOnThisListItem)
     {
-        Debug.WriteLine($"Listview klick, user clicked on {UserClickedOnThisListItem.Name}");
-
-        timeController.StartTimeUnix = 1619005552045 - 2000;
+        //Debug.WriteLine($"Listview klick, user clicked on {UserClickedOnThisListItem.Name}");
+        timeController.StartTimeUnix = UserClickedOnThisListItem.Timestamp_unix_BIGINT-2000;
         timeController.WriteUnixToSolartime_StartTime();
-        timeController.EndTimeUnix = 1619005552045 + 2000;
+        timeController.EndTimeUnix = UserClickedOnThisListItem.Timestamp_unix_BIGINT+2000;
         timeController.WriteUnixToSolartime_EndTime();
-
+        _NumericTextBoxComponents.StartTimeYear.CurrentValue = timeController.StartYear;
+        _NumericTextBoxComponents.StartTimeMonth.CurrentValue = timeController.StartMonth;
+        _NumericTextBoxComponents.StartTimeDay.CurrentValue = timeController.StartDay;
+        _NumericTextBoxComponents.StartTimeHour.CurrentValue = timeController.StartHour;
+        _NumericTextBoxComponents.StartTimeMinute.CurrentValue = timeController.StartMinute;
         _NumericTextBoxComponents.StartTimeSecond.CurrentValue = timeController.StartSecond;
-        _NumericTextBoxComponents.StartTimeSecond.ExternalUpdate();
-
-        Debug.WriteLine($"_NumericTextBoxComponents.StartTimeSecond.CurrentValue= {_NumericTextBoxComponents.StartTimeSecond.CurrentValue}");
-        
-        
-        //Här skall det in 3st grejor
-        //Träd(plockar kolumnnamn från TriggerDB, typ den är byggd på IO template)
-        //GlobalTime start(trigger-2) stop(trigger + 2) centreras runt TriggerTime
-        //Update spinboxes 1 - 6->
+        _NumericTextBoxComponents.EndTimeYear.CurrentValue = timeController.EndYear;
+        _NumericTextBoxComponents.EndTimeMonth.CurrentValue = timeController.EndMonth;
+        _NumericTextBoxComponents.EndTimeDay.CurrentValue = timeController.EndDay;
+        _NumericTextBoxComponents.EndTimeHour.CurrentValue = timeController.EndHour;
+        _NumericTextBoxComponents.EndTimeMinute.CurrentValue = timeController.EndMinute;
+        _NumericTextBoxComponents.EndTimeSecond.CurrentValue = timeController.EndSecond;
+        //_NumericTextBoxComponents.StartTimeSecond.ExternalUpdate();
+        //Debug.WriteLine($"timeController.EndSecond= {timeController.EndSecond}");
     }
 
 
@@ -443,6 +445,8 @@
         </div>
         <div class="Row5Col11">
             <!-- EndTimeYear -->
+
+
             <NumericTextBoxComponent CssClassStyle="My5"
                                      @ref="_NumericTextBoxComponents.EndTimeYear"
                                      ThisComponentInstanceName="_NumericTextBoxComponents.EndTimeYear"

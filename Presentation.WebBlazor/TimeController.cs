@@ -61,13 +61,13 @@ namespace Presentation.WebBlazor
         {
             dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
             DateTime time = dateTime.AddMilliseconds(EndTimeUnix);
-            StartYear = time.Year;
-            StartMonth = time.Month;
-            StartDay = time.Day;
-            StartHour = time.Hour;
-            StartMinute = time.Minute;
-            StartSecond = time.Second;
-            StartMilliseconds = time.Millisecond;
+            EndYear = time.Year;
+            EndMonth = time.Month;
+            EndDay = time.Day;
+            EndHour = time.Hour;
+            EndMinute = time.Minute;
+            EndSecond = time.Second;
+            EndMilliseconds = time.Millisecond;
             //Debug.WriteLine($"In WriteUnixToSolartime_EndTime: {StartYear} {StartMonth} {StartDay} {StartHour} {StartMinute} {StartSecond} {StartMilliseconds} ");
         }
 
