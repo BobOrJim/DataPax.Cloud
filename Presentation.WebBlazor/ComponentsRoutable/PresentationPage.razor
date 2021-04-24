@@ -13,21 +13,14 @@
 
 @inject Presentation.WebBlazor.ComponentCreation.NumericTextBoxComponents _NumericTextBoxComponents
 @inject Application.UseCases.NumericTextBoxUseCases _NumericTextBoxUseCases
-
 @inject Presentation.WebBlazor.ComponentCreation.ButtonComponents _ButtonComponents
 @inject Application.UseCases.ButtonUseCases _ButtonUseCases
-
 @inject Presentation.WebBlazor.ComponentCreation.RangeSliderComponents _RangeSliderComponents
 @inject Application.UseCases.RangeSliderUseCases _RangeSliderUseCases
-
 @inject Presentation.WebBlazor.ComponentCreation.ParagraphComponents _ParagraphComponents
-
 @inject Presentation.WebBlazor.ComponentCreation.ImgSrcComponents _ImgSrcComponents
-
 @inject Presentation.WebBlazor.ComponentCreation.TreeViewComponents _TreeViewComponents
-
 @inject Presentation.WebBlazor.ComponentCreation.ClickableListComponents _ClickableListComponents
-
 
 @inject Infrastructure.DataAccess.EFAccessCam1KeepTable eFAccessCam1KeepTable
 @inject Infrastructure.DataAccess.EFAccessCam2KeepTable eFAccessCam2KeepTable
@@ -66,44 +59,35 @@
         pictureServiceCam1.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
         pictureServiceCam2.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
         plotService = new PlotService(); //Här skall jag framöver injecera ett Interface
-        //iOKeepTableService.IOColumnNamesAsTreeNodes();
         treeUpdateUtils = new TreeUpdateUtils();
         //timeController.WriteUnixToSolartime_StartTime();
-        timeController.WriteSolarTimeToUnix_StartTime();
-
+        //timeController.WriteSolarTimeToUnix_StartTime();
     }
 
     protected override async Task OnInitializedAsync()
     {
-        //Debug.WriteLine($"Dep inject ");
         _NumericTextBoxUseCases.Hej();
         _NumericTextBoxUseCases.DepInjection(_NumericTextBoxComponents);
         _ButtonUseCases.DepInjection(_NumericTextBoxComponents);
     }
+
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
         {
+            //Tilldelar träd data från db
             TreeNodeList = iOKeepTableService.IOColumnNamesAsTreeNodes();
             _TreeViewComponents.IOTreeView2Component.TreeNodes = TreeNodeList;
             _TreeViewComponents.IOTreeView2Component.UpdateState();
-
+            //Tilldelar trigger list data från db
             ListItemList = iODeviationService.DeviationsList();
-            //foreach (ListItem s in ListItemList)
-            //{
-            //    Debug.WriteLine($"in presentaiton page : {s.Id}");
-            //    Debug.WriteLine($"in presentaiton page : {s.Name}");
-            //}
-
-
             _ClickableListComponents.DeviationListViewComponent.ListItems = ListItemList;
             _ClickableListComponents.DeviationListViewComponent.UpdateState();
-
+            //Tilldelar bilder varsing startbild. Logga skall in här
             _ImgSrcComponents.LeftPicture.PicturePathString = "a.jpeg"; //Skall ändras till glad gubbe, eller något annat trevligt.
             _ImgSrcComponents.LeftPicture.UpdateState();
             _ImgSrcComponents.RightPicture.PicturePathString = "PlotStartCanvas.jpeg"; //Skall ändras till glad gubbe, eller något annat trevligt.
             _ImgSrcComponents.RightPicture.UpdateState();
-
         }
     }
     protected override void OnParametersSet()
@@ -134,11 +118,20 @@
     public void EventCallback_ListView(ListItem UserClickedOnThisListItem)
     {
         Debug.WriteLine($"Listview klick, user clicked on {UserClickedOnThisListItem.Name}");
+
+        timeController.StartTimeUnix = 1619005552045 - 2000;
+        timeController.WriteUnixToSolartime_StartTime();
+        timeController.EndTimeUnix = 1619005552045 + 2000;
+        timeController.WriteUnixToSolartime_EndTime();
+        _NumericTextBoxComponents.DeviationYear.CurrentValue = timeController.StartYear;
+        _NumericTextBoxComponents.DeviationYear.ExternalUpdate();
+
+
         //Här skall det in 3st grejor
         //Träd(plockar kolumnnamn från TriggerDB, typ den är byggd på IO template)
         //GlobalTime start(trigger-2) stop(trigger + 2) centreras runt TriggerTime
         //Update spinboxes 1 - 6->
-    }
+        }
 
 
     public void ActionEventCallback_LeftPictureRangeSlider()

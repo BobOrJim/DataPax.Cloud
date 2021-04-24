@@ -1,5 +1,10 @@
 
+Nu börjar det intressanta komma, vilka funktioner vill jag ha hos mina komponenter:
 
+1: alla måste ha en externalUpdate metod.
+2: alla måste ha en EventCallback metod.
+
+Får jag dessa till att lira för varje objekt, så tror jag det är ganska lätt att sy ihop helheten.
 
 
 
