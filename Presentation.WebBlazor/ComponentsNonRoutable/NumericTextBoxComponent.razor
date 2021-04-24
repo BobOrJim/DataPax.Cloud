@@ -1,5 +1,5 @@
-﻿@inject ProtectedLocalStorage LocalStorage
-@inject ProtectedSessionStorage SessionStorage
+﻿@*@inject ProtectedLocalStorage LocalStorage
+@inject ProtectedSessionStorage SessionStorage*@
 
 <!-- Spinners = always show -->
 <style>
@@ -42,7 +42,7 @@
     private async Task OnInput()
     {
         //Debug.WriteLine("MyNumericSpinBoxComponent...OnInput..");
-        await LocalStorage.SetAsync(ThisComponentInstanceName, CurrentValue);
+        //await LocalStorage.SetAsync(ThisComponentInstanceName, CurrentValue);
         ActionEventCallback?.Invoke();
     }
 

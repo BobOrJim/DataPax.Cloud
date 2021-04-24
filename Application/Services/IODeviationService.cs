@@ -16,6 +16,7 @@ namespace Application.Services
     {
         private List<ListItem> ListItemList = new List<ListItem>();
         private List<string> WorkStringList = new List<string>();
+        private List<Int64> WorkInt64List = new List<Int64>();
 
         public IIODeviationDataAccess iIODeviationDataAccess;
 
@@ -24,15 +25,12 @@ namespace Application.Services
             iIODeviationDataAccess = _iIODeviationDataAccess;
         }
 
-
-        public List<ListItem> DeviationsList()
+        public List<ListItem> DeviationListItemList()
         {
             ListItemList.Clear();
             ListItem listItem;
             int ID = 0;
-            WorkStringList = iIODeviationDataAccess.DeviationStringList_FromIODeviationTable();
-            //Debug.WriteLine($"Antal element i WorkStringList är : {WorkStringList.Count()}");
-
+            WorkStringList = iIODeviationDataAccess.DeviationNameStringList_FromIODeviationTable();
             foreach (string s in WorkStringList)
             {
                 listItem = new ListItem();
@@ -41,6 +39,9 @@ namespace Application.Services
                 listItem.Name = s;
                 ListItemList.Add(listItem);
             }
+
+
+
             return ListItemList;
         }
     }

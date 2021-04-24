@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 
 namespace Interfaces.Interfaces
 {
     public interface IIODeviationDataAccess
     {
-        List<string> DeviationStringList_FromIODeviationTable();
-
-
+        List<string> DeviationNameStringList_FromIODeviationTable();
+        List<Int64> DeviationTimeStampList_FromIODeviationTable();
     }
 }
 

@@ -123,15 +123,18 @@
         timeController.WriteUnixToSolartime_StartTime();
         timeController.EndTimeUnix = 1619005552045 + 2000;
         timeController.WriteUnixToSolartime_EndTime();
-        _NumericTextBoxComponents.DeviationYear.CurrentValue = timeController.StartYear;
-        _NumericTextBoxComponents.DeviationYear.ExternalUpdate();
 
+        _NumericTextBoxComponents.StartTimeSecond.CurrentValue = timeController.StartSecond;
+        _NumericTextBoxComponents.StartTimeSecond.ExternalUpdate();
 
+        Debug.WriteLine($"_NumericTextBoxComponents.StartTimeSecond.CurrentValue= {_NumericTextBoxComponents.StartTimeSecond.CurrentValue}");
+        
+        
         //Här skall det in 3st grejor
         //Träd(plockar kolumnnamn från TriggerDB, typ den är byggd på IO template)
         //GlobalTime start(trigger-2) stop(trigger + 2) centreras runt TriggerTime
         //Update spinboxes 1 - 6->
-        }
+    }
 
 
     public void ActionEventCallback_LeftPictureRangeSlider()
