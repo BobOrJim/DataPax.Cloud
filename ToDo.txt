@@ -1,26 +1,21 @@
 
-Nu börjar det intressanta komma, vilka funktioner vill jag ha hos mina komponenter:
-
-1: alla måste ha en externalUpdate metod.
-2: alla måste ha en EventCallback metod.
-
-Får jag dessa till att lira för varje objekt, så tror jag det är ganska lätt att sy ihop helheten.
-Metoder att gå igenom:
-1: Numeric textbox
-2: Plot
-3: 
-
-
-OBS: kanske kan alla external uppdate utgå...
 
 
 
 
 
-1: Time objekt, med både start och stop skall skapas i PresentaitonPage. Ev skall start7stop skickas med som parametrar till lager nedanför.
-1.1: Klick på trigger, skall update time object.
-2: Klick på trigger, skall populate tree
-3: Klick på trigger, skall uppdate spinboxes.
+
+
+        * skriv metod i iokeeptableservice, där input är namn, starttid, stoptid, och return är en lista med coordinate.
+
+
+
+1. EventCallback för trigger o spinboxes, skall först update global time och sedan update plot
+2. plot, när dess uppate körs har pseudo kod ungefär såhär
+If NOT (my startUnixTime = glob startunixtime and endunixtime = globunixtime){
+	update min time
+	gör en ny plot.
+}
 
 
 
@@ -32,17 +27,15 @@ OBS: kanske kan alla external uppdate utgå...
 [Domain Utgår tillsvidare]
 
 
-* global static för start/stop time. Detta fixar jag till senare.
 
 
 
 
 
-* populate trigger lista
 
 * Populate träd
 
-* populate spinboxes
+
 
 
 
@@ -61,6 +54,10 @@ Half Forw etc
 
 ###############################################################################################################################
 
+
+OBS: kanske kan alla external uppdate utgå...städa kod...
+
+
 Städa bort template kod.
 
 In PictureService. Stoppa in logga.
@@ -69,11 +66,6 @@ In PictureService. Stoppa in logga.
 ********
 Till Front features
 * URL timer grejen.
-* KANSKE SNILLEBLIXT, SUDDA INTE. ALLA TIME SPIN BOXES KAN TRÄFFA SAMMA CALLBACK FUNKTION
 * Step line chart. Skriv in detta namn i någon kommentar i Front.
 * Kanske lägga till färgglidande bakgrund, så som jag gjorde på IQR.
 
-
-"Bygg en egen ehandels plattform"
-dotNET core 101
-liu

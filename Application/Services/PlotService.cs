@@ -70,7 +70,7 @@ namespace Application
             System.IO.File.Move("tmp.jpeg", ImagePathPasteTo);
         }
 
-        public void PlotXAxisTo(List<Int64> XCord, string ImagePathPasteTo)
+        public void PlotXAxisTo(Int64 FirstLocationTime, Int64 SecondLocationTime, Int64 ThirdLocationTime, string ImagePathPasteTo)
         {
             //Create The Axis, and save it to a temporary file
             using (Bitmap bitmap = new Bitmap(1800, 40)) //X och Y kordinat. Glöm inte att origo är uppe till vänster.
@@ -81,23 +81,23 @@ namespace Application
                     //Now we have an empty "canvas". Time to draw stuff.
                     using (var Pen = new Pen(PlotPenColor, 5))
                     {
-                        g.DrawLine(Pen, 50, 10, 1750, 10); //Horizontal line xy xy
-                        g.DrawLine(Pen, 100, 10, 100, 20); //Vertical time notation line 1
-                        g.DrawLine(Pen, 850, 10, 850, 20); //Vertical time notation line 2
-                        g.DrawLine(Pen, 1700, 10, 1700, 20); //Vertical time notation line 3
-                        g.DrawLine(Pen, 49, 11, 60, 0); //Part 1. Arrow left side
-                        g.DrawLine(Pen, 49, 9, 60, 20); //Part 2. Arrow left side
-                        g.DrawLine(Pen, 1751, 11, 1740, 0); //Part 1. Arrow right side
-                        g.DrawLine(Pen, 1751, 9, 1740, 20); //Part 2. Arrow right side
+                        g.DrawLine(Pen, 50, 10, 1750, 10);      //Horizontal line xy xy
+                        g.DrawLine(Pen, 100, 10, 100, 20);      //Vertical time notation line 1
+                        g.DrawLine(Pen, 850, 10, 850, 20);      //Vertical time notation line 2
+                        g.DrawLine(Pen, 1700, 10, 1700, 20);    //Vertical time notation line 3
+                        g.DrawLine(Pen, 49, 11, 60, 0);         //Part 1. Arrow left side
+                        g.DrawLine(Pen, 49, 9, 60, 20);         //Part 2. Arrow left side
+                        g.DrawLine(Pen, 1751, 11, 1740, 0);     //Part 1. Arrow right side
+                        g.DrawLine(Pen, 1751, 9, 1740, 20);     //Part 2. Arrow right side
                     }
                     using (Font arialFont = new Font("Arial", 12, FontStyle.Bold))
                     {
                         PointF firstLocation = new PointF(100f - 35, 20f);
                         PointF secondLocation = new PointF(850f - 70, 20f);
                         PointF thirdLocation = new PointF(1700f - 105, 20f);
-                        g.DrawString("21-03-22 22:55:04.123", arialFont, Brushes.Black, firstLocation);
-                        g.DrawString("21-03-22 22:55:06.323", arialFont, Brushes.Black, secondLocation);
-                        g.DrawString("21-03-22 22:55:08.523", arialFont, Brushes.Black, thirdLocation);
+                        g.DrawString(UnixToSolarTimeString(FirstLocationTime), arialFont, Brushes.Black, firstLocation);
+                        g.DrawString(UnixToSolarTimeString(SecondLocationTime), arialFont, Brushes.Black, secondLocation);
+                        g.DrawString(UnixToSolarTimeString(ThirdLocationTime), arialFont, Brushes.Black, thirdLocation);
                     }
                 }
                 System.GC.Collect();
@@ -106,6 +106,12 @@ namespace Application
                 bitmap.Save("TmpCreateAndPlotXAxis.jpeg", ImageFormat.Jpeg);
             }
             InsertImageInImageAt("TmpCreateAndPlotXAxis.jpeg", ImagePathPasteTo, 0, 260);
+        }
+
+        private string UnixToSolarTimeString(Int64 UnixTime)
+        {
+            DateTime result = DateTimeOffset.FromUnixTimeMilliseconds(UnixTime).DateTime;
+            return result.ToString() + " " + result.Millisecond;
         }
 
         public void PlotGraphTo(List<Coordinate> coordinates, string ImagePathPasteTo, int slot)

@@ -3,11 +3,19 @@
 
 <!-- Spinners = always show -->
 <style>
-    input[type=number]::-webkit-inner-spin-button { opacity: 1 }
+/*    Endast för pattern ändra utseende på knappar*/
+/*    input[type=number]::-webkit-inner-spin-button { opacity: 1 }*/
+/*    input[type=number]::-webkit-outer-spin-button { opacity: 1 }*/
+/*för att göra osynliga knappar*/
+/*    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;*/
+    }
 </style>
 
 <div>
-    <input class=@CssClassStyle type="number" min=@MinValue max="@MaxValue" value="@CurrentValue" required @oninput="OnInput">
+    <input class=@CssClassStyle step="1" type="number" min=@MinValue max="@MaxValue" @bind-value="@CurrentValue" required @oninput="OnInput"  >
 </div>
 
 @code {
@@ -39,9 +47,28 @@
     [Parameter]
     public Action ActionEventCallback { get; set; }
 
+    private async Task Up()
+    {
+        CurrentValue += 1;
+        Debug.WriteLine($"Up..{CurrentValue}");
+    }
+    private async Task Down()
+    {
+        CurrentValue -= 1;
+        Debug.WriteLine($"Down..{CurrentValue}");
+    }
+
+
+    private async Task ASDF()
+    {
+        //CurrentValue = CurrentValue;
+        //Debug.WriteLine($"In NumericSpinBoxComponent...OnInput..{CurrentValue}");
+    }
+
     private async Task OnInput()
     {
-        //Debug.WriteLine("MyNumericSpinBoxComponent...OnInput..");
+        //CurrentValue = this.CurrentValue;
+        //Debug.WriteLine($"OnInput.....{CurrentValue}");
         //await LocalStorage.SetAsync(ThisComponentInstanceName, CurrentValue);
         ActionEventCallback?.Invoke();
     }

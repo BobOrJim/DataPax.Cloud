@@ -96,7 +96,7 @@ namespace Presentation.WebBlazor
             //StartMilliseconds = 410;
             dateTime = new DateTime(EndYear, EndMonth, EndDay, EndHour, EndMinute, EndSecond, EndMilliseconds, System.DateTimeKind.Utc);
             EndTimeUnix = (long)(dateTime - new DateTime(1970, 1, 1)).TotalMilliseconds;
-            Debug.WriteLine($"In WriteSolarTimeToUnix_EndTime: {EndTimeUnix}");
+            //Debug.WriteLine($"In WriteSolarTimeToUnix_EndTime: {EndTimeUnix}");
         }
 
 

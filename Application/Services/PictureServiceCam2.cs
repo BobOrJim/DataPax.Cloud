@@ -56,7 +56,7 @@ namespace Application.Services
             if (PicturePathsArray != null)
             {
                 //Debug.WriteLine($"RightPicturePathToShow path to show ::::: {PicturePathsArray[RightPictureNumberInStackToShow]}");
-                return PicturePathsArray[RightPictureNumberInStackToShow];
+                return PicturePathsArray[RightPictureNumberInStackToShow - 1];
             }
             return "Cam1KeepPictures/Camera1_1611872350240.jpeg"; //Skall ersättas med någon logga eller något mer neutralt kanske
         }

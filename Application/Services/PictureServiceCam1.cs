@@ -41,7 +41,7 @@ namespace Application.Services
         {
             if (PicturePathsArray != null)
             {
-                return PicturePathsArray[LeftPictureNumberInStackToShow];
+                return PicturePathsArray[LeftPictureNumberInStackToShow-1];
             }
             return "Cam1KeepPictures/Camera1_1611872350240.jpeg"; //Skall ersättas med någon logga eller något mer neutralt kanske
         }
