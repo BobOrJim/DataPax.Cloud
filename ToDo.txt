@@ -6,7 +6,7 @@
 
 
 
-        * skriv metod i iokeeptableservice, där input är namn, starttid, stoptid, och return är en lista med coordinate.
+* skriv metod i iokeeptableservice, där input är namn, starttid, stoptid, och return är en lista med coordinate.
 
 
 
@@ -67,5 +67,9 @@ In PictureService. Stoppa in logga.
 Till Front features
 * URL timer grejen.
 * Step line chart. Skriv in detta namn i någon kommentar i Front.
-* Kanske lägga till färgglidande bakgrund, så som jag gjorde på IQR.
+* Kanske lägga till färgglidande bakgrund, så som jag gjorde på IQR. Nja troligen för mycket jobb..
+
+Det hade varit läckert med picture filter.....rörelse alltså.
+
+fråga jonathan efter kontakt till yrkeslivet, visa film och fråga vad som är bäst/sämst.
 

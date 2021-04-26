@@ -105,7 +105,7 @@ namespace Application
                 System.IO.File.Delete("TmpCreateAndPlotXAxis.jpeg");
                 bitmap.Save("TmpCreateAndPlotXAxis.jpeg", ImageFormat.Jpeg);
             }
-            InsertImageInImageAt("TmpCreateAndPlotXAxis.jpeg", ImagePathPasteTo, 0, 260);
+            InsertImageInImageAt("TmpCreateAndPlotXAxis.jpeg", ImagePathPasteTo, 0, 280);
         }
 
         private string UnixToSolarTimeString(Int64 UnixTime)

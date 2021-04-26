@@ -84,9 +84,9 @@
             _ClickableListComponents.DeviationListViewComponent.ListItems = ListItemList;
             _ClickableListComponents.DeviationListViewComponent.UpdateState();
             //Tilldelar bilder varsing startbild. Logga skall in här
-            _ImgSrcComponents.LeftPicture.PicturePathString = "a.jpeg"; //Skall ändras till logga
+            _ImgSrcComponents.LeftPicture.PicturePathString = "Logo.jpeg"; //Skall ändras till logga
             _ImgSrcComponents.LeftPicture.UpdateState();
-            _ImgSrcComponents.RightPicture.PicturePathString = "PlotStartCanvas.jpeg"; //logga
+            _ImgSrcComponents.RightPicture.PicturePathString = "Logo.jpeg"; //logga
             _ImgSrcComponents.RightPicture.UpdateState();
         }
     }
@@ -124,7 +124,6 @@
         WriteTimeControllerToNumericTextBoxes();
         Knapp1();
         //_NumericTextBoxComponents.StartTimeSecond.ExternalUpdate();
-        //Debug.WriteLine($"timeController.EndSecond= {timeController.EndSecond}");
     }
 
     public void ActionEventCallback_LeftPictureRangeSlider()
@@ -200,6 +199,7 @@
         //Debug.WriteLine($"In WriteNumericTextBoxesToTimeController. timeController.EndTimeUnix = {timeController.EndTimeUnix}");
     }
 
+
     public void UpdatePlot()
     {
         //Debug.WriteLine("Knapp1 körs");
@@ -211,6 +211,24 @@
         Int64 Second = timeController.StartTimeUnix + (timeController.EndTimeUnix - timeController.StartTimeUnix) / 2;      //Text utmed X-axel
         Int64 Third = timeController.EndTimeUnix;                                                                           //Text utmed X-axel
         plotService.PlotXAxisTo(First, Second, Third, "wwwroot/PlotWorkCanvas.jpeg");
+
+        //Kolla om det finns något i mitt kösystem. om det finns något så skall jag plotta det.
+        //iOKeepTableService.
+
+
+        List<Int64> xlist = new List<Int64>() { 0, 111, 2, 3, 4, 5, 6, 7, 8, 197 }; //Simulerad data från DB
+        List<Boolean> ylist = new List<Boolean>() { true, false, true, false, false, false, false, true, true, false }; //Simulerad data från DB
+        
+        List<Coordinate> CoordinateList = plotService.CreateCoordinateList(xlist, ylist); //IMPORTANT, THIS FUNCTION INJECT FAKE CORDINATES TO MAKE A STEP CURVE, DONT REMOVE
+        //foreach (Coordinate item in CoordinateList)
+        //{
+        //    Debug.WriteLine($" {item.XCoordinatePixel}");
+        //}
+
+        //plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 0);
+        plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 1);
+        //plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 2);
+        //plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 3);
         _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
         _ImgSrcComponents.Plot.UpdateState();
     }
@@ -235,7 +253,9 @@
         List<Int64> xlist = new List<Int64>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }; //Simulerad data från DB
         List<Boolean> ylist = new List<Boolean>() { true, false, true, false, false, false, false, true, true, true }; //Simulerad data från DB
         List<Coordinate> CoordinateList = plotService.CreateCoordinateList(xlist, ylist);
+
         plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 3);
+
         CoordinateList.Clear();
         _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
         _ImgSrcComponents.Plot.UpdateState();
@@ -347,12 +367,7 @@
 
         <div class="Row3Col5">
             <!-- DeviationTimePeriod -->
-            <div class="dropdown">
-                <span>Mouse over me</span>
-                <div class="dropdown-content">
-                    <p>Hello World!</p>
-                </div>
-            </div>
+            PLACEHOLDER
         </div>
         <div class="Row3Col6">
             <!-- LeftPictureSlider  -->

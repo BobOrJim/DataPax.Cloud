@@ -22,7 +22,6 @@ namespace Application.Services
             iIOKeepTableDataAccess = _iIOKeepTableDataAccess;
         }
 
-
         public List<TreeNode> IOColumnNamesAsTreeNodes()
         {
             List<string> IONameList = iIOKeepTableDataAccess.IOColumnNames_FromIOKeepTable(); //Här skall det in anrop till IODataAccess, vilken inte är skapad ännu.
@@ -38,5 +37,19 @@ namespace Application.Services
             }
             return TreeNodeList;
         }
+
+        public List<Int64> GetXCordinatesBetween(string signal, Int64 from, Int64 to)
+        {
+
+            return new List<Int64>();
+        }
+
+        public List<Boolean> GetYCoordinatesFromSignalFromAndTo(string signal, Int64 from, Int64 to)
+        {
+
+            return new List<Boolean>();
+        }
+
+
     }
 }
