@@ -20,20 +20,6 @@
 
 @code {
 
-    DateTime currentDate = DateTime.Now;
-    public long elapsedTicks { get; private set; }
-
-    public NumericTextBoxComponent()
-    {
-        elapsedTicks = currentDate.Ticks;
-        //Debug.WriteLine($"Im a NumericTextBoxComponent and i was born on Tick: {elapsedTicks} ");
-    }
-
-    public long ObjectCreatedAtTick()
-    {
-        return elapsedTicks;
-    }
-
     [Parameter]
     public string CssClassStyle { get; set; }
     [Parameter]
@@ -59,12 +45,6 @@
     }
 
 
-    private async Task ASDF()
-    {
-        //CurrentValue = CurrentValue;
-        //Debug.WriteLine($"In NumericSpinBoxComponent...OnInput..{CurrentValue}");
-    }
-
     private async Task OnInput()
     {
         //CurrentValue = this.CurrentValue;
@@ -79,8 +59,6 @@
         //CurrentValue = 25;
     }
 
-    //Lite olika triggers att välja på
-    //     <input type="number" min=@MinValue max="31" value="16" required @onclick="OnClick" @onchange="OnChange" @oninput="OnInput">
 }
 
 

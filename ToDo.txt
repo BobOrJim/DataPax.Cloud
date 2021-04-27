@@ -5,7 +5,7 @@
 
 Fulhacka med hårdkod. Senare switchCase ifall jag inte får nåt svar av jimmyHaglund.
 
-
+Fan. Blazor knapp ger ingen rerender....
 
 
 

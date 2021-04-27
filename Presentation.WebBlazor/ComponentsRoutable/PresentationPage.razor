@@ -122,8 +122,6 @@
         timeController.EndTimeUnix = UserClickedOnThisListItem.Timestamp_unix_BIGINT+2000;
         timeController.WriteUnixToSolartime_EndTime();
         WriteTimeControllerToNumericTextBoxes();
-        Knapp1();
-        //_NumericTextBoxComponents.StartTimeSecond.ExternalUpdate();
     }
 
     public void ActionEventCallback_LeftPictureRangeSlider()
@@ -152,15 +150,12 @@
     {
         //Debug.WriteLine($"1 = {timeController.StartSecond}");
         //Debug.WriteLine($"2 = {_NumericTextBoxComponents.StartTimeSecond.CurrentValue}");
-        timeController.StartSecond = _NumericTextBoxComponents.StartTimeSecond.CurrentValue;
+        //timeController.StartSecond = _NumericTextBoxComponents.StartTimeSecond.CurrentValue;
         //Debug.WriteLine($"3 = {timeController.StartSecond}");
         //Debug.WriteLine($"4 = {_NumericTextBoxComponents.StartTimeSecond.CurrentValue}");
         WriteNumericTextBoxesToTimeController();
         UpdatePlot();
-
     }
-
-
 
     public void WriteTimeControllerToNumericTextBoxes()
     {
@@ -180,7 +175,7 @@
 
     public void WriteNumericTextBoxesToTimeController()
     {
-        Debug.WriteLine($"In WriteNumericTextBoxesToTimeController. timeController.StartTimeUnix = {timeController.StartTimeUnix}");
+        //Debug.WriteLine($"In WriteNumericTextBoxesToTimeController. timeController.StartTimeUnix = {timeController.StartTimeUnix}");
         timeController.StartYear = _NumericTextBoxComponents.StartTimeYear.CurrentValue;
         timeController.StartMonth = _NumericTextBoxComponents.StartTimeMonth.CurrentValue;
         timeController.StartDay = _NumericTextBoxComponents.StartTimeDay.CurrentValue;
@@ -188,7 +183,7 @@
         timeController.StartMinute = _NumericTextBoxComponents.StartTimeMinute.CurrentValue;
         timeController.StartSecond = _NumericTextBoxComponents.StartTimeSecond.CurrentValue;
         timeController.WriteSolarTimeToUnix_StartTime();
-        Debug.WriteLine($"In WriteNumericTextBoxesToTimeController. timeController.StartTimeUnix = {timeController.StartTimeUnix}");
+        //Debug.WriteLine($"In WriteNumericTextBoxesToTimeController. timeController.StartTimeUnix = {timeController.StartTimeUnix}");
         timeController.EndYear = _NumericTextBoxComponents.EndTimeYear.CurrentValue;
         timeController.EndMonth = _NumericTextBoxComponents.EndTimeMonth.CurrentValue;
         timeController.EndDay = _NumericTextBoxComponents.EndTimeDay.CurrentValue;
@@ -202,7 +197,7 @@
 
     public void UpdatePlot()
     {
-        //Debug.WriteLine("Knapp1 körs");
+        Debug.WriteLine("UpdatePlot körs");
         //Debug.WriteLine(timeController.StartTimeUnix);
         //Debug.WriteLine(timeController.EndTimeUnix);
 
@@ -213,65 +208,57 @@
         plotService.PlotXAxisTo(First, Second, Third, "wwwroot/PlotWorkCanvas.jpeg");
 
         //Kolla om det finns något i mitt kösystem. om det finns något så skall jag plotta det.
-        //iOKeepTableService.
 
+        List<XYValuePair> XYValuePairsList = iOKeepTableService.GetXYValuePairFromSignalBetween("HEJ_Name", timeController.StartTimeUnix, timeController.EndTimeUnix);
+        Debug.WriteLine($"In UpdatePlot. XYValuePairsList.Count = {XYValuePairsList.Count}");
 
-        List<Int64> xlist = new List<Int64>() { 0, 111, 2, 3, 4, 5, 6, 7, 8, 197 }; //Simulerad data från DB
-        List<Boolean> ylist = new List<Boolean>() { true, false, true, false, false, false, false, true, true, false }; //Simulerad data från DB
+        List<Coordinate> CoordinateList = plotService.CreateCoordinateList(XYValuePairsList); //IMPORTANT, THIS FUNCTION INJECT FAKE CORDINATES TO MAKE A STEP CURVE, DONT REMOVE
 
-        List<Coordinate> CoordinateList = plotService.CreateCoordinateList(xlist, ylist); //IMPORTANT, THIS FUNCTION INJECT FAKE CORDINATES TO MAKE A STEP CURVE, DONT REMOVE
-        //foreach (Coordinate item in CoordinateList)
-        //{
-        //    Debug.WriteLine($" {item.XCoordinatePixel}");
-        //}
 
         //plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 0);
-        plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 1);
+        //plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 1);
         //plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 2);
         //plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 3);
-        _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
-        _ImgSrcComponents.Plot.UpdateState();
-    }
-
-
-    public void Knapp1() //Restart
-    {
-        iOKeepTableService.GetYCoordinatesFromSignalBetwenStartAndEnd("Hub2Hub_KKS123_SystemVolt_Erratic", 666, 666);
-        //plotService.ResetPlot();
         //_ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
         //_ImgSrcComponents.Plot.UpdateState();
+    }
+
+    public void Knapp1()
+    {
+        timeController.StartTimeUnix = timeController.StartTimeUnix - 4000;
+        timeController.WriteUnixToSolartime_StartTime();
+        timeController.EndTimeUnix = timeController.EndTimeUnix - 4000;
+        timeController.WriteUnixToSolartime_EndTime();
+        WriteTimeControllerToNumericTextBoxes();
+    }
+    public void Knapp2()
+    {
+        timeController.StartTimeUnix = timeController.StartTimeUnix - 2000;
+        timeController.WriteUnixToSolartime_StartTime();
+        timeController.EndTimeUnix = timeController.EndTimeUnix - 2000;
+        timeController.WriteUnixToSolartime_EndTime();
+        WriteTimeControllerToNumericTextBoxes();
+    }
+    public void Knapp3()
+    {
+        timeController.StartTimeUnix = timeController.StartTimeUnix + 2000;
+        timeController.WriteUnixToSolartime_StartTime();
+        timeController.EndTimeUnix = timeController.EndTimeUnix + 2000;
+        timeController.WriteUnixToSolartime_EndTime();
+        WriteTimeControllerToNumericTextBoxes();
+
+    }
+    public void Knapp4()
+    {
+        //LÅNE KNAPP
+        UpdatePlot();
+
+        //timeController.StartTimeUnix = timeController.StartTimeUnix + 4000;
+        //timeController.WriteUnixToSolartime_StartTime();
+        //timeController.EndTimeUnix = timeController.EndTimeUnix + 4000;
+        //timeController.WriteUnixToSolartime_EndTime();
+        //WriteTimeControllerToNumericTextBoxes();
         }
-    public void Knapp2() //Ritar in X axel.
-    {
-        //List<Int64> list1 = new List<Int64>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-        //plotService.PlotXAxisTo(list1, "wwwroot/PlotWorkCanvas.jpeg");
-
-        _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
-        _ImgSrcComponents.Plot.UpdateState();
-    }
-    public void Knapp3() //ritar in första kurvan
-    {
-        List<Int64> xlist = new List<Int64>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }; //Simulerad data från DB
-        List<Boolean> ylist = new List<Boolean>() { true, false, true, false, false, false, false, true, true, true }; //Simulerad data från DB
-        List<Coordinate> CoordinateList = plotService.CreateCoordinateList(xlist, ylist);
-
-        plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 3);
-
-        CoordinateList.Clear();
-        _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
-        _ImgSrcComponents.Plot.UpdateState();
-    }
-    public void Knapp4() //Knapp 4
-    {
-        List<Int64> xlist = new List<Int64>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }; //Simulerad data från DB
-        List<Boolean> ylist = new List<Boolean>() { true, false, true, false, false, false, false, true, true, true }; //Simulerad data från DB
-        List<Coordinate> CoordinateList = plotService.CreateCoordinateList(xlist, ylist);
-        plotService.Knapp4Test(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg");
-
-        _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
-        _ImgSrcComponents.Plot.UpdateState();
-        Debug.WriteLine("Knapp4");
-    }
 }
 
 
@@ -480,7 +467,7 @@
             <ButtonComponent CssClassStyle="My5 btn-primary"
                              @ref="_ButtonComponents.FullBack"
                              ButtonText="1"
-                             ActionEventCallback="Knapp1">
+                             MyCallback="Knapp1">
             </ButtonComponent>
         </div>
         <div class="Row5Col8">
@@ -488,7 +475,7 @@
             <ButtonComponent CssClassStyle="My5 btn-primary"
                              @ref="_ButtonComponents.HalfBack"
                              ButtonText="2"
-                             ActionEventCallback="Knapp2">
+                             MyCallback="Knapp2">
             </ButtonComponent>
         </div>
         <div class="Row5Col9">
@@ -496,7 +483,7 @@
             <ButtonComponent CssClassStyle="My5 btn-primary"
                              @ref="_ButtonComponents.HalfForw"
                              ButtonText="3"
-                             ActionEventCallback="Knapp3">
+                             MyCallback="Knapp3">
             </ButtonComponent>
         </div>
         <div class="Row5Col10">
@@ -504,7 +491,7 @@
             <ButtonComponent CssClassStyle="My5 btn-primary"
                              @ref="_ButtonComponents.FullForw"
                              ButtonText="4"
-                             ActionEventCallback="Knapp4">
+                             MyCallback="Knapp4">
             </ButtonComponent>
         </div>
         <div class="Row5Col11">

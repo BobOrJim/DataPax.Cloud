@@ -30,54 +30,23 @@ namespace Infrastructure.DataAccess
             {
                 XCoordinateList.Add(item.Timestamp_unix_BIGINT);
             }
-            return new List<long>();
+            return XCoordinateList;
         }
 
-        //linq
         public List<Boolean> IOYCoordinatesFromSignal_FromIOKeepTable(string Signal)
         {
             List<Boolean> YCoordinateList = new List<Boolean>();
             List<IOSample> IOSampleList = eFAccessIOKeepTable.IOKeepTable.ToList();
 
+            //jimmyhaglund har lösning. Fixa asap...tight deadline...
 
-            //var db = new DataContex();
-            //var columnNames = db.Mapping.MappingSource
-            //                      .GetModel(typeof(DataContex))
-            //                      .GetMetaType(typeof(_tablename))
-            //                      .DataMembers;
+            //Hårdkodad tmp lösning.
+            foreach (IOSample item in IOSampleList)
+            {
+                YCoordinateList.Add(item.Hub2Hub_KKS123_AuxPressure_Low);
+            }
 
-
-            //var columnNames = ctx.ExecuteQuery<string>
-
-            //("SELECT name FROM sys.columns WHERE object_id = OBJECT_ID('your table name');");
-
-
-            //var columnnames = from t in typeof(table_name).GetProperties() select t.Name
-            //i Ren sql hade jag kört "SELECT column1 FROM table_name"
-
-
-
-
-                              //var result = IOSampleList.Where(Signal => IOSampleList.Contains(Signal));
-
-                              //var result = IOSampleList.Where(Signal => IOSampleList.
-
-                              //Debug.WriteLine($"NU JÄVLAR: GetType :  {result.GetType()}"); // System.Linq.Enumerable+WhereListIterator`1[Infrastructure.Models.IOSample]
-                              //Debug.WriteLine($"NU JÄVLAR: GetType :  {result.ToList}");
-
-                              //List<IOSample> newList = IOSampleList.Where(m => m. == Signal
-
-                              //            && m.users.Any(u => u.surname == "surname"))
-                              //.ToList();
-
-                              //foreach (IOSample item in IOSampleList)
-                              //{
-                              //    YCoordinateList.Add(item.Signal);
-                              //}
-
-
-
-            return new List<bool>();
+            return YCoordinateList;
         }
 
 

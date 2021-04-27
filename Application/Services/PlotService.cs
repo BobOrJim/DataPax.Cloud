@@ -25,23 +25,26 @@ namespace Application
             System.IO.File.Delete("wwwroot/PlotWorkCanvas.jpeg");
             System.IO.File.Copy("wwwroot/PlotStartCanvas.jpeg", "wwwroot/PlotWorkCanvas.jpeg");
         }
-        public List<Coordinate> CreateCoordinateList(List<Int64> _xlist, List<Boolean> _ylist) //För Y=Boolean. Bygg Överlagrad för Y=Number.
+        public List<Coordinate> CreateCoordinateList(List<XYValuePair> XYValuePairsList) //Bygg Överlagrad när det kommer till integers.
         {
-            Int64[] xArr = _xlist.ToArray();
-            Boolean[] YArr = _ylist.ToArray();
-            List<Coordinate> coordinates = new List<Coordinate>();
-            if (_xlist.Count != _ylist.Count)
+            List<Int64> XWorkList = new List<Int64>();
+            List<Boolean> YWorkList = new List<Boolean>();
+            foreach (XYValuePair item in XYValuePairsList)
             {
-                Debug.WriteLine($"ERROR IN CreateCoordinateList, INPUT LISTS DONT HAVE THE SAME LENGTH !!!!!!!!!!!!");
-                return new List<Coordinate>();
+                XWorkList.Add(item.XCoordinateInt64);
+                YWorkList.Add(item.YCoordinateBoolean);
             }
-            for (int i = 0; i < _xlist.Count; i++)
+            Int64[] Xarr = XWorkList.ToArray();
+            Boolean[] Yarr = YWorkList.ToArray();
+
+            List<Coordinate> coordinates = new List<Coordinate>();
+            for (int i = 0; i < Xarr.Count(); i++)
             {
                 Coordinate coordinate = new Coordinate();
-                coordinate.XCoordinateInt64 = _xlist[i];
-                coordinate.YCoordinateBoolean = _ylist[i];
-                coordinate.XCoordinatePixel = 100 + i * (1600 / (_xlist.Count - 1));
-                if (_ylist[i])
+                coordinate.XCoordinateInt64 = Xarr[i];
+                coordinate.YCoordinateBoolean = Yarr[i];
+                coordinate.XCoordinatePixel = 100 + i * (1600 / (Xarr.Count() - 1));
+                if (Yarr[i])
                     coordinate.YCoordinatePixel = 10;
                 else
                     coordinate.YCoordinatePixel = 60; //Note, a low number, result i a higher graph due to the Origo.

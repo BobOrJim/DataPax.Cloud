@@ -1,29 +1,26 @@
 ﻿<div>
-    <button class=@CssClassStyle @onclick="OnClick">
+    <button class=@CssClassStyle @onclick="@(() => MyCallback.InvokeAsync(true))">
         @ButtonText
     </button>
 </div>
 
-@code {
-    [Parameter]
-    public string ButtonText { get; set; }
 
-    [Parameter]
-    public Action ActionEventCallback { get; set; } //Input här kopplas till detta Event.
+@code { 
 
     [Parameter]
     public string CssClassStyle { get; set; }
 
-    private async Task OnClick(MouseEventArgs e)
-    {
-        ActionEventCallback?.Invoke();
-    }
+    [Parameter]
+    public string ButtonText { get; set; }
 
-    public void MyStateHasChanged()
-    {
-        StateHasChanged();
-        Debug.WriteLine("MyStateHasChanged TEST");
-    }
+    [Parameter]
+    public EventCallback<bool> MyCallback { get; set; }
+
+    //public void UpdateState()
+    //{
+    //    InvokeAsync(StateHasChanged);
+    //}
+
+
 }
-
 

@@ -36,18 +36,53 @@ namespace Application.Services
             return TreeNodeList;
         }
 
-        public List<Int64> GetXCordinatesBetween(string Signal, Int64 Start, Int64 End)
+        public List<XYValuePair> GetXYValuePairFromSignalBetween(string Signal, Int64 Start, Int64 Stop)
         {
+            Debug.WriteLine($"in GetXYValuePairFromSignalBetween. Start = {Start} ");
+            Debug.WriteLine($"in GetXYValuePairFromSignalBetween. Stop = {Stop} ");
 
-            return new List<Int64>();
+
+            Int64[] XValueWorkList = iIOKeepTableDataAccess.IOXCoordinatesFromSignal_FromIOKeepTable(Signal).ToArray();
+            Boolean[] YValueWorkList = iIOKeepTableDataAccess.IOYCoordinatesFromSignal_FromIOKeepTable(Signal).ToArray();
+            Debug.WriteLine($"in GetXYValuePairFromSignalBetween. XValueWorkList.Length = {XValueWorkList.Length}");
+            Debug.WriteLine($"in GetXYValuePairFromSignalBetween. YValueWorkList.Length = {YValueWorkList.Length}");
+
+            List <XYValuePair> ReturnList = new List<XYValuePair>();
+            for (int i = 0; i < XValueWorkList.Length; i++)
+            {
+                //Debug.WriteLine($"in GetXYValuePairFromSignalBetween in for loop. XValueWorkList[i] = {XValueWorkList[i]} start = {Start} stop = {Stop}");
+
+                if (XValueWorkList[i] > Start && XValueWorkList[i] < Stop)
+                {
+                    XYValuePair tmp = new XYValuePair();
+                    tmp.XCoordinateInt64 = XValueWorkList[i];
+                    tmp.YCoordinateBoolean = YValueWorkList[i];
+                    ReturnList.Add(tmp);
+                }
+            }
+            Debug.WriteLine($"in GetXYValuePairFromSignalBetween. ReturnList.Count = {ReturnList.Count}");
+
+            return ReturnList;
+        }
+
+        public List<Int64> GetXCordinatesBetween(string Signal, Int64 Start, Int64 Stop)
+        {
+            List<Int64> WorkList = iIOKeepTableDataAccess.IOXCoordinatesFromSignal_FromIOKeepTable(Signal);
+            List<Int64> ReturnList = new List<Int64>();
+            foreach (Int64 item in WorkList)
+            {
+                if (item > Start && item < Stop)
+                {
+                    ReturnList.Add(item);
+                }
+            }
+            return ReturnList;
         }
 
         public List<Boolean> GetYCoordinatesFromSignalBetwenStartAndEnd(string Signal, Int64 Start, Int64 End)
         {
-
             return iIOKeepTableDataAccess.IOYCoordinatesFromSignal_FromIOKeepTable(Signal);
         }
-
 
     }
 }

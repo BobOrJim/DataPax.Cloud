@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\XYValuePair.cs" />
     <Compile Include="Models\ListItem.cs" />
     <Compile Include="Models\Coordinate.cs" />
     <Compile Include="Models\PlotData.cs" />
