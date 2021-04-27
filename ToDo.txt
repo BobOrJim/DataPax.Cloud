@@ -3,10 +3,17 @@
 
 
 
+Fulhacka med hårdkod. Senare switchCase ifall jag inte får nåt svar av jimmyHaglund.
 
 
 
-* skriv metod i iokeeptableservice, där input är namn, starttid, stoptid, och return är en lista med coordinate.
+
+
+
+
+
+
+
 
 
 

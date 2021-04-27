@@ -40,7 +40,5 @@ namespace Infrastructure.Models
         public bool Vestas_Verk12_Koppling_LagOljeNiva { get; }
         public bool Vestas_Verk12_Koppling_TryckAvvikelse { get; }
         public bool Vestas_Verk12_Vaderstation_WatchDog { get; }
-
-
     }
 }

@@ -218,7 +218,7 @@
 
         List<Int64> xlist = new List<Int64>() { 0, 111, 2, 3, 4, 5, 6, 7, 8, 197 }; //Simulerad data från DB
         List<Boolean> ylist = new List<Boolean>() { true, false, true, false, false, false, false, true, true, false }; //Simulerad data från DB
-        
+
         List<Coordinate> CoordinateList = plotService.CreateCoordinateList(xlist, ylist); //IMPORTANT, THIS FUNCTION INJECT FAKE CORDINATES TO MAKE A STEP CURVE, DONT REMOVE
         //foreach (Coordinate item in CoordinateList)
         //{
@@ -236,10 +236,11 @@
 
     public void Knapp1() //Restart
     {
-        plotService.ResetPlot();
-        _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
-        _ImgSrcComponents.Plot.UpdateState();
-    }
+        iOKeepTableService.GetYCoordinatesFromSignalBetwenStartAndEnd("Hub2Hub_KKS123_SystemVolt_Erratic", 666, 666);
+        //plotService.ResetPlot();
+        //_ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
+        //_ImgSrcComponents.Plot.UpdateState();
+        }
     public void Knapp2() //Ritar in X axel.
     {
         //List<Int64> list1 = new List<Int64>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };

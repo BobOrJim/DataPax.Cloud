@@ -7,6 +7,8 @@ using Infrastructure.Models;
 using Interfaces.Interfaces;
 using System.Reflection;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Infrastructure.DataAccess
 {
@@ -19,6 +21,65 @@ namespace Infrastructure.DataAccess
         {
             eFAccessIOKeepTable = _eFAccessIOKeepTable;
         }
+
+        public List<Int64> IOXCoordinatesFromSignal_FromIOKeepTable(string Signal)
+        {
+            List<Int64> XCoordinateList = new List<Int64>();
+            List<IOSample> IOSampleList = eFAccessIOKeepTable.IOKeepTable.ToList();
+            foreach (IOSample item in IOSampleList)
+            {
+                XCoordinateList.Add(item.Timestamp_unix_BIGINT);
+            }
+            return new List<long>();
+        }
+
+        //linq
+        public List<Boolean> IOYCoordinatesFromSignal_FromIOKeepTable(string Signal)
+        {
+            List<Boolean> YCoordinateList = new List<Boolean>();
+            List<IOSample> IOSampleList = eFAccessIOKeepTable.IOKeepTable.ToList();
+
+
+            //var db = new DataContex();
+            //var columnNames = db.Mapping.MappingSource
+            //                      .GetModel(typeof(DataContex))
+            //                      .GetMetaType(typeof(_tablename))
+            //                      .DataMembers;
+
+
+            //var columnNames = ctx.ExecuteQuery<string>
+
+            //("SELECT name FROM sys.columns WHERE object_id = OBJECT_ID('your table name');");
+
+
+            //var columnnames = from t in typeof(table_name).GetProperties() select t.Name
+            //i Ren sql hade jag kört "SELECT column1 FROM table_name"
+
+
+
+
+                              //var result = IOSampleList.Where(Signal => IOSampleList.Contains(Signal));
+
+                              //var result = IOSampleList.Where(Signal => IOSampleList.
+
+                              //Debug.WriteLine($"NU JÄVLAR: GetType :  {result.GetType()}"); // System.Linq.Enumerable+WhereListIterator`1[Infrastructure.Models.IOSample]
+                              //Debug.WriteLine($"NU JÄVLAR: GetType :  {result.ToList}");
+
+                              //List<IOSample> newList = IOSampleList.Where(m => m. == Signal
+
+                              //            && m.users.Any(u => u.surname == "surname"))
+                              //.ToList();
+
+                              //foreach (IOSample item in IOSampleList)
+                              //{
+                              //    YCoordinateList.Add(item.Signal);
+                              //}
+
+
+
+            return new List<bool>();
+        }
+
 
         //Här vill jag ha kolumn namen, och kolumnnamen vet jag redan då de ligger i koden för IOSample för att lyfta ur datan mha EF.
         //Detta metod är därför lite bakvänd men jag använder IOSample då ändringar i IOSample slår igenom här.

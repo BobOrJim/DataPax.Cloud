@@ -7,14 +7,12 @@ using Application.Models;
 using System.Diagnostics;
 using Interfaces.Interfaces;
 
-
 namespace Application.Services
 {
     public class IOKeepTableService
     {
         private List<TreeNode> TreeNodeList = new List<TreeNode>(); //Work data, skall hämtas från IOService senare.
         private TreeInitUtils TreeBuilderUtils = new TreeInitUtils();
-
         private IIOKeepTableDataAccess iIOKeepTableDataAccess;
 
         public IOKeepTableService(IIOKeepTableDataAccess _iIOKeepTableDataAccess)
@@ -38,16 +36,16 @@ namespace Application.Services
             return TreeNodeList;
         }
 
-        public List<Int64> GetXCordinatesBetween(string signal, Int64 from, Int64 to)
+        public List<Int64> GetXCordinatesBetween(string Signal, Int64 Start, Int64 End)
         {
 
             return new List<Int64>();
         }
 
-        public List<Boolean> GetYCoordinatesFromSignalFromAndTo(string signal, Int64 from, Int64 to)
+        public List<Boolean> GetYCoordinatesFromSignalBetwenStartAndEnd(string Signal, Int64 Start, Int64 End)
         {
 
-            return new List<Boolean>();
+            return iIOKeepTableDataAccess.IOYCoordinatesFromSignal_FromIOKeepTable(Signal);
         }
 
 
