@@ -12,7 +12,6 @@
 @using Application
 @using Application.Utils
 
-
 @inject Presentation.WebBlazor.ComponentCreation.NumericTextBoxComponents _NumericTextBoxComponents
 @inject Application.UseCases.NumericTextBoxUseCases _NumericTextBoxUseCases
 @inject Presentation.WebBlazor.ComponentCreation.ButtonComponents _ButtonComponents
@@ -41,7 +40,8 @@
     private List<TreeNode> TreeNodeList = new List<TreeNode>(); //Kommer länkas ihop med denna blazor komponent: _TreeViewComponents.IOTreeView2Component
     private List<ListItem> ListItemList = new List<ListItem>(); //Kommer länkas ihop med denna blazor komponent: _ClickableListComponents.DeviationListViewComponent
     private TimeController timeController = new TimeController();
-    private FixedSizedQueue<List<Coordinate>> signalsToPlotQueue = new FixedSizedQueue<List<Coordinate>>(4);
+
+    private FixedSizedQueue<string> signalsToPlotQueue = new FixedSizedQueue<string>(4);
 
     //Method invoked when the component is ready to start, having recieved its initial parameters from its parrent renderer tree
     //1: protected override void OnInitialized()
@@ -106,20 +106,15 @@
     {
         if (UserClickedOnThisTreeNode.Level == 3) //This is a child/leaf.
         {
-            Debug.WriteLine($"In EventCallback_TreeView. Denna sträng kommer skickas till RoundRobin = {UserClickedOnThisTreeNode.Name}");
-            //Här skall updateStatus till ploter ligga.
+            //Debug.WriteLine($"In EventCallback_TreeView. Denna sträng kommer skickas till RoundRobin = {UserClickedOnThisTreeNode.Name}");
+            signalsToPlotQueue.Push(UserClickedOnThisTreeNode.Name);
         }
         else //This is a Parent. I.E we invert "IsExpanded"
         {
-            Debug.WriteLine($"In EventCallback_TreeView. Denna sträng/nod kommer toggla expanded = {UserClickedOnThisTreeNode.Name} ");
+            //Debug.WriteLine($"In EventCallback_TreeView. Denna sträng/nod kommer toggla expanded = {UserClickedOnThisTreeNode.Name} ");
             _TreeViewComponents.IOTreeView2Component.TreeNodes = treeUpdateUtils.UpdateNodesToExpandInTree(TreeNodeList, UserClickedOnThisTreeNode);
             _TreeViewComponents.IOTreeView2Component.UpdateState();
         }
-
-        //Inject string in Que
-
-
-
     }
 
     public void EventCallback_ListView(ListItem UserClickedOnThisListItem)
@@ -212,9 +207,24 @@
         Int64 Third = timeController.EndTimeUnix;                                                                           //Text utmed X-axel
         plotService.PlotXAxisTo(First, Second, Third, "wwwroot/PlotWorkCanvas.jpeg");
 
-        //Kolla om det finns något i mitt kösystem. om det finns något så skall jag plotta det.
 
-        List<XYValuePair> XYValuePairsList = iOKeepTableService.GetXYValuePairFromSignalBetween("HEJ_Name", timeController.StartTimeUnix, timeController.EndTimeUnix);
+
+
+
+
+
+        Debug.WriteLine($"In UpdatePlot. Queue.Count = {signalsToPlotQueue.Queue.Count}");
+        List<string> SignalsToPlot = signalsToPlotQueue.ContentsInQueue();
+        Debug.WriteLine($"In UpdatePlot. Queue.Count = {signalsToPlotQueue.Queue.Count}");
+        int NextSlot = 0;
+        foreach (string SignalName in SignalsToPlot)
+        {
+            Debug.WriteLine($"item = {item}");
+            NextSlot += 1;
+            List<XYValuePair> XYValuePairsList = iOKeepTableService.GetXYValuePairFromSignalBetween(SignalName, timeController.StartTimeUnix, timeController.EndTimeUnix);
+
+        }
+
 
         //foreach (var item in XYValuePairsList)
         //{
@@ -232,10 +242,10 @@
         //    Debug.WriteLine($" item.XCoordinatePixel = {item.XCoordinatePixel} item.YCoordinatePixel = {item.YCoordinatePixel}");
         //}
 
-        plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 0);
-        plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 1);
-        plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 2);
-        plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 3);
+        plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 0, "Hub2Hub_KKS123_SystemVolt_Erratic");
+        plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 1, "Hub2Hub_KKS123_SystemVolt_Low");
+        plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 2, "Hub2Hub_KKS123_Retarder_LowCurrent");
+        plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 3, "Hub2Hub_KKS123_AuxPressure_Low");
         _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
         _ImgSrcComponents.Plot.UpdateState();
     }
@@ -269,12 +279,14 @@
     }
     public void Knapp4()
     {
-        timeController.StartTimeUnix = timeController.StartTimeUnix + 4000;
-        timeController.WriteUnixToSolartime_StartTime();
-        timeController.EndTimeUnix = timeController.EndTimeUnix + 4000;
-        timeController.WriteUnixToSolartime_EndTime();
-        WriteTimeControllerToNumericTextBoxes();
-        UpdatePlot();
+        //Låne knapp
+        //signalsToPlotQueue
+        //timeController.StartTimeUnix = timeController.StartTimeUnix + 4000;
+        //timeController.WriteUnixToSolartime_StartTime();
+        //timeController.EndTimeUnix = timeController.EndTimeUnix + 4000;
+        //timeController.WriteUnixToSolartime_EndTime();
+        //WriteTimeControllerToNumericTextBoxes();
+        //UpdatePlot();
     }
 }
 

@@ -1,29 +1,20 @@
-Plotta namn tillvänster.
 
 
+1: Plotta namn tillvänster.
+
+2: Bygg med switchCase
+
+3:
+
+
+14360
+5625
+2605
 
 
 
 Fulhacka med hårdkod. Senare switchCase ifall jag inte får nåt svar av jimmyHaglund.
 
-Fan. Blazor knapp ger ingen rerender....
-
-
-
-
-
-
-
-
-
-
-
-1. EventCallback för trigger o spinboxes, skall först update global time och sedan update plot
-2. plot, när dess uppate körs har pseudo kod ungefär såhär
-If NOT (my startUnixTime = glob startunixtime and endunixtime = globunixtime){
-	update min time
-	gör en ny plot.
-}
 
 
 
@@ -43,11 +34,10 @@ If NOT (my startUnixTime = glob startunixtime and endunixtime = globunixtime){
 
 UPPDATERINGS HIRARKI:
 TriggerListClick ->
-	Träd (plockar kolumnnamn från TriggerDB, typ den är byggd på IO template)  
-	GlobalTime start (trigger-2) stop (trigger+2) centreras runt TriggerTime
+	GlobalTime time grejor
 	Update spinboxes 1-6 ->
-		GlobalTime start/stop.
-		Update graph (med tidstämpel LastUpdateStartStop property för att undvika 6st updates)
+		GlobalTime grejor
+		Update graph
 		Update picture stack (med tidstämpel LastUpdateStartStop property för att undvika 6st updates)
 Half Forw etc
 	Update spinboxes
@@ -67,8 +57,8 @@ Städa bort template kod.
 * plotta analoga signaler.
 Till Front features
 * URL timer grejen.
-* Step line chart. Skriv in detta namn i någon kommentar i Front.
-* Kanske lägga till färgglidande bakgrund, så som jag gjorde på IQR. Nja troligen för mycket jobb..
+
+* Kanske lägga till färgglidande bakgrund, så som jag gjorde på IQR. "Radial-gradient" gör det snyggt som fan. Kanske kan matchas med opage eller hur det nu stavas.
 
 Det hade varit läckert med picture filter.....rörelse alltså.
 
@@ -77,22 +67,9 @@ fråga jonathan efter kontakt till yrkeslivet, visa film och fråga vad som är bäs
 Fyll detta prog med try/catch. och sök på det, just nu finns det ingenting.
 
 
+ändra namn på knappar så de inte heter knapp1 osv.
 
-        public void Knapp4Test(List<Coordinate> coordinates, string ImagePathPasteTo)
-        {
-            signalsToPlotQueue.Push(coordinates);
-            signalsToPlotQueue.Push(coordinates);
-            signalsToPlotQueue.Push(coordinates);
-            signalsToPlotQueue.Push(coordinates);
-            signalsToPlotQueue.Push(coordinates); //En skall nu falla ur.
-            var tmpArray = signalsToPlotQueue.Queue.ToArray();
 
-            //PlotGraphTo(tmpArray[0], ImagePathPasteTo, 3);
-            for (int i = 0; i < tmpArray.Length - 1; i++)
-            {
-                PlotGraphTo(tmpArray[i], ImagePathPasteTo, i);
-            }
-        }
 
 
 

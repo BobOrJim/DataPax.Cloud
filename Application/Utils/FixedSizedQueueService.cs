@@ -16,6 +16,7 @@ namespace Application.Utils
         {
             Size = size;
         }
+
         public void Push(T obj)
         {
             Queue.Enqueue(obj);
@@ -25,6 +26,26 @@ namespace Application.Utils
                 Queue.TryDequeue(out ObjectToThrowAway);
                 Debug.WriteLine($"In FixedSizedQueue, ett objekt faller ur då kön är full");
             }
+        }
+
+        public List<T> ContentsInQueue() //Ops, maybe not thread safe anymore :)
+        {
+            ConcurrentQueue<T> QueueTmp = new ConcurrentQueue<T>();
+            QueueTmp = Queue; 
+            List<T> ReturnList = new List<T>();
+            while (!QueueTmp.IsEmpty)
+            {
+                T retValue;
+                QueueTmp.TryDequeue(out retValue);
+                ReturnList.Add(retValue);
+            }
+            //Notering, ovan tömmer även Queue, ty det är copy by reference. så jag fyller queue igen. Kan också göras med Clone
+            T[] FillBackArray = ReturnList.ToArray();
+            for (int i = 0; i < FillBackArray.Count(); i++)
+            {
+                Queue.Enqueue(FillBackArray[i]);
+            }
+            return ReturnList;
         }
     }
 }

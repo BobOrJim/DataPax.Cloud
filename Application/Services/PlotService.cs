@@ -20,12 +20,13 @@ namespace Application
         Color BackgroundColor = System.Drawing.ColorTranslator.FromHtml("#c6e8f7");
         Color PlotPenColor = System.Drawing.ColorTranslator.FromHtml("#1b6ca6");
         Color PlotCircleColor = System.Drawing.ColorTranslator.FromHtml("#1b6ca6");
-        //asdf
+
         public void ResetPlot()
         {
             System.IO.File.Delete("wwwroot/PlotWorkCanvas.jpeg");
             System.IO.File.Copy("wwwroot/PlotStartCanvas.jpeg", "wwwroot/PlotWorkCanvas.jpeg");
         }
+
         public List<Coordinate> CreateCoordinateList(List<XYValuePair> XYValuePairsList) //Bygg Överlagrad när det kommer till integers.
         {
             List<Int64> XWorkList = new List<Int64>();
@@ -118,8 +119,11 @@ namespace Application
             return result.ToString() + " " + result.Millisecond;
         }
 
-        public void PlotGraphTo(List<Coordinate> coordinates, string ImagePathPasteTo, int slot)
+        public void PlotGraphToWithLabel(List<Coordinate> coordinates, string ImagePathPasteTo, int slot, string PlotLabel)
         {
+            string[] words = PlotLabel.Split('_');
+            string PlotLabelPart1 = words[0] + " " + words[1];
+            string PlotLabelPart2 = words[2] + " " + words[3];
             int PenThickness = 5;
 
             //Adding artificiall step coordinates, to make a step graph
@@ -164,6 +168,10 @@ namespace Application
                             g.FillEllipse(EraseBrush, coordinates[i].XCoordinatePixel-7, coordinates[i].YCoordinatePixel-7, 14, 14); //g.DrawEllipse(pen, centerX - radius, centerY - radius, radius + radius, radius + radius);
                             g.DrawEllipse(CirclePen, coordinates[i].XCoordinatePixel - 7, coordinates[i].YCoordinatePixel - 7, 14, 14); //g.DrawEllipse(pen, centerX - radius, centerY - radius, radius + radius, radius + radius);
                         }
+                        RectangleF rectf = new RectangleF(0, 20, bitmap.Width, bitmap.Height);
+                        g.DrawString(PlotLabelPart1, new Font(" Helvetica", 10, FontStyle.Bold), Brushes.Black, rectf);
+                        RectangleF rectf2 = new RectangleF(0, 38, bitmap.Width, bitmap.Height);
+                        g.DrawString(PlotLabelPart2, new Font(" Helvetica", 10, FontStyle.Bold), Brushes.Black, rectf2);
                     }
                 }
                 System.GC.Collect();
