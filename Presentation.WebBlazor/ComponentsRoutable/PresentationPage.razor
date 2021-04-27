@@ -10,6 +10,8 @@
 @using Infrastructure.DataAccess
 @using Application.Models
 @using Application
+@using Application.Utils
+
 
 @inject Presentation.WebBlazor.ComponentCreation.NumericTextBoxComponents _NumericTextBoxComponents
 @inject Application.UseCases.NumericTextBoxUseCases _NumericTextBoxUseCases
@@ -39,6 +41,7 @@
     private List<TreeNode> TreeNodeList = new List<TreeNode>(); //Kommer länkas ihop med denna blazor komponent: _TreeViewComponents.IOTreeView2Component
     private List<ListItem> ListItemList = new List<ListItem>(); //Kommer länkas ihop med denna blazor komponent: _ClickableListComponents.DeviationListViewComponent
     private TimeController timeController = new TimeController();
+    private FixedSizedQueue<List<Coordinate>> signalsToPlotQueue = new FixedSizedQueue<List<Coordinate>>(4);
 
     //Method invoked when the component is ready to start, having recieved its initial parameters from its parrent renderer tree
     //1: protected override void OnInitialized()
@@ -112,16 +115,23 @@
             _TreeViewComponents.IOTreeView2Component.TreeNodes = treeUpdateUtils.UpdateNodesToExpandInTree(TreeNodeList, UserClickedOnThisTreeNode);
             _TreeViewComponents.IOTreeView2Component.UpdateState();
         }
+
+        //Inject string in Que
+
+
+
     }
 
     public void EventCallback_ListView(ListItem UserClickedOnThisListItem)
     {
         //Debug.WriteLine($"Listview klick, user clicked on {UserClickedOnThisListItem.Name}");
-        timeController.StartTimeUnix = UserClickedOnThisListItem.Timestamp_unix_BIGINT-2000;
+        timeController.StartTimeUnix = UserClickedOnThisListItem.Timestamp_unix_BIGINT - 1000;
         timeController.WriteUnixToSolartime_StartTime();
-        timeController.EndTimeUnix = UserClickedOnThisListItem.Timestamp_unix_BIGINT+2000;
+        timeController.EndTimeUnix = UserClickedOnThisListItem.Timestamp_unix_BIGINT + 1000;
         timeController.WriteUnixToSolartime_EndTime();
         WriteTimeControllerToNumericTextBoxes();
+        UpdatePlot();
+
     }
 
     public void ActionEventCallback_LeftPictureRangeSlider()
@@ -148,11 +158,6 @@
 
     public void EventCallback_NumericTextBoxesStartAndStopTime()
     {
-        //Debug.WriteLine($"1 = {timeController.StartSecond}");
-        //Debug.WriteLine($"2 = {_NumericTextBoxComponents.StartTimeSecond.CurrentValue}");
-        //timeController.StartSecond = _NumericTextBoxComponents.StartTimeSecond.CurrentValue;
-        //Debug.WriteLine($"3 = {timeController.StartSecond}");
-        //Debug.WriteLine($"4 = {_NumericTextBoxComponents.StartTimeSecond.CurrentValue}");
         WriteNumericTextBoxesToTimeController();
         UpdatePlot();
     }
@@ -210,17 +215,29 @@
         //Kolla om det finns något i mitt kösystem. om det finns något så skall jag plotta det.
 
         List<XYValuePair> XYValuePairsList = iOKeepTableService.GetXYValuePairFromSignalBetween("HEJ_Name", timeController.StartTimeUnix, timeController.EndTimeUnix);
+
+        //foreach (var item in XYValuePairsList)
+        //{
+        //    Debug.WriteLine($" item.XCoordinateInt64 = {item.XCoordinateInt64} item.YCoordinateBoolean = {item.YCoordinateBoolean}");
+        //}
+
+
         Debug.WriteLine($"In UpdatePlot. XYValuePairsList.Count = {XYValuePairsList.Count}");
 
         List<Coordinate> CoordinateList = plotService.CreateCoordinateList(XYValuePairsList); //IMPORTANT, THIS FUNCTION INJECT FAKE CORDINATES TO MAKE A STEP CURVE, DONT REMOVE
+        Debug.WriteLine($"In UpdatePlot. CoordinateList.Count = {CoordinateList.Count}");
 
+        //foreach (var item in CoordinateList)
+        //{
+        //    Debug.WriteLine($" item.XCoordinatePixel = {item.XCoordinatePixel} item.YCoordinatePixel = {item.YCoordinatePixel}");
+        //}
 
-        //plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 0);
-        //plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 1);
-        //plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 2);
-        //plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 3);
-        //_ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
-        //_ImgSrcComponents.Plot.UpdateState();
+        plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 0);
+        plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 1);
+        plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 2);
+        plotService.PlotGraphTo(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 3);
+        _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
+        _ImgSrcComponents.Plot.UpdateState();
     }
 
     public void Knapp1()
@@ -230,6 +247,7 @@
         timeController.EndTimeUnix = timeController.EndTimeUnix - 4000;
         timeController.WriteUnixToSolartime_EndTime();
         WriteTimeControllerToNumericTextBoxes();
+        UpdatePlot();
     }
     public void Knapp2()
     {
@@ -238,6 +256,7 @@
         timeController.EndTimeUnix = timeController.EndTimeUnix - 2000;
         timeController.WriteUnixToSolartime_EndTime();
         WriteTimeControllerToNumericTextBoxes();
+        UpdatePlot();
     }
     public void Knapp3()
     {
@@ -246,19 +265,17 @@
         timeController.EndTimeUnix = timeController.EndTimeUnix + 2000;
         timeController.WriteUnixToSolartime_EndTime();
         WriteTimeControllerToNumericTextBoxes();
-
+        UpdatePlot();
     }
     public void Knapp4()
     {
-        //LÅNE KNAPP
+        timeController.StartTimeUnix = timeController.StartTimeUnix + 4000;
+        timeController.WriteUnixToSolartime_StartTime();
+        timeController.EndTimeUnix = timeController.EndTimeUnix + 4000;
+        timeController.WriteUnixToSolartime_EndTime();
+        WriteTimeControllerToNumericTextBoxes();
         UpdatePlot();
-
-        //timeController.StartTimeUnix = timeController.StartTimeUnix + 4000;
-        //timeController.WriteUnixToSolartime_StartTime();
-        //timeController.EndTimeUnix = timeController.EndTimeUnix + 4000;
-        //timeController.WriteUnixToSolartime_EndTime();
-        //WriteTimeControllerToNumericTextBoxes();
-        }
+    }
 }
 
 

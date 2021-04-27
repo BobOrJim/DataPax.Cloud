@@ -1,3 +1,4 @@
+Plotta namn tillvänster.
 
 
 
@@ -40,13 +41,6 @@ If NOT (my startUnixTime = glob startunixtime and endunixtime = globunixtime){
 
 
 
-* Populate träd
-
-
-
-
-
-
 UPPDATERINGS HIRARKI:
 TriggerListClick ->
 	Träd (plockar kolumnnamn från TriggerDB, typ den är byggd på IO template)  
@@ -67,10 +61,10 @@ OBS: kanske kan alla external uppdate utgå...städa kod...
 
 Städa bort template kod.
 
-In PictureService. Stoppa in logga.
 
 
 ********
+* plotta analoga signaler.
 Till Front features
 * URL timer grejen.
 * Step line chart. Skriv in detta namn i någon kommentar i Front.
@@ -79,4 +73,27 @@ Till Front features
 Det hade varit läckert med picture filter.....rörelse alltså.
 
 fråga jonathan efter kontakt till yrkeslivet, visa film och fråga vad som är bäst/sämst.
+
+Fyll detta prog med try/catch. och sök på det, just nu finns det ingenting.
+
+
+
+        public void Knapp4Test(List<Coordinate> coordinates, string ImagePathPasteTo)
+        {
+            signalsToPlotQueue.Push(coordinates);
+            signalsToPlotQueue.Push(coordinates);
+            signalsToPlotQueue.Push(coordinates);
+            signalsToPlotQueue.Push(coordinates);
+            signalsToPlotQueue.Push(coordinates); //En skall nu falla ur.
+            var tmpArray = signalsToPlotQueue.Queue.ToArray();
+
+            //PlotGraphTo(tmpArray[0], ImagePathPasteTo, 3);
+            for (int i = 0; i < tmpArray.Length - 1; i++)
+            {
+                PlotGraphTo(tmpArray[i], ImagePathPasteTo, i);
+            }
+        }
+
+
+
 

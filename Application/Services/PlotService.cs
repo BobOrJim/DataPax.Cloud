@@ -7,14 +7,15 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Application.Utils;
 
 namespace Application
 {
     public class PlotService
     {
         private string imageFilePath { get; set; } = "a.jpeg";
-        private FixedSizedQueue<List<Coordinate>> signalsToPlotQueue = new FixedSizedQueue<List<Coordinate>>(4);
+
+
 
         Color BackgroundColor = System.Drawing.ColorTranslator.FromHtml("#c6e8f7");
         Color PlotPenColor = System.Drawing.ColorTranslator.FromHtml("#1b6ca6");
@@ -108,7 +109,7 @@ namespace Application
                 System.IO.File.Delete("TmpCreateAndPlotXAxis.jpeg");
                 bitmap.Save("TmpCreateAndPlotXAxis.jpeg", ImageFormat.Jpeg);
             }
-            InsertImageInImageAt("TmpCreateAndPlotXAxis.jpeg", ImagePathPasteTo, 0, 280);
+            InsertImageInImageAt("TmpCreateAndPlotXAxis.jpeg", ImagePathPasteTo, 40, 280);
         }
 
         private string UnixToSolarTimeString(Int64 UnixTime)
@@ -124,19 +125,25 @@ namespace Application
             //Adding artificiall step coordinates, to make a step graph
             Coordinate[] coordinatesArr = coordinates.ToArray();
             List<Coordinate> coordinatesWithStepPoints = new List<Coordinate>();
-
-            for (int i = 0; i < coordinatesArr.Length-1; i++)
+            try
             {
-                coordinatesWithStepPoints.Add(coordinatesArr[i]);
-                if (coordinatesArr[i] != coordinatesArr[i+1]) //If next coordinate switch state, i add a step cordinate.
+                for (int i = 0; i < coordinatesArr.Length - 1; i++)
                 {
-                    Coordinate StepCoordinateToAdd = new Coordinate();
-                    StepCoordinateToAdd.XCoordinatePixel = coordinatesArr[i+1].XCoordinatePixel;
-                    StepCoordinateToAdd.YCoordinatePixel = coordinatesArr[i].YCoordinatePixel;
-                    coordinatesWithStepPoints.Add(StepCoordinateToAdd);
+                    coordinatesWithStepPoints.Add(coordinatesArr[i]);
+                    if (coordinatesArr[i] != coordinatesArr[i + 1]) //If next coordinate switch state, i add a step cordinate.
+                    {
+                        Coordinate StepCoordinateToAdd = new Coordinate();
+                        StepCoordinateToAdd.XCoordinatePixel = coordinatesArr[i + 1].XCoordinatePixel;
+                        StepCoordinateToAdd.YCoordinatePixel = coordinatesArr[i].YCoordinatePixel;
+                        coordinatesWithStepPoints.Add(StepCoordinateToAdd);
+                    }
                 }
+                coordinatesWithStepPoints.Add(coordinatesArr[coordinatesArr.Length - 1]);
             }
-            coordinatesWithStepPoints.Add(coordinatesArr[coordinatesArr.Length-1]);
+            catch (Exception e)
+            {
+                Debug.WriteLine($"In PlotGraphTo. Exception caught: {e}");
+            }
             //Alright, time to plot the graph.
             using (Bitmap bitmap = new Bitmap(1800, 70))
             {
@@ -164,24 +171,10 @@ namespace Application
                 System.IO.File.Delete("TmpPlotGraph.jpeg");
                 bitmap.Save("TmpPlotGraph.jpeg", ImageFormat.Jpeg);
             }
-            InsertImageInImageAt("TmpPlotGraph.jpeg", ImagePathPasteTo, 0, 70*slot); //Möjliga slots är 0, 70, 140, 210
+            InsertImageInImageAt("TmpPlotGraph.jpeg", ImagePathPasteTo, 40, 70*slot); //Möjliga slots är 0, 70, 140, 210
         }
 
-        public void Knapp4Test(List<Coordinate> coordinates, string ImagePathPasteTo)
-        {
-            signalsToPlotQueue.Push(coordinates);
-            signalsToPlotQueue.Push(coordinates);
-            signalsToPlotQueue.Push(coordinates);
-            signalsToPlotQueue.Push(coordinates);
-            signalsToPlotQueue.Push(coordinates); //En skall nu falla ur.
-            var tmpArray = signalsToPlotQueue.Queue.ToArray();
 
-            //PlotGraphTo(tmpArray[0], ImagePathPasteTo, 3);
-            for (int i = 0; i < tmpArray.Length - 1; i++)
-            {
-                PlotGraphTo(tmpArray[i], ImagePathPasteTo, i);
-            }
-        }
     }
 }
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Application.Models;
 using System.Diagnostics;
 using Interfaces.Interfaces;
+using Application.Utils;
 
 namespace Application.Services
 {
@@ -38,20 +39,25 @@ namespace Application.Services
 
         public List<XYValuePair> GetXYValuePairFromSignalBetween(string Signal, Int64 Start, Int64 Stop)
         {
-            Debug.WriteLine($"in GetXYValuePairFromSignalBetween. Start = {Start} ");
-            Debug.WriteLine($"in GetXYValuePairFromSignalBetween. Stop = {Stop} ");
+            //Debug.WriteLine($"in GetXYValuePairFromSignalBetween. Start = {Start} ");
+            //Debug.WriteLine($"in GetXYValuePairFromSignalBetween. Stop = {Stop} ");
 
 
             Int64[] XValueWorkList = iIOKeepTableDataAccess.IOXCoordinatesFromSignal_FromIOKeepTable(Signal).ToArray();
             Boolean[] YValueWorkList = iIOKeepTableDataAccess.IOYCoordinatesFromSignal_FromIOKeepTable(Signal).ToArray();
-            Debug.WriteLine($"in GetXYValuePairFromSignalBetween. XValueWorkList.Length = {XValueWorkList.Length}");
-            Debug.WriteLine($"in GetXYValuePairFromSignalBetween. YValueWorkList.Length = {YValueWorkList.Length}");
+
+            //foreach (var item in YValueWorkList)
+            //{
+            //    Debug.WriteLine($"In GetXYValuePairFromSignalBetween. YValueWorkList = {item.ToString()}");
+            //}
+
+            //Debug.WriteLine($"in GetXYValuePairFromSignalBetween. XValueWorkList.Length = {XValueWorkList.Length}");
+            //Debug.WriteLine($"in GetXYValuePairFromSignalBetween. YValueWorkList.Length = {YValueWorkList.Length}");
 
             List <XYValuePair> ReturnList = new List<XYValuePair>();
             for (int i = 0; i < XValueWorkList.Length; i++)
             {
                 //Debug.WriteLine($"in GetXYValuePairFromSignalBetween in for loop. XValueWorkList[i] = {XValueWorkList[i]} start = {Start} stop = {Stop}");
-
                 if (XValueWorkList[i] > Start && XValueWorkList[i] < Stop)
                 {
                     XYValuePair tmp = new XYValuePair();
@@ -60,7 +66,7 @@ namespace Application.Services
                     ReturnList.Add(tmp);
                 }
             }
-            Debug.WriteLine($"in GetXYValuePairFromSignalBetween. ReturnList.Count = {ReturnList.Count}");
+            //Debug.WriteLine($"in GetXYValuePairFromSignalBetween. ReturnList.Count = {ReturnList.Count}");
 
             return ReturnList;
         }

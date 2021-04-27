@@ -29,6 +29,7 @@ namespace Infrastructure.DataAccess
             foreach (IOSample item in IOSampleList)
             {
                 XCoordinateList.Add(item.Timestamp_unix_BIGINT);
+                //Debug.WriteLine($"item.Timestamp_unix_BIGINT = {item.Timestamp_unix_BIGINT}");
             }
             return XCoordinateList;
         }
@@ -41,11 +42,11 @@ namespace Infrastructure.DataAccess
             //jimmyhaglund har lösning. Fixa asap...tight deadline...
 
             //Hårdkodad tmp lösning.
-            foreach (IOSample item in IOSampleList)
+            foreach (IOSample item2 in IOSampleList)
             {
-                YCoordinateList.Add(item.Hub2Hub_KKS123_AuxPressure_Low);
+                YCoordinateList.Add(item2.Hub2Hub_KKS123_SystemVolt_Erratic);
+                //Debug.WriteLine($"item.Hub2Hub_KKS123_SystemVolt_Erratic = {item2.Hub2Hub_KKS123_SystemVolt_Erratic}");
             }
-
             return YCoordinateList;
         }
 
