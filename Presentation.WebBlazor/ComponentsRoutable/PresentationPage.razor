@@ -108,6 +108,7 @@
         {
             //Debug.WriteLine($"In EventCallback_TreeView. Denna sträng kommer skickas till RoundRobin = {UserClickedOnThisTreeNode.Name}");
             signalsToPlotQueue.Push(UserClickedOnThisTreeNode.Name);
+            UpdatePlot();
         }
         else //This is a Parent. I.E we invert "IsExpanded"
         {
@@ -120,13 +121,12 @@
     public void EventCallback_ListView(ListItem UserClickedOnThisListItem)
     {
         //Debug.WriteLine($"Listview klick, user clicked on {UserClickedOnThisListItem.Name}");
-        timeController.StartTimeUnix = UserClickedOnThisListItem.Timestamp_unix_BIGINT - 1000;
+        timeController.StartTimeUnix = UserClickedOnThisListItem.Timestamp_unix_BIGINT - 500;
         timeController.WriteUnixToSolartime_StartTime();
-        timeController.EndTimeUnix = UserClickedOnThisListItem.Timestamp_unix_BIGINT + 1000;
+        timeController.EndTimeUnix = UserClickedOnThisListItem.Timestamp_unix_BIGINT + 500;
         timeController.WriteUnixToSolartime_EndTime();
         WriteTimeControllerToNumericTextBoxes();
         UpdatePlot();
-
     }
 
     public void ActionEventCallback_LeftPictureRangeSlider()
@@ -219,10 +219,11 @@
         int NextSlot = 0;
         foreach (string SignalName in SignalsToPlot)
         {
-            Debug.WriteLine($"item = {item}");
-            NextSlot += 1;
+            Debug.WriteLine($"item = {SignalName}");
             List<XYValuePair> XYValuePairsList = iOKeepTableService.GetXYValuePairFromSignalBetween(SignalName, timeController.StartTimeUnix, timeController.EndTimeUnix);
-
+            List<Coordinate> CoordinateList = plotService.CreateCoordinateList(XYValuePairsList); //IMPORTANT, THIS FUNCTION INJECT FAKE CORDINATES TO MAKE A STEP CURVE
+            plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", NextSlot, SignalName);
+            NextSlot += 1;
         }
 
 
@@ -232,20 +233,18 @@
         //}
 
 
-        Debug.WriteLine($"In UpdatePlot. XYValuePairsList.Count = {XYValuePairsList.Count}");
-
-        List<Coordinate> CoordinateList = plotService.CreateCoordinateList(XYValuePairsList); //IMPORTANT, THIS FUNCTION INJECT FAKE CORDINATES TO MAKE A STEP CURVE, DONT REMOVE
-        Debug.WriteLine($"In UpdatePlot. CoordinateList.Count = {CoordinateList.Count}");
+        //Debug.WriteLine($"In UpdatePlot. XYValuePairsList.Count = {XYValuePairsList.Count}");
+        //Debug.WriteLine($"In UpdatePlot. CoordinateList.Count = {CoordinateList.Count}");
 
         //foreach (var item in CoordinateList)
         //{
         //    Debug.WriteLine($" item.XCoordinatePixel = {item.XCoordinatePixel} item.YCoordinatePixel = {item.YCoordinatePixel}");
         //}
 
-        plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 0, "Hub2Hub_KKS123_SystemVolt_Erratic");
-        plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 1, "Hub2Hub_KKS123_SystemVolt_Low");
-        plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 2, "Hub2Hub_KKS123_Retarder_LowCurrent");
-        plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 3, "Hub2Hub_KKS123_AuxPressure_Low");
+        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 0, "Hub2Hub_KKS123_SystemVolt_Erratic");
+        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 1, "Hub2Hub_KKS123_SystemVolt_Low");
+        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 2, "Hub2Hub_KKS123_Retarder_LowCurrent");
+        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 3, "Hub2Hub_KKS123_AuxPressure_Low");
         _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
         _ImgSrcComponents.Plot.UpdateState();
     }
