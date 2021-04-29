@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Interfaces.Interfaces;
-
 
 namespace Application.Services
 {
@@ -17,50 +18,36 @@ namespace Application.Services
         {
             _PictureDataAccessCam1 = p;
         }
-        public int NumberOfPicturesInStack()
+        public int NumberOfPicturesInStack(Int64 StartTime, Int64 EndTime)
         {
-            return _PictureDataAccessCam1.PicturePathsListFrom_Cam1KeepTable().Count();
+            return _PictureDataAccessCam1.PicturePathsStringList_FromCam1KeepTable(StartTime, EndTime).Count();
         }
-        public void UpdatePictureStack()
+        public void UpdatePictureStack(Int64 StartTime, Int64 EndTime)
         {
-            PicturePathsList = _PictureDataAccessCam1.PicturePathsListFrom_Cam1KeepTable();
+            PicturePathsList = _PictureDataAccessCam1.PicturePathsStringList_FromCam1KeepTable(StartTime, EndTime);
             PicturePathsArray = PicturePathsList.ToArray();
-            PictureTimeStampStringList = _PictureDataAccessCam1.PictureTimeStampStringListFrom_Cam1KeepTable();
+            PictureTimeStampStringList = _PictureDataAccessCam1.PictureTimeStampStringList_FromCam1KeepTable(StartTime, EndTime);
             PictureTimeStampStringArray = PictureTimeStampStringList.ToArray();
+            //Debug.WriteLine($"In PictureServiceCam1 / UpdatePictureStack. PicturePathsArray.Length =  {PicturePathsArray.Length}");
         }
+
         public string LeftPicturePathToShow(int LeftPictureNumberInStackToShow)
         {
-            if (PicturePathsArray != null && LeftPictureNumberInStackToShow > 0)
+            if (PicturePathsArray != null && LeftPictureNumberInStackToShow < PicturePathsArray.Length)
             {
-                return PicturePathsArray[LeftPictureNumberInStackToShow-1];
+                return PicturePathsArray[LeftPictureNumberInStackToShow];
             }
             return "Images/Logo.jpeg";
         }
         public string LeftPictureTimestampToShow(int LeftPictureNumberInStackToShow)
         {
-            if (PictureTimeStampStringArray != null)
+            if (PictureTimeStampStringArray != null && LeftPictureNumberInStackToShow < PicturePathsArray.Length)
             {
                 return PictureTimeStampStringArray[LeftPictureNumberInStackToShow];
             }
-            return "";
+            return "No picture found";
         }
-        //public string RightPicturePathToShow(int RightPictureNumberInStackToShow)
-        //{
-        //    if (PicturePathsArray != null)
-        //    {
-        //        //Debug.WriteLine($"RightPicturePathToShow path to show ::::: {PicturePathsArray[RightPictureNumberInStackToShow]}");
-        //        return PicturePathsArray[RightPictureNumberInStackToShow];
-        //    }
-        //    return "Cam1KeepPictures/Camera1_1611872350240.jpeg"; //Skall ersättas med någon logga eller något mer neutralt kanske
-        //}
-        //public string RightPictureTimestampToShow(int RightPictureNumberInStackToShow)
-        //{
-        //    if (PictureTimeStampStringArray != null)
-        //    {
-        //        return PictureTimeStampStringArray[RightPictureNumberInStackToShow];
-        //    }
-        //    return "";
-        //}
+
     }
 }
 

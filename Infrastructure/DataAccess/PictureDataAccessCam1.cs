@@ -6,9 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-
-//Syftet med denna klass är att vara utillity vid skapandet av en PictureService.
-//"PresentationPage" använder en PictureService
+//The interface of this class is a utility/Data-access for pictureService in Application. And a pictureService object is used in the PresentationPage
 
 namespace Infrastructure.DataAccess
 {
@@ -22,14 +20,14 @@ namespace Infrastructure.DataAccess
             eFAccessCam1KeepTable = _eFAccessCam1KeepTable;
         }
 
-      
         private void UpdatePictureData_FromCam1Keep(Int64 StartTime, Int64 EndTime)
         {
             List<Picture> PictureList = eFAccessCam1KeepTable.Cam1KeepTable.ToList();
             PicturePathsStringList.Clear();
+            PictureTimeStampStringList.Clear();
             foreach (Picture picture in PictureList)
             {
-                if (picture.Timestamp_unix_BIGINT)
+                if (picture.Timestamp_unix_BIGINT > StartTime && picture.Timestamp_unix_BIGINT < EndTime)
                 {
                     PicturePathsStringList.Add("Cam1KeepPictures/" + picture.FileNameCurrent_TEXT + ".jpeg");
                     PictureTimeStampStringList.Add(picture.Datestamp_TEXT + "." + picture.FileNameCurrent_TEXT.Substring(picture.FileNameCurrent_TEXT.Length - 3));
@@ -50,6 +48,5 @@ namespace Infrastructure.DataAccess
             UpdatePictureData_FromCam1Keep(StartTime, EndTime);
             return PictureTimeStampStringList;
         }
-
     }
 }

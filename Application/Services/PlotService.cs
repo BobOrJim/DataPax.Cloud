@@ -13,10 +13,6 @@ namespace Application
 {
     public class PlotService
     {
-        private string imageFilePath { get; set; } = "a.jpeg";
-
-
-
         Color BackgroundColor = System.Drawing.ColorTranslator.FromHtml("#c6e8f7");
         Color PlotPenColor = System.Drawing.ColorTranslator.FromHtml("#1b6ca6");
         Color PlotCircleColor = System.Drawing.ColorTranslator.FromHtml("#1b6ca6");
@@ -27,7 +23,7 @@ namespace Application
             System.IO.File.Copy("wwwroot/PlotStartCanvas.jpeg", "wwwroot/PlotWorkCanvas.jpeg");
         }
 
-        public List<Coordinate> CreateCoordinateList(List<XYValuePair> XYValuePairsList) //Bygg Överlagrad när det kommer till integers.
+        public List<Coordinate> CreateCoordinateList(List<XYValuePair> XYValuePairsList, Int64 StartTime, Int64 StopTime) //Bygg Överlagrad när det kommer till integers.
         {
             List<Int64> XWorkList = new List<Int64>();
             List<Boolean> YWorkList = new List<Boolean>();
@@ -45,17 +41,26 @@ namespace Application
                 Coordinate coordinate = new Coordinate();
                 coordinate.XCoordinateInt64 = Xarr[i];
                 coordinate.YCoordinateBoolean = Yarr[i];
-                coordinate.XCoordinatePixel = 100 + i * (1600 / (Xarr.Count() - 1));
+
+                //Jag skall plotta mellan pixel 100 och 1700 (bilden är 1800)
+                //Beräknar pixel koordinat nedan.
+                Int64 IntervallTime = StopTime - StartTime;
+                Int64 TimePassedAfterStartTime = coordinate.XCoordinateInt64 - StartTime;
+                //Debug.WriteLine($"coordinate.XCoordinateInt64  =  {coordinate.XCoordinateInt64}");
+                //Debug.WriteLine($"IntervallTime  =  {IntervallTime}");
+                //Debug.WriteLine($"TimePassedAfterStartTime  =  {TimePassedAfterStartTime}");
+                float percent = (float) TimePassedAfterStartTime / (float) IntervallTime;                 
+                //Debug.WriteLine($"percent  =  {percent}");
+                int tmpCordinate = (int)(1600 * percent);
+                //Debug.WriteLine($"tmpCordinate  =  {tmpCordinate}");
+                coordinate.XCoordinatePixel = 100 + tmpCordinate;
+
                 if (Yarr[i])
                     coordinate.YCoordinatePixel = 10;
                 else
                     coordinate.YCoordinatePixel = 60; //Note, a low number, result i a higher graph due to the Origo.
                 coordinates.Add(coordinate);
             }
-            //foreach (Coordinate item in coordinates)
-            //{
-            //    Debug.WriteLine($"XCoordinateInt64 = {item.XCoordinateInt64}. YCoordinateBoolean = {item.YCoordinateBoolean}. XCoordinatePixel = {item.XCoordinatePixel}. YCoordinatePixel = {item.YCoordinatePixel} ");
-            //}
             return coordinates;
         }
 
@@ -99,7 +104,7 @@ namespace Application
                     {
                         PointF firstLocation = new PointF(100f - 35, 20f);
                         PointF secondLocation = new PointF(850f - 70, 20f);
-                        PointF thirdLocation = new PointF(1700f - 105, 20f);
+                        PointF thirdLocation = new PointF(1700f - 130, 20f);
                         g.DrawString(UnixToSolarTimeString(FirstLocationTime), arialFont, Brushes.Black, firstLocation);
                         g.DrawString(UnixToSolarTimeString(SecondLocationTime), arialFont, Brushes.Black, secondLocation);
                         g.DrawString(UnixToSolarTimeString(ThirdLocationTime), arialFont, Brushes.Black, thirdLocation);
@@ -116,7 +121,14 @@ namespace Application
         private string UnixToSolarTimeString(Int64 UnixTime)
         {
             DateTime result = DateTimeOffset.FromUnixTimeMilliseconds(UnixTime).DateTime;
-            return result.ToString() + " " + result.Millisecond;
+            string MillisecondString = result.Millisecond.ToString();
+            if (MillisecondString.Length == 2)
+                MillisecondString = "0" + MillisecondString;
+            if (MillisecondString.Length == 1)
+                MillisecondString = "00" + MillisecondString;
+            if (MillisecondString.Length == 0)
+                MillisecondString = "000" + MillisecondString;
+            return result.ToString() + " " + MillisecondString; // result.Millisecond; //här är det ett fel, ty 45milisekunder, blir 450 milisekunder.
         }
 
         public void PlotGraphToWithLabel(List<Coordinate> coordinates, string ImagePathPasteTo, int slot, string PlotLabel)

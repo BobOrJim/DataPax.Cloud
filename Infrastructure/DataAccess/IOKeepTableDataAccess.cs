@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
+//The interface of this class is a utility/Data-access for an IOKeepTableService in Application. And a IOKeepTableService object is used in the PresentationPage
 
 namespace Infrastructure.DataAccess
 {

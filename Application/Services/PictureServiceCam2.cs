@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.Services;
-using System.Drawing.Imaging;
-using System.Drawing;
 using System.Diagnostics;
+using System.Linq;
 using Interfaces.Interfaces;
 
 namespace Application.Services
@@ -17,56 +12,40 @@ namespace Application.Services
         private string[] PicturePathsArray;
         private List<string> PictureTimeStampStringList = new List<string>();
         private string[] PictureTimeStampStringArray;
-
         public IPictureDataAccessCam2 iPictureDataAccessCam2;
 
         public PictureServiceCam2(IPictureDataAccessCam2 _iPictureDataAccessCam2)
         {
             iPictureDataAccessCam2 = _iPictureDataAccessCam2;
         }
-        public int NumberOfPicturesInStack()
+        public int NumberOfPicturesInStack(Int64 StartTime, Int64 EndTime)
         {
-            return iPictureDataAccessCam2.PicturePathsListFrom_Cam2KeepTable().Count();
+            return iPictureDataAccessCam2.PicturePathsStringList_FromCam2KeepTable(StartTime, EndTime).Count();
         }
-        public void UpdatePictureStack()
+        public void UpdatePictureStack(Int64 StartTime, Int64 EndTime)
         {
-            PicturePathsList = iPictureDataAccessCam2.PicturePathsListFrom_Cam2KeepTable();
+            PicturePathsList = iPictureDataAccessCam2.PicturePathsStringList_FromCam2KeepTable(StartTime, EndTime);
             PicturePathsArray = PicturePathsList.ToArray();
-            PictureTimeStampStringList = iPictureDataAccessCam2.PictureTimeStampStringListFrom_Cam2KeepTable();
+            PictureTimeStampStringList = iPictureDataAccessCam2.PictureTimeStampStringList_FromCam2KeepTable(StartTime, EndTime);
             PictureTimeStampStringArray = PictureTimeStampStringList.ToArray();
         }
-        //public string LeftPicturePathToShow(int LeftPictureNumberInStackToShow)
-        //{
-        //    if (PicturePathsArray != null)
-        //    {
-        //        return PicturePathsArray[LeftPictureNumberInStackToShow];
-        //    }
-        //    return "Cam1KeepPictures/Camera1_1611872350240.jpeg"; //Skall ersättas med någon logga eller något mer neutralt kanske
-        //}
-        //public string LeftPictureTimestampToShow(int LeftPictureNumberInStackToShow)
-        //{
-        //    if (PictureTimeStampStringArray != null)
-        //    {
-        //        return PictureTimeStampStringArray[LeftPictureNumberInStackToShow];
-        //    }
-        //    return "";
-        //}
+
+
         public string RightPicturePathToShow(int RightPictureNumberInStackToShow)
         {
-            if (PicturePathsArray != null)
+            if (PicturePathsArray != null && RightPictureNumberInStackToShow < PicturePathsArray.Length)
             {
-                //Debug.WriteLine($"RightPicturePathToShow path to show ::::: {PicturePathsArray[RightPictureNumberInStackToShow]}");
-                return PicturePathsArray[RightPictureNumberInStackToShow - 1];
+                return PicturePathsArray[RightPictureNumberInStackToShow];
             }
-            return "Cam1KeepPictures/Camera1_1611872350240.jpeg"; //Skall ersättas med någon logga eller något mer neutralt kanske
+            return "Images/Logo.jpeg";
         }
         public string RightPictureTimestampToShow(int RightPictureNumberInStackToShow)
         {
-            if (PictureTimeStampStringArray != null)
+            if (PictureTimeStampStringArray != null && RightPictureNumberInStackToShow < PicturePathsArray.Length)
             {
                 return PictureTimeStampStringArray[RightPictureNumberInStackToShow];
             }
-            return "";
+            return "No picture found";
         }
     }
 }

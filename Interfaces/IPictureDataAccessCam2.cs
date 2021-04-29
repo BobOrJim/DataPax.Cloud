@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Interfaces.Interfaces
 {
     public interface IPictureDataAccessCam2
     {
-        string[] PicturePathsArrayFrom_Cam2KeepTable();
-        List<string> PicturePathsListFrom_Cam2KeepTable();
-        string[] PictureTimeStampStringArrayFrom_Cam2KeepTable();
-        List<string> PictureTimeStampStringListFrom_Cam2KeepTable();
+        List<string> PicturePathsStringList_FromCam2KeepTable(Int64 StartTime, Int64 EndTime);
+        List<string> PictureTimeStampStringList_FromCam2KeepTable(Int64 StartTime, Int64 EndTime);
     }
 }

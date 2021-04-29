@@ -58,13 +58,8 @@
         pictureServiceCam2 = new PictureServiceCam2(new PictureDataAccessCam2(eFAccessCam2KeepTable));
         iOKeepTableService = new IOKeepTableService(new IOKeepTableDataAccess(eFAccessIOKeepTable));
         iODeviationService = new IODeviationService(new IODeviationDataAccess(eFAccessIODeviationTable));
-
-        pictureServiceCam1.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
-        pictureServiceCam2.UpdatePictureStack(); //Denna rad skall senare ersättas med något där tidsobjekt event grej
         plotService = new PlotService(); //Här skall jag framöver injecera ett Interface
         treeUpdateUtils = new TreeUpdateUtils();
-        //timeController.WriteUnixToSolartime_StartTime();
-        //timeController.WriteSolarTimeToUnix_StartTime();
     }
 
     protected override async Task OnInitializedAsync()
@@ -89,7 +84,7 @@
             //Tilldelar bilder varsing startbild. Logga skall in här
             _ImgSrcComponents.LeftPicture.PicturePathString = "Images/Logo.jpeg";
             _ImgSrcComponents.LeftPicture.UpdateState();
-            _ImgSrcComponents.RightPicture.PicturePathString = "Images/Logo.jpeg"; 
+            _ImgSrcComponents.RightPicture.PicturePathString = "Images/Logo.jpeg";
             _ImgSrcComponents.RightPicture.UpdateState();
         }
     }
@@ -131,26 +126,36 @@
 
     public void ActionEventCallback_LeftPictureRangeSlider()
     {
-        //Text höger underfönster
-        _ParagraphComponents.LeftPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue.ToString() + " / " + _RangeSliderComponents.LeftPictureRangeSlider.MaxValue.ToString();
+        //Text vänster underfönster 1
+        _ParagraphComponents.LeftPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue.ToString() + " / " + pictureServiceCam1.NumberOfPicturesInStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
         _ParagraphComponents.LeftPictureShowNumberOfTotal.UpdateState();
-        //Text vänster underfönster
+        //Text vänster underfönster 2
         _ParagraphComponents.LeftPictureTimeStamp.FirstString = pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(0, 10);
         _ParagraphComponents.LeftPictureTimeStamp.SecondString = pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Length - 13);
+        pictureServiceCam1.UpdatePictureStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
+
+        //string test = pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Length - 13);
+        //Debug.WriteLine($"test = {test}");
+
         _ParagraphComponents.LeftPictureTimeStamp.UpdateState();
-        //
+
         _ImgSrcComponents.LeftPicture.PicturePathString = pictureServiceCam1.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue);
+
         _ImgSrcComponents.LeftPicture.UpdateState();
     }
 
     public void ActionEventCallback_RightPictureRangeSlider()
     {
-        _ParagraphComponents.RightPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.RightPictureRangeSlider.CurrentValue.ToString() + " / " + _RangeSliderComponents.RightPictureRangeSlider.MaxValue.ToString();
+        //Text höger underfönster 1
+        _ParagraphComponents.RightPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.RightPictureRangeSlider.CurrentValue.ToString() + " / " + pictureServiceCam2.NumberOfPicturesInStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
         _ParagraphComponents.RightPictureShowNumberOfTotal.UpdateState();
+        //Text höger underfönster 2
         _ParagraphComponents.RightPictureTimeStamp.FirstString = pictureServiceCam2.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Substring(0, 10);
         _ParagraphComponents.RightPictureTimeStamp.SecondString = pictureServiceCam2.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Substring(pictureServiceCam2.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Length - 13);
         _ParagraphComponents.RightPictureTimeStamp.UpdateState();
+
         _ImgSrcComponents.RightPicture.PicturePathString = pictureServiceCam2.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
+        //Debug.WriteLine($"In ActionEventCallback_RightPictureRangeSlider:  numbers of picture in stack = {pictureServiceCam2.NumberOfPicturesInStack(timeController.StartTimeUnix, timeController.EndTimeUnix)}");
         _ImgSrcComponents.RightPicture.UpdateState();
     }
 
@@ -200,9 +205,17 @@
 
     public void UpdatePlot()
     {
+        pictureServiceCam1.UpdatePictureStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
+        //Debug.WriteLine($"In updateplot. Number of pictures in stack = {pictureServiceCam1.NumberOfPicturesInStack(timeController.StartTimeUnix, timeController.EndTimeUnix)}");
         ActionEventCallback_LeftPictureRangeSlider();
 
-        Debug.WriteLine("UpdatePlot körs");
+        pictureServiceCam2.UpdatePictureStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
+        ActionEventCallback_RightPictureRangeSlider();
+
+
+
+
+        //Debug.WriteLine("UpdatePlot körs");
         //Debug.WriteLine(timeController.StartTimeUnix);
         //Debug.WriteLine(timeController.EndTimeUnix);
 
@@ -210,6 +223,8 @@
         Int64 First = timeController.StartTimeUnix;                                                                         //Text utmed X-axel
         Int64 Second = timeController.StartTimeUnix + (timeController.EndTimeUnix - timeController.StartTimeUnix) / 2;      //Text utmed X-axel
         Int64 Third = timeController.EndTimeUnix;                                                                           //Text utmed X-axel
+
+        //Debug.WriteLine($" first second third {First} {Second} {Third}");
         plotService.PlotXAxisTo(First, Second, Third, "wwwroot/PlotWorkCanvas.jpeg");
 
 
@@ -218,15 +233,15 @@
 
 
 
-        Debug.WriteLine($"In UpdatePlot. Queue.Count = {signalsToPlotQueue.Queue.Count}");
+        //Debug.WriteLine($"In UpdatePlot. Queue.Count = {signalsToPlotQueue.Queue.Count}");
         List<string> SignalsToPlot = signalsToPlotQueue.ContentsInQueue();
-        Debug.WriteLine($"In UpdatePlot. Queue.Count = {signalsToPlotQueue.Queue.Count}");
+        //Debug.WriteLine($"In UpdatePlot. Queue.Count = {signalsToPlotQueue.Queue.Count}");
         int NextSlot = 0;
         foreach (string SignalName in SignalsToPlot)
         {
             Debug.WriteLine($"item = {SignalName}");
             List<XYValuePair> XYValuePairsList = iOKeepTableService.GetXYValuePairFromSignalBetween(SignalName, timeController.StartTimeUnix, timeController.EndTimeUnix);
-            List<Coordinate> CoordinateList = plotService.CreateCoordinateList(XYValuePairsList); //IMPORTANT, THIS FUNCTION INJECT FAKE CORDINATES TO MAKE A STEP CURVE
+            List<Coordinate> CoordinateList = plotService.CreateCoordinateList(XYValuePairsList, timeController.StartTimeUnix, timeController.EndTimeUnix); //IMPORTANT, THIS FUNCTION INJECT FAKE CORDINATES TO MAKE A STEP CURVE
             plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", NextSlot, SignalName);
             NextSlot += 1;
         }
@@ -386,7 +401,7 @@
             <RangeSliderComponent CssClassStyle="My5"
                                   @ref="_RangeSliderComponents.LeftPictureRangeSlider"
                                   MinValue="1"
-                                  MaxValue="@pictureServiceCam1.NumberOfPicturesInStack()"
+                                  MaxValue="@pictureServiceCam1.NumberOfPicturesInStack(timeController.StartTimeUnix, timeController.EndTimeUnix)"
                                   ActionEventCallback="ActionEventCallback_LeftPictureRangeSlider" />
         </div>
         <div class="Row3Col7 MyRadialBackground">
@@ -394,7 +409,7 @@
             <RangeSliderComponent CssClassStyle="My5"
                                   @ref="_RangeSliderComponents.RightPictureRangeSlider"
                                   MinValue="1"
-                                  MaxValue="@pictureServiceCam2.NumberOfPicturesInStack()"
+                                  MaxValue="@pictureServiceCam2.NumberOfPicturesInStack(timeController.StartTimeUnix, timeController.EndTimeUnix)"
                                   ActionEventCallback="ActionEventCallback_RightPictureRangeSlider" />
         </div>
     </div>
@@ -556,7 +571,7 @@
                                      @ref="_NumericTextBoxComponents.EndTimeHour"
                                      ThisComponentInstanceName="_NumericTextBoxComponents.EndTimeHour"
                                      MinValue="1"
-                                     MaxValue="31"
+                                     MaxValue="23"
                                      ActionEventCallback="EventCallback_NumericTextBoxesStartAndStopTime">
             </NumericTextBoxComponent>
         </div>
@@ -566,7 +581,7 @@
                                      @ref="_NumericTextBoxComponents.EndTimeMinute"
                                      ThisComponentInstanceName="_NumericTextBoxComponents.EndTimeMinute"
                                      MinValue="1"
-                                     MaxValue="31"
+                                     MaxValue="59"
                                      ActionEventCallback="EventCallback_NumericTextBoxesStartAndStopTime">
             </NumericTextBoxComponent>
         </div>
@@ -576,7 +591,7 @@
                                      @ref="_NumericTextBoxComponents.EndTimeSecond"
                                      ThisComponentInstanceName="_NumericTextBoxComponents.EndTimeSecond"
                                      MinValue="1"
-                                     MaxValue="31"
+                                     MaxValue="59"
                                      ActionEventCallback="EventCallback_NumericTextBoxesStartAndStopTime">
             </NumericTextBoxComponent>
         </div>

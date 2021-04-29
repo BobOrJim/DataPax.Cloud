@@ -1,5 +1,7 @@
-1: Bild stacken skall sorteras efter start och stop time
-- Jag tror bildstacken skall uppdateras samtidigt som plot();
+
+
+
+* flytta bilder till Image folder. Det ser för jäkligt ut just nu.
 
 
 
@@ -8,8 +10,13 @@
 3: Det hade varit läckert med picture filter.....rörelse alltså. då får jag även min första useCase + att jag kan använda Domain.
 
 * Börja tänka mer på publiceringen.
-* option, korrekta x-kordinater i plotter
 * REFLEKTION map IOSample
+
+
+
+
+
+
 
 
 
@@ -60,9 +67,6 @@ for (int y = 0; y < height; y++)
 
 
 
-
-
-
 UPPDATERINGS HIRARKI:
 TriggerListClick ->
 	GlobalTime time grejor
@@ -76,13 +80,17 @@ Half Forw etc
 ###############################################################################################################################
 
 
+
+
+
+
 Inför storstädningen:
 * Fyll detta prog med try/catch. och sök på det, just nu finns det ingenting. Gör fil för fil på slutet så jag inte missar något.
 * OBS: kanske kan alla external uppdate utgå...städa kod...
 * Städa bort template kod.
+* Kanske ta bort de tre ful lådorna som inte används. Svårt val, det blir tomt utan dem.
 
 
 TROLIGEN UTGÅR:
 * plotta analoga signaler (tror denna utgår, det kommer ändå inte bli snyggt)
 * fråga jonathan efter kontakt till yrkeslivet, visa film och fråga...
-
