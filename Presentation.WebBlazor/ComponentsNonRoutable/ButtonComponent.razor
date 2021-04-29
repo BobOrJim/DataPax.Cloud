@@ -1,11 +1,13 @@
 ﻿<div>
     <button class=@CssClassStyle @onclick="@(() => MyCallback.InvokeAsync(true))">
-        @ButtonText
+        <!--@ButtonText-->
+        <img src=@ImagePath class=@CssClassStyle>
+        <!--<img src="http://thinkingstiff.com/images/matt.jpg" > -->
     </button>
 </div>
 
 
-@code { 
+@code {
 
     [Parameter]
     public string CssClassStyle { get; set; }
@@ -16,11 +18,24 @@
     [Parameter]
     public EventCallback<bool> MyCallback { get; set; }
 
+    [Parameter]
+    public string ImagePath { get; set; }
+
+
     //public void UpdateState()
     //{
     //    InvokeAsync(StateHasChanged);
     //}
+//    <img src="Images/ButtonHalfBack.jpg" class=@CssClassStyle>
+
+
+
+        //<input type="image" src="http://example.com/path/to/image.png" />
+        //<button id="close-image"><img src="http://thinkingstiff.com/images/matt.jpg"></button>
+        // background-size:cover
 
 
 }
+
+
 

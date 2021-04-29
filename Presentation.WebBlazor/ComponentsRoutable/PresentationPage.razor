@@ -249,7 +249,7 @@
         _ImgSrcComponents.Plot.UpdateState();
     }
 
-    public void Knapp1()
+    public void EventCallback_ButtonFullBack()
     {
         timeController.StartTimeUnix = timeController.StartTimeUnix - 4000;
         timeController.WriteUnixToSolartime_StartTime();
@@ -258,7 +258,7 @@
         WriteTimeControllerToNumericTextBoxes();
         UpdatePlot();
     }
-    public void Knapp2()
+    public void EventCallback_ButtonHalfBack()
     {
         timeController.StartTimeUnix = timeController.StartTimeUnix - 2000;
         timeController.WriteUnixToSolartime_StartTime();
@@ -267,7 +267,7 @@
         WriteTimeControllerToNumericTextBoxes();
         UpdatePlot();
     }
-    public void Knapp3()
+    public void EventCallback_ButtonHalfForw()
     {
         timeController.StartTimeUnix = timeController.StartTimeUnix + 2000;
         timeController.WriteUnixToSolartime_StartTime();
@@ -276,7 +276,7 @@
         WriteTimeControllerToNumericTextBoxes();
         UpdatePlot();
     }
-    public void Knapp4()
+    public void EventCallback_ButtonFullForw()
     {
         //Låne knapp
         //signalsToPlotQueue
@@ -492,34 +492,38 @@
         </div>
         <div class="Row5Col7">
             <!-- FullBack -->
-            <ButtonComponent CssClassStyle="My5 btn-primary"
+            <ButtonComponent CssClassStyle="My5 MyMaxSize btn-primary"
                              @ref="_ButtonComponents.FullBack"
+                             ImagePath="Images/ButtonFullBack.jpg"
                              ButtonText="1"
-                             MyCallback="Knapp1">
+                             MyCallback="EventCallback_ButtonFullBack">
             </ButtonComponent>
         </div>
         <div class="Row5Col8">
             <!-- HalfBack -->
             <ButtonComponent CssClassStyle="My5 btn-primary"
                              @ref="_ButtonComponents.HalfBack"
+                             ImagePath="Images/ButtonHalfBack.jpg"
                              ButtonText="2"
-                             MyCallback="Knapp2">
+                             MyCallback="EventCallback_ButtonHalfBack">
             </ButtonComponent>
         </div>
         <div class="Row5Col9">
             <!-- HalfForw-->
             <ButtonComponent CssClassStyle="My5 btn-primary"
                              @ref="_ButtonComponents.HalfForw"
+                             ImagePath="Images/ButtonHalfForw.jpg"
                              ButtonText="3"
-                             MyCallback="Knapp3">
+                             MyCallback="EventCallback_ButtonHalfForw">
             </ButtonComponent>
         </div>
         <div class="Row5Col10">
             <!-- FullForw -->
             <ButtonComponent CssClassStyle="My5 btn-primary"
                              @ref="_ButtonComponents.FullForw"
+                             ImagePath="Images/ButtonFullForw.jpg"
                              ButtonText="4"
-                             MyCallback="Knapp4">
+                             MyCallback="EventCallback_ButtonFullForw">
             </ButtonComponent>
         </div>
         <div class="Row5Col11">

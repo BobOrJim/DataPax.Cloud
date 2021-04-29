@@ -1,12 +1,9 @@
 
 
 
-
 IMORGON ÄR DET UTSEENDE SOM GÄLLER, samt inlämings uppgiften.
-* bilder på knappar
 * ändra namn på knappar så de inte heter knapp1 osv.
 * Kanske lägga till färgglidande bakgrund, så som jag gjorde på IQR. "Radial-gradient" gör det snyggt som fan. Kanske kan matchas med opage eller hur det nu stavas.
-
 
 
 @page "/"
