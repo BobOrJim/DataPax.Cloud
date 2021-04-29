@@ -14,63 +14,42 @@ namespace Infrastructure.DataAccess
 {
     public class PictureDataAccessCam1 : IPictureDataAccessCam1
     {
-        private List<string> PicturePathsList = new List<string>();
-        private string[] PicturePathsArray;
+        private List<string> PicturePathsStringList = new List<string>();
         private List<string> PictureTimeStampStringList = new List<string>();
-        private string[] PictureTimeStampStringArray;
         EFAccessCam1KeepTable eFAccessCam1KeepTable;
         public PictureDataAccessCam1(EFAccessCam1KeepTable _eFAccessCam1KeepTable)
         {
             eFAccessCam1KeepTable = _eFAccessCam1KeepTable;
         }
 
-        //Metod0. Utils. Private.
-        private void ReadFrom_Cam1KeepTableAndPrepData()
+      
+        private void UpdatePictureData_FromCam1Keep(Int64 StartTime, Int64 EndTime)
         {
             List<Picture> PictureList = eFAccessCam1KeepTable.Cam1KeepTable.ToList();
-            Picture[] PicturesArray = eFAccessCam1KeepTable.Cam1KeepTable.ToArray();
-            PicturePathsList.Clear();
-            //Debug.WriteLine($"Nu sker anrop till DB från PictureDataAccessCam1, kolla så det inte blir för många av dessa, bortsett från init, bör de bara köras när någon tidModell ändras");
+            PicturePathsStringList.Clear();
             foreach (Picture picture in PictureList)
             {
-                PicturePathsList.Add("Cam1KeepPictures/" + picture.FileNameCurrent_TEXT + ".jpeg");
-                //Building a label(string), that will show the timestamp with 3 decimals after the second.
-                PictureTimeStampStringList.Add(picture.Datestamp_TEXT + "." + picture.FileNameCurrent_TEXT.Substring(picture.FileNameCurrent_TEXT.Length - 3));
+                if (picture.Timestamp_unix_BIGINT)
+                {
+                    PicturePathsStringList.Add("Cam1KeepPictures/" + picture.FileNameCurrent_TEXT + ".jpeg");
+                    PictureTimeStampStringList.Add(picture.Datestamp_TEXT + "." + picture.FileNameCurrent_TEXT.Substring(picture.FileNameCurrent_TEXT.Length - 3));
+                }
             }
-            PicturePathsArray = PicturePathsList.ToArray();
-            PictureTimeStampStringArray = PictureTimeStampStringList.ToArray();
         }
 
-
-        //Metod 1. Returnerar alla paths, i anropad tabell som lista.
-        public List<string> PicturePathsListFrom_Cam1KeepTable()
+        //Returnerar alla picture patch betwen startTime and stopTime
+        public List<string> PicturePathsStringList_FromCam1KeepTable(Int64 StartTime, Int64 EndTime)
         {
-            ReadFrom_Cam1KeepTableAndPrepData();
-            return PicturePathsList;
+            UpdatePictureData_FromCam1Keep(StartTime, EndTime);
+            return PicturePathsStringList;
         }
 
-
-        //Metod 2. Returnerar alla paths, i anropad tabell som array
-        public string[] PicturePathsArrayFrom_Cam1KeepTable()
+        //Returnerar alla picture timestamps betwen startTime and stopTime
+        public List<string> PictureTimeStampStringList_FromCam1KeepTable(Int64 StartTime, Int64 EndTime)
         {
-            ReadFrom_Cam1KeepTableAndPrepData();
-            return PicturePathsArray;
-        }
-
-
-        //Metod 3. Returnerar alla timestamp, i anropad tabell som lista.
-        public List<string> PictureTimeStampStringListFrom_Cam1KeepTable()
-        {
-            ReadFrom_Cam1KeepTableAndPrepData();
+            UpdatePictureData_FromCam1Keep(StartTime, EndTime);
             return PictureTimeStampStringList;
         }
 
-
-        //Metod 4. Returnerar alla timestamp, i anropad tabell som array
-        public string[] PictureTimeStampStringArrayFrom_Cam1KeepTable()
-        {
-            ReadFrom_Cam1KeepTableAndPrepData();
-            return PictureTimeStampStringArray;
-        }
     }
 }

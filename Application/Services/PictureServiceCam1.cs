@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.Services;
-using System.Drawing.Imaging;
-using System.Drawing;
-using System.Diagnostics;
 using Interfaces.Interfaces;
-
 
 
 namespace Application.Services
@@ -19,7 +11,6 @@ namespace Application.Services
         private string[] PicturePathsArray;
         private List<string> PictureTimeStampStringList = new List<string>();
         private string[] PictureTimeStampStringArray;
-
         public IPictureDataAccessCam1 _PictureDataAccessCam1;
 
         public PictureServiceCam1(IPictureDataAccessCam1 p)
@@ -39,11 +30,11 @@ namespace Application.Services
         }
         public string LeftPicturePathToShow(int LeftPictureNumberInStackToShow)
         {
-            if (PicturePathsArray != null)
+            if (PicturePathsArray != null && LeftPictureNumberInStackToShow > 0)
             {
                 return PicturePathsArray[LeftPictureNumberInStackToShow-1];
             }
-            return "Cam1KeepPictures/Camera1_1611872350240.jpeg"; //Skall ersättas med någon logga eller något mer neutralt kanske
+            return "Images/Logo.jpeg";
         }
         public string LeftPictureTimestampToShow(int LeftPictureNumberInStackToShow)
         {

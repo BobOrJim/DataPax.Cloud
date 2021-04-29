@@ -9,6 +9,8 @@
 
 * Börja tänka mer på publiceringen.
 * option, korrekta x-kordinater i plotter
+* REFLEKTION map IOSample
+
 
 
 @page "/"

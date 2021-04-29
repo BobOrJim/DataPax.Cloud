@@ -87,9 +87,9 @@
             _ClickableListComponents.DeviationListViewComponent.ListItems = ListItemList;
             _ClickableListComponents.DeviationListViewComponent.UpdateState();
             //Tilldelar bilder varsing startbild. Logga skall in här
-            _ImgSrcComponents.LeftPicture.PicturePathString = "Logo.jpeg"; //Skall ändras till logga
+            _ImgSrcComponents.LeftPicture.PicturePathString = "Images/Logo.jpeg";
             _ImgSrcComponents.LeftPicture.UpdateState();
-            _ImgSrcComponents.RightPicture.PicturePathString = "Logo.jpeg"; //logga
+            _ImgSrcComponents.RightPicture.PicturePathString = "Images/Logo.jpeg"; 
             _ImgSrcComponents.RightPicture.UpdateState();
         }
     }
@@ -131,11 +131,14 @@
 
     public void ActionEventCallback_LeftPictureRangeSlider()
     {
+        //Text höger underfönster
         _ParagraphComponents.LeftPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue.ToString() + " / " + _RangeSliderComponents.LeftPictureRangeSlider.MaxValue.ToString();
         _ParagraphComponents.LeftPictureShowNumberOfTotal.UpdateState();
+        //Text vänster underfönster
         _ParagraphComponents.LeftPictureTimeStamp.FirstString = pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(0, 10);
         _ParagraphComponents.LeftPictureTimeStamp.SecondString = pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Length - 13);
         _ParagraphComponents.LeftPictureTimeStamp.UpdateState();
+        //
         _ImgSrcComponents.LeftPicture.PicturePathString = pictureServiceCam1.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue);
         _ImgSrcComponents.LeftPicture.UpdateState();
     }
