@@ -1,9 +1,14 @@
+1: Bild stacken skall sorteras efter start och stop time
+- Jag tror bildstacken skall uppdateras samtidigt som plot();
 
 
 
-IMORGON ÄR DET UTSEENDE SOM GÄLLER, samt inlämings uppgiften.
-* ändra namn på knappar så de inte heter knapp1 osv.
-* Kanske lägga till färgglidande bakgrund, så som jag gjorde på IQR. "Radial-gradient" gör det snyggt som fan. Kanske kan matchas med opage eller hur det nu stavas.
+
+2: URL timer grejen.
+3: Det hade varit läckert med picture filter.....rörelse alltså. då får jag även min första useCase + att jag kan använda Domain.
+
+* Börja tänka mer på publiceringen.
+* option, korrekta x-kordinater i plotter
 
 
 @page "/"
@@ -55,16 +60,6 @@ for (int y = 0; y < height; y++)
 
 
 
-* INTE LÄGGA TILL NÅGOT MER PÅ LISTAN
-* Bild stacken skall sorteras efter start och stop time
-* URL timer grejen.
-* Det hade varit läckert med picture filter.....rörelse alltså. då får jag även min första useCase + att jag kan använda Domain.
-* Börja tänka mer på publiceringen.
-
-
-
-
-
 
 UPPDATERINGS HIRARKI:
 TriggerListClick ->
@@ -83,8 +78,6 @@ Inför storstädningen:
 * Fyll detta prog med try/catch. och sök på det, just nu finns det ingenting. Gör fil för fil på slutet så jag inte missar något.
 * OBS: kanske kan alla external uppdate utgå...städa kod...
 * Städa bort template kod.
-
-
 
 
 TROLIGEN UTGÅR:

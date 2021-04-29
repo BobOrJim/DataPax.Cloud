@@ -197,6 +197,8 @@
 
     public void UpdatePlot()
     {
+        ActionEventCallback_LeftPictureRangeSlider();
+
         Debug.WriteLine("UpdatePlot körs");
         //Debug.WriteLine(timeController.StartTimeUnix);
         //Debug.WriteLine(timeController.EndTimeUnix);
@@ -251,41 +253,39 @@
 
     public void EventCallback_ButtonFullBack()
     {
-        timeController.StartTimeUnix = timeController.StartTimeUnix - 4000;
+        timeController.StartTimeUnix = timeController.StartTimeUnix - 1000;
         timeController.WriteUnixToSolartime_StartTime();
-        timeController.EndTimeUnix = timeController.EndTimeUnix - 4000;
+        timeController.EndTimeUnix = timeController.EndTimeUnix - 1000;
         timeController.WriteUnixToSolartime_EndTime();
         WriteTimeControllerToNumericTextBoxes();
         UpdatePlot();
     }
     public void EventCallback_ButtonHalfBack()
     {
-        timeController.StartTimeUnix = timeController.StartTimeUnix - 2000;
+        timeController.StartTimeUnix = timeController.StartTimeUnix - 500;
         timeController.WriteUnixToSolartime_StartTime();
-        timeController.EndTimeUnix = timeController.EndTimeUnix - 2000;
+        timeController.EndTimeUnix = timeController.EndTimeUnix - 500;
         timeController.WriteUnixToSolartime_EndTime();
         WriteTimeControllerToNumericTextBoxes();
         UpdatePlot();
     }
     public void EventCallback_ButtonHalfForw()
     {
-        timeController.StartTimeUnix = timeController.StartTimeUnix + 2000;
+        timeController.StartTimeUnix = timeController.StartTimeUnix + 500;
         timeController.WriteUnixToSolartime_StartTime();
-        timeController.EndTimeUnix = timeController.EndTimeUnix + 2000;
+        timeController.EndTimeUnix = timeController.EndTimeUnix + 500;
         timeController.WriteUnixToSolartime_EndTime();
         WriteTimeControllerToNumericTextBoxes();
         UpdatePlot();
     }
     public void EventCallback_ButtonFullForw()
     {
-        //Låne knapp
-        //signalsToPlotQueue
-        //timeController.StartTimeUnix = timeController.StartTimeUnix + 4000;
-        //timeController.WriteUnixToSolartime_StartTime();
-        //timeController.EndTimeUnix = timeController.EndTimeUnix + 4000;
-        //timeController.WriteUnixToSolartime_EndTime();
-        //WriteTimeControllerToNumericTextBoxes();
-        //UpdatePlot();
+        timeController.StartTimeUnix = timeController.StartTimeUnix + 1000;
+        timeController.WriteUnixToSolartime_StartTime();
+        timeController.EndTimeUnix = timeController.EndTimeUnix + 1000;
+        timeController.WriteUnixToSolartime_EndTime();
+        WriteTimeControllerToNumericTextBoxes();
+        UpdatePlot();
     }
 }
 
@@ -293,64 +293,58 @@
 
 <div class="grid-container">
     <div class="Row1">
-        <div class="Row1Col1">
+        <div class="Row1Col1 MyRadialBackground">
             <!-- SignalTreeView -->
             <TreeView2Component CssClassStyle="MyInvisibleButton"
                                 @ref="_TreeViewComponents.IOTreeView2Component"
                                 MyCallback="EventCallback_TreeView" />
         </div>
-        <div class="Row1Col2">
+        <div class="Row1Col2 MyRadialBackground">
             <ClickableListComponent CssClassStyle="MyInvisibleButton"
                                     @ref="_ClickableListComponents.DeviationListViewComponent"
                                     MyCallback="EventCallback_ListView" />
         </div>
-        <div class="Row1Col3">
+        <div class="Row1Col3 MyRadialBackground">
             <!-- LeftPicture -->
             <ImgSrcComponent CssClassStyle="MyAutoSizeKeepRatio" @ref="_ImgSrcComponents.LeftPicture" />
         </div>
-        <div class="Row1Col4">
+        <div class="Row1Col4 MyRadialBackground">
             <!-- RightPicture -->
             <ImgSrcComponent CssClassStyle="MyAutoSizeKeepRatio" @ref="_ImgSrcComponents.RightPicture" />
         </div>
     </div>
     <div class="Row2">
-        <div class="Row2Col1">
-            <!-- -->
-            <p>Row2Col1</p>
+        <div class="Row2Col1 MyRadialBackground">
         </div>
-        <div class="Row2Col2">
-            <!-- -->
-            <p>Row2Col2</p>
+        <div class="Row2Col2 MyRadialBackground">
         </div>
-        <div class="Row2Col3">
-            <!-- -->
-            <p>Row2Col3</p>
+        <div class="Row2Col3 MyRadialBackground">
         </div>
-        <div class="Row2Col4">
-            <ParagraphComponent CssClassStyle="My5" @ref="_ParagraphComponents.LeftPictureTimeStamp" />
+        <div class="Row2Col4 MyRadialBackground">
+            <ParagraphComponent CssClassStyle="MyBackgroundColor" @ref="_ParagraphComponents.LeftPictureTimeStamp" />
         </div>
-        <div class="Row2Col5">
+        <div class="Row2Col5 MyRadialBackground">
             <!-- Space -->
         </div>
-        <div class="Row2Col6">
-            <ParagraphComponent CssClassStyle="My5" @ref="_ParagraphComponents.LeftPictureShowNumberOfTotal" />
+        <div class="Row2Col6 MyRadialBackground">
+            <ParagraphComponent CssClassStyle="MyBackgroundColor" @ref="_ParagraphComponents.LeftPictureShowNumberOfTotal" />
         </div>
-        <div class="Row2Col7">
-            <ParagraphComponent CssClassStyle="My5" @ref="_ParagraphComponents.RightPictureTimeStamp" />
+        <div class="Row2Col7 MyRadialBackground">
+            <ParagraphComponent CssClassStyle="MyBackgroundColor" @ref="_ParagraphComponents.RightPictureTimeStamp" />
         </div>
-        <div class="Row2Col8">
+        <div class="Row2Col8 MyRadialBackground">
             <!-- Space -->
         </div>
-        <div class="Row2Col9">
-            <ParagraphComponent CssClassStyle="My5" @ref="_ParagraphComponents.RightPictureShowNumberOfTotal" />
+        <div class="Row2Col9 MyRadialBackground">
+            <ParagraphComponent CssClassStyle="MyBackgroundColor" @ref="_ParagraphComponents.RightPictureShowNumberOfTotal" />
         </div>
     </div>
 
     <div class="Row3">
-        <div class="Row3Col1">
+        <div class="Row3Col1 MyRadialBackground">
             <!-- Space -->
         </div>
-        <div class="Row3Col2">
+        <div class="Row3Col2 MyRadialBackground">
             <!-- DeviationYear -->
             <NumericTextBoxComponent CssClassStyle="My5"
                                      @ref="_NumericTextBoxComponents.DeviationYear"
@@ -360,7 +354,7 @@
                                      ActionEventCallback="_NumericTextBoxUseCases.DeviationYearValueChangedEvent">
             </NumericTextBoxComponent>
         </div>
-        <div class="Row3Col3">
+        <div class="Row3Col3 MyRadialBackground">
             <!-- DeviationMonth -->
             <NumericTextBoxComponent CssClassStyle="My5"
                                      @ref="_NumericTextBoxComponents.DeviationMonth"
@@ -370,7 +364,7 @@
                                      ActionEventCallback="_NumericTextBoxUseCases.DeviationMonthValueChangedEvent">
             </NumericTextBoxComponent>
         </div>
-        <div class="Row3Col4">
+        <div class="Row3Col4 MyRadialBackground">
             <!-- DeviationDay -->
             <NumericTextBoxComponent CssClassStyle="My5"
                                      @ref="_NumericTextBoxComponents.DeviationDay"
@@ -381,11 +375,10 @@
             </NumericTextBoxComponent>
         </div>
 
-        <div class="Row3Col5">
+        <div class="Row3Col5 MyRadialBackground">
             <!-- DeviationTimePeriod -->
-            PLACEHOLDER
         </div>
-        <div class="Row3Col6">
+        <div class="Row3Col6 MyRadialBackground">
             <!-- LeftPictureSlider  -->
             <RangeSliderComponent CssClassStyle="My5"
                                   @ref="_RangeSliderComponents.LeftPictureRangeSlider"
@@ -393,7 +386,7 @@
                                   MaxValue="@pictureServiceCam1.NumberOfPicturesInStack()"
                                   ActionEventCallback="ActionEventCallback_LeftPictureRangeSlider" />
         </div>
-        <div class="Row3Col7">
+        <div class="Row3Col7 MyRadialBackground">
             <!-- RightPictureSlider-->
             <RangeSliderComponent CssClassStyle="My5"
                                   @ref="_RangeSliderComponents.RightPictureRangeSlider"
@@ -404,24 +397,20 @@
     </div>
 
     <div class="Row4">
-        <div class="Row4Col1">
+        <div class="Row4Col1 MyRadialBackground">
             <!-- Luft Row4Col1-->
         </div>
-        <div class="Row4Col2">
+        <div class="Row4Col2 MyRadialBackground">
             <!-- MakeLeftSyncMasterCheckBox -->
-            <p>Row4Col2</p>
         </div>
-        <div class="Row4Col3">
+        <div class="Row4Col3 MyRadialBackground">
             <!-- Luft -->
-            <p>Row4Col3</p>
         </div>
-        <div class="Row4Col4">
+        <div class="Row4Col4 MyRadialBackground">
             <!-- MakeRightSyncMasterCheckBox -->
-            <p>Row4Col4</p>
         </div>
-        <div class="Row4Col5">
+        <div class="Row4Col5 MyRadialBackground">
             <!-- Luft -->
-            <p>Row4Col5</p>
         </div>
     </div>
 

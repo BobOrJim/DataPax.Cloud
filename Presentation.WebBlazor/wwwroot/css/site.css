@@ -92,6 +92,11 @@ a, .btn-link {
     transition: opacity .2s;
 }
 
+.MyBackgroundColor {
+    background-color: #c6e8f7;
+}
+
+
 .My5 {
     /* This is a know issue, and thus i have to use a simple workaround. */
     /* height: 100vh;*/
@@ -100,6 +105,10 @@ a, .btn-link {
     background-color: #3694d2;
     height: 5vh;
     width: 100%;
+}
+
+.MyRadialBackground {
+    background: radial-gradient(#c6e8f7, #efe9ef);
 }
 
 .MyMaxSize {
@@ -137,6 +146,7 @@ a, .btn-link {
     height: 99vh; /*Refererar till viewport*/
     width: 99vw; /*Refererar till viewport */
     gap: 0px 0px;
+
 }
 
 .Row1 {
@@ -146,6 +156,7 @@ a, .btn-link {
     gap: 0px 0px;
     grid-template-areas: "Row1Col1 Row1Col2 Row1Col3 Row1Col4";
     grid-area: 1 / 1 / span 1 / span 4; /* Make "item1" start on row 2 column 1, and span 2 rows and 3 columns: */
+
 }
 
 .Row1Col1 { /* SignalTreeView */
@@ -160,8 +171,8 @@ a, .btn-link {
     grid-area: Row1Col2;
     background-color: #c6e8f7;
     border: 1px solid black;
-    font-size: 1.0vw 
-/*    font-size: 0.75vw*/
+    font-size: 1.0vw
+    /*    font-size: 0.75vw*/
 }
 
 .Row1Col3 { /* LeftPicture */
@@ -245,7 +256,7 @@ a, .btn-link {
 
 .Row3 {
     display: grid;
-    grid-template-columns: 15% 5% 5% 5% 10% 30% 30%; /* 10%% är en skärm, dvs jag kan överskrkrida och då får jag scrolla */
+    grid-template-columns: 20% 5% 5% 5% 5% 30% 30%; /* 10%% är en skärm, dvs jag kan överskrkrida och då får jag scrolla */
     grid-template-rows: 100%;
     gap: 0px 0px;
     grid-template-areas: "Row3Col1 Row3Col2 Row3Col3 Row3Col4 Row3Col5 Row3Col6 Row3Col7";
@@ -347,7 +358,7 @@ a, .btn-link {
 
 .Row5 {
     display: grid;
-    grid-template-columns: 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 25%; /* 10% är en skärm, dvs jag kan överskrkrida och då får jag scrolla */
+    grid-template-columns: 6% 6% 6% 6% 6% 6% 7% 7% 7% 7% 6% 6% 6% 6% 6% 6%; /* 10% är en skärm, dvs jag kan överskrkrida och då får jag scrolla */
     grid-template-rows: 100%;
     gap: 0px 0px;
     grid-template-areas: "Row5Col1 Row5Col2 Row5Col3 Row5Col4 Row5Col5 Row5Col6 Row5Col7 Row5Col8 Row5Col9 Row5Col10 Row5Col11 Row5Col12 Row5Col13 Row5Col14 Row5Col15 Row5Col16";
