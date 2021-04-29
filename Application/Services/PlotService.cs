@@ -19,8 +19,8 @@ namespace Application
 
         public void ResetPlot()
         {
-            System.IO.File.Delete("wwwroot/PlotWorkCanvas.jpeg");
-            System.IO.File.Copy("wwwroot/PlotStartCanvas.jpeg", "wwwroot/PlotWorkCanvas.jpeg");
+            System.IO.File.Delete("wwwroot/Images/PlotWorkCanvas.jpeg");
+            System.IO.File.Copy("wwwroot/Images/PlotStartCanvas.jpeg", "wwwroot/Images/PlotWorkCanvas.jpeg");
         }
 
         public List<Coordinate> CreateCoordinateList(List<XYValuePair> XYValuePairsList, Int64 StartTime, Int64 StopTime) //Bygg Överlagrad när det kommer till integers.
@@ -112,10 +112,10 @@ namespace Application
                 }
                 System.GC.Collect();
                 System.GC.WaitForPendingFinalizers();
-                System.IO.File.Delete("TmpCreateAndPlotXAxis.jpeg");
-                bitmap.Save("TmpCreateAndPlotXAxis.jpeg", ImageFormat.Jpeg);
+                System.IO.File.Delete("wwwroot/Images/TmpCreateAndPlotXAxis.jpeg");
+                bitmap.Save("wwwroot/Images/TmpCreateAndPlotXAxis.jpeg", ImageFormat.Jpeg);
             }
-            InsertImageInImageAt("TmpCreateAndPlotXAxis.jpeg", ImagePathPasteTo, 40, 280);
+            InsertImageInImageAt("wwwroot/Images/TmpCreateAndPlotXAxis.jpeg", ImagePathPasteTo, 40, 280);
         }
 
         private string UnixToSolarTimeString(Int64 UnixTime)
@@ -188,10 +188,10 @@ namespace Application
                 }
                 System.GC.Collect();
                 System.GC.WaitForPendingFinalizers();
-                System.IO.File.Delete("TmpPlotGraph.jpeg");
-                bitmap.Save("TmpPlotGraph.jpeg", ImageFormat.Jpeg);
+                System.IO.File.Delete("wwwroot/Images/TmpPlotGraph.jpeg");
+                bitmap.Save("wwwroot/Images/TmpPlotGraph.jpeg", ImageFormat.Jpeg);
             }
-            InsertImageInImageAt("TmpPlotGraph.jpeg", ImagePathPasteTo, 40, 70*slot); //Möjliga slots är 0, 70, 140, 210
+            InsertImageInImageAt("wwwroot/Images/TmpPlotGraph.jpeg", ImagePathPasteTo, 40, 70*slot); //Möjliga slots är 0, 70, 140, 210
         }
 
 

@@ -225,7 +225,7 @@
         Int64 Third = timeController.EndTimeUnix;                                                                           //Text utmed X-axel
 
         //Debug.WriteLine($" first second third {First} {Second} {Third}");
-        plotService.PlotXAxisTo(First, Second, Third, "wwwroot/PlotWorkCanvas.jpeg");
+        plotService.PlotXAxisTo(First, Second, Third, "wwwroot/Images/PlotWorkCanvas.jpeg");
 
 
 
@@ -242,7 +242,7 @@
             Debug.WriteLine($"item = {SignalName}");
             List<XYValuePair> XYValuePairsList = iOKeepTableService.GetXYValuePairFromSignalBetween(SignalName, timeController.StartTimeUnix, timeController.EndTimeUnix);
             List<Coordinate> CoordinateList = plotService.CreateCoordinateList(XYValuePairsList, timeController.StartTimeUnix, timeController.EndTimeUnix); //IMPORTANT, THIS FUNCTION INJECT FAKE CORDINATES TO MAKE A STEP CURVE
-            plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", NextSlot, SignalName);
+            plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/Images/PlotWorkCanvas.jpeg", NextSlot, SignalName);
             NextSlot += 1;
         }
 
@@ -261,11 +261,11 @@
         //    Debug.WriteLine($" item.XCoordinatePixel = {item.XCoordinatePixel} item.YCoordinatePixel = {item.YCoordinatePixel}");
         //}
 
-        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 0, "Hub2Hub_KKS123_SystemVolt_Erratic");
-        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 1, "Hub2Hub_KKS123_SystemVolt_Low");
-        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 2, "Hub2Hub_KKS123_Retarder_LowCurrent");
-        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/PlotWorkCanvas.jpeg", 3, "Hub2Hub_KKS123_AuxPressure_Low");
-        _ImgSrcComponents.Plot.PicturePathString = "PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
+        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/Images/PlotWorkCanvas.jpeg", 0, "Hub2Hub_KKS123_SystemVolt_Erratic");
+        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/Images/PlotWorkCanvas.jpeg", 1, "Hub2Hub_KKS123_SystemVolt_Low");
+        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/Images/PlotWorkCanvas.jpeg", 2, "Hub2Hub_KKS123_Retarder_LowCurrent");
+        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/Images/PlotWorkCanvas.jpeg", 3, "Hub2Hub_KKS123_AuxPressure_Low");
+        _ImgSrcComponents.Plot.PicturePathString = "Images/PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
         _ImgSrcComponents.Plot.UpdateState();
     }
 

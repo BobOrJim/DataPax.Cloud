@@ -1,7 +1,6 @@
 
 
 
-* flytta bilder till Image folder. Det ser för jäkligt ut just nu.
 
 
 
@@ -11,11 +10,6 @@
 
 * Börja tänka mer på publiceringen.
 * REFLEKTION map IOSample
-
-
-
-
-
 
 
 
