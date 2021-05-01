@@ -2,10 +2,7 @@
 
 
 
-
-
-
-2: URL timer grejen.
+2: URL. Spara time start, time stop. Och sedan valda kurvor.
 3: Det hade varit läckert med picture filter.....rörelse alltså. då får jag även min första useCase + att jag kan använda Domain.
 
 * Börja tänka mer på publiceringen.
@@ -88,3 +85,5 @@ Inför storstädningen:
 TROLIGEN UTGÅR:
 * plotta analoga signaler (tror denna utgår, det kommer ändå inte bli snyggt)
 * fråga jonathan efter kontakt till yrkeslivet, visa film och fråga...
+
+

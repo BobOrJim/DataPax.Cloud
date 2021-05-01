@@ -50,6 +50,14 @@ a, .btn-link {
         top: 0.5rem;
     }
 
+.MySaveToUrl {
+    position: absolute;
+    top: 0px;
+/*    left: 96%;*/
+/*left: 90vw;*/
+    right: 12px;
+}
+
 .MyInvisibleButton {
     background-color: Transparent;
     background-repeat: no-repeat;

@@ -12,6 +12,7 @@ namespace Presentation.WebBlazor.ComponentCreation
         public ButtonComponent HalfBack = new ButtonComponent();
         public ButtonComponent HalfForw = new ButtonComponent();
         public ButtonComponent FullForw = new ButtonComponent();
+        public ButtonComponent devTestButton = new ButtonComponent();
     }
 }
 
