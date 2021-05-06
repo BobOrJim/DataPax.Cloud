@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Presentation.WebBlazor;
-using Syncfusion.Blazor;
 using Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
@@ -59,7 +58,6 @@ namespace Presentation.WebBlazor
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-            services.AddSyncfusionBlazor(); //Jimmy
 
             //JAG TROR ALLT NEDAN SKALL RENSAS BORT. DET ENDA SOM SKALL VARA HÄR, ÄR SÅDANT SOM BEHÖVS PÅ FLERA STÄLLEN.
 

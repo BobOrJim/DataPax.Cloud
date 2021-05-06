@@ -138,3 +138,12 @@ Vestas_Verk12_Koppling_TryckAvvikelse
 Vestas_Verk12_Vaderstation_WatchDog
 
 
+UPPDATERINGS HIRARKI:
+TriggerListClick ->
+	GlobalTime time grejor
+	Update spinboxes 1-6 ->
+		GlobalTime grejor
+		Update graph
+		Update picture stack (med tidstämpel LastUpdateStartStop property för att undvika 6st updates)
+Half Forw etc
+	Update spinboxes

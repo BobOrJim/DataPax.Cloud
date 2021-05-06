@@ -1,5 +1,5 @@
 ﻿@page "/PresentationPage/"
-@page "/PresentationPage/{*MyURLInputParams}"
+@page "/PresentationPage/{*URLParameters}"
 
 
 @using System
@@ -32,7 +32,7 @@
 
 @code{
     [Parameter]
-    public string MyURLInputParams { get; set; }
+    public string URLParameters { get; set; }
 
     private PictureServiceCam1 pictureServiceCam1;
     private PictureServiceCam2 pictureServiceCam2;
@@ -44,7 +44,6 @@
     private List<TreeNode> TreeNodeList = new List<TreeNode>(); //Kommer länkas ihop med denna blazor komponent: _TreeViewComponents.IOTreeView2Component
     private List<ListItem> ListItemList = new List<ListItem>(); //Kommer länkas ihop med denna blazor komponent: _ClickableListComponents.DeviationListViewComponent
     private TimeController timeController = new TimeController();
-
     private FixedSizedQueue<string> signalsToPlotQueue = new FixedSizedQueue<string>(4);
 
     //Method invoked when the component is ready to start, having recieved its initial parameters from its parrent renderer tree
@@ -66,17 +65,6 @@
         treeUpdateUtils = new TreeUpdateUtils();
 
     }
-
-    private void InjectURLParamsToProgram()
-    {
-        Debug.WriteLine("InjectURLParamsToProgram körs");
-        timeController.StartTimeUnix = Convert.ToInt64(MyURLInputParams);
-        timeController.WriteUnixToSolartime_StartTime();
-        //timeController.EndTimeUnix = timeController.EndTimeUnix - 1000;
-        //timeController.WriteUnixToSolartime_EndTime();
-        WriteTimeControllerToNumericTextBoxes();
-    }
-
     protected override async Task OnInitializedAsync()
     {
         _NumericTextBoxUseCases.Hej();
@@ -84,7 +72,6 @@
         _ButtonUseCases.DepInjection(_NumericTextBoxComponents);
 
     }
-
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
@@ -104,22 +91,16 @@
             _ImgSrcComponents.RightPicture.UpdateState();
         }
     }
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            Debug.WriteLine($"These URL parameters will be read to the app {MyURLInputParams}");
-            InjectURLParamsToProgram();
-            //EventCallback_ButtonFullForw();
+            Debug.WriteLine($"These URL parameters will be read to the app {URLParameters}");
+            ReadParamsFromURL();
+            UpdatePlot();
             StateHasChanged();
         }
     }
-
-
-
-
-
     protected override void OnParametersSet()
     {
 
@@ -257,12 +238,6 @@
         //Debug.WriteLine($" first second third {First} {Second} {Third}");
         plotService.PlotXAxisTo(First, Second, Third, "wwwroot/Images/PlotWorkCanvas.jpeg");
 
-
-
-
-
-
-
         //Debug.WriteLine($"In UpdatePlot. Queue.Count = {signalsToPlotQueue.Queue.Count}");
         List<string> SignalsToPlot = signalsToPlotQueue.ContentsInQueue();
         //Debug.WriteLine($"In UpdatePlot. Queue.Count = {signalsToPlotQueue.Queue.Count}");
@@ -299,16 +274,52 @@
         _ImgSrcComponents.Plot.UpdateState();
 
 
-
+        WriteParamsToURL();
     }
 
     private void WriteParamsToURL()
     {
-        MyURLInputParams = timeController.StartTimeUnix.ToString() + "-" + timeController.EndTimeUnix.ToString();
-        signalsToPlotQueue
-
+        URLParameters = timeController.StartTimeUnix.ToString() + "-" + timeController.EndTimeUnix.ToString();
+        List<string> SignalsToWriteToURL = signalsToPlotQueue.ContentsInQueue();
+        foreach (string s in SignalsToWriteToURL)
+        {
+            URLParameters = URLParameters + "-" + s;
+        }
     }
-    //signalsToPlotQueue
+    private void ReadParamsFromURL()
+    {
+        Debug.WriteLine("ReadParamsFromURL körs");
+        try
+        {
+            if (URLParameters is not null)
+            {
+                string[] URLParametersArray = URLParameters.Split('-');
+
+                for (int i = 0; i < URLParametersArray.Length; i++)
+                {
+                    Debug.WriteLine($"ReadParamsFromURL. Parsat item {i} är: {URLParametersArray[i]}");
+                }
+                timeController.StartTimeUnix = Convert.ToInt64(URLParametersArray[0]);
+                timeController.WriteUnixToSolartime_StartTime();
+                timeController.EndTimeUnix = Convert.ToInt64(URLParametersArray[1]);
+                timeController.WriteUnixToSolartime_EndTime();
+                WriteTimeControllerToNumericTextBoxes();
+
+                if (URLParametersArray[2] is not null)
+                    signalsToPlotQueue.Push(URLParametersArray[2]);
+                if (URLParametersArray[3] is not null)
+                    signalsToPlotQueue.Push(URLParametersArray[3]);
+                if (URLParametersArray[4] is not null)
+                    signalsToPlotQueue.Push(URLParametersArray[4]);
+                if (URLParametersArray[5] is not null)
+                    signalsToPlotQueue.Push(URLParametersArray[5]);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine($"Exception In ReadParamsFromURL. Exception = {e}");
+        }
+    }
 
 
     public void EventCallback_ButtonFullBack()
@@ -340,22 +351,18 @@
     }
     public void EventCallback_ButtonFullForw()
     {
-
-        Debug.WriteLine("Kör testknapp 4");
-        InjectURLParamsToProgram();
-        //timeController.StartTimeUnix = timeController.StartTimeUnix + 1000;
-        //timeController.WriteUnixToSolartime_StartTime();
-        //timeController.EndTimeUnix = timeController.EndTimeUnix + 1000;
-        //timeController.WriteUnixToSolartime_EndTime();
-        //WriteTimeControllerToNumericTextBoxes();
-        //UpdatePlot();
+        //Debug.WriteLine("Kör testknapp 4");
+        timeController.StartTimeUnix = timeController.StartTimeUnix + 1000;
+        timeController.WriteUnixToSolartime_StartTime();
+        timeController.EndTimeUnix = timeController.EndTimeUnix + 1000;
+        timeController.WriteUnixToSolartime_EndTime();
+        WriteTimeControllerToNumericTextBoxes();
+        UpdatePlot();
     }
-    //class="MySaveToUrl"
-}
-
+    }
 
 <div class="MySaveToUrl">
-    <a href="PresentationPage/@MyURLInputParams">
+    <a href="PresentationPage/@URLParameters">
         <img border="0" src="Images/SaveIcon.png" width="50" height="50">
     </a>
 </div>
@@ -660,5 +667,3 @@
         </div>
     </div>
 </div>
-
-

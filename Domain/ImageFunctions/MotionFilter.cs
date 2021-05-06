@@ -9,6 +9,28 @@ namespace Domain.Services
     public class PictureFilters
     {
 
+        string pathTestImg1 = "";
+        string pathTestImg2 = "";
+        string pathOutputImage = "";
+
+
+
+
+
+        //Denna är jäkligt lättjobbad. Undra vad dess prestanda är.
+//    for (int y = 0; y<height; y++)
+//    {
+//    for (int x = 0; x<width; x++)
+//    {
+//        pix1 = src.GetPixel(x, y);
+//        pix2 = comp.GetPixel(x, y);
+//        if (pix1 != pix2)
+//        {
+//            dest.SetPixel(x, y, pix1);
+//        }
+//}
+//}
+
 
 
         // Temp förändring filter

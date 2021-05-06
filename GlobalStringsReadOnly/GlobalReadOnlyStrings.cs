@@ -12,11 +12,11 @@ namespace GlobalStringsReadOnly
     //posibly this file as well.
 	static public class GlobalReadOnlyStrings
     {
-        public static readonly string pathCamera1WorkFolder = @"C:\Users\Jimmy\Desktop\Tests\V033\Presentation\Cam1WorkPictures\";
-        public static readonly string pathCamera1KeepFolder = @"C:\Users\Jimmy\Desktop\Tests\V033\Presentation\Cam1KeepPictures\";
+        //public static readonly string pathCamera1WorkFolder = @"C:\Users\Jimmy\Desktop\Tests\V033\Presentation\Cam1WorkPictures\";
+        //public static readonly string pathCamera1KeepFolder = @"C:\Users\Jimmy\Desktop\Tests\V033\Presentation\Cam1KeepPictures\";
 
-        public static readonly string pathCamera2WorkFolder = @"C:\Users\Jimmy\Desktop\Tests\V033\Presentation\Cam2WorkPictures\";
-        public static readonly string pathCamera2KeepFolder = @"C:\Users\Jimmy\Desktop\Tests\V033\Presentation\Cam2KeepPictures\";
+        //public static readonly string pathCamera2WorkFolder = @"C:\Users\Jimmy\Desktop\Tests\V033\Presentation\Cam2WorkPictures\";
+        //public static readonly string pathCamera2KeepFolder = @"C:\Users\Jimmy\Desktop\Tests\V033\Presentation\Cam2KeepPictures\";
 
 
         public static readonly string IOTablesTemplateColumnNames  = " @ToTable_TEXT, @Timestamp_unix_BIGINT, @Datestamp_TEXT, @DeviationID_TEXT, @Hub2Hub_KKS123_SystemVolt_Erratic, " +
