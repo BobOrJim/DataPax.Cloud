@@ -1,4 +1,44 @@
 
+Arbetspaket.
+
+
+2: Om Motion är vald skall jag försöka plocka fram två bilder med nedan
+_ImgSrcComponents.RightPicture.PicturePathString = pictureServiceCam2.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
+
+3: Dessa bilder skall skapa en Motion bild, som alltid ligger på samma plats, och är hårdkodad.
+Typ nåt sånthär:
+PicturePathsStringList.Add("Cam1KeepPictures/" + picture.FileNameCurrent_TEXT + ".jpeg");
+Om det trasslar så kan jag tjuvkolla i denna fil PictureDataAccessCam1.
+
+
+4: När range slider rör på sig, och Motion är vald, så skall nu min hårdkodade bild/path läsas in.
+
+
+
+
+
+vid skapa en Motion bild, som är hårdkodad på en fast plats.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+rensa drop down skräpet i site.css som är relaterat till dropDownMenu.
+fixa någon CSS på dropDown.
+
+
+
+
+
 1: Start url
 2: Ta bort nuvarande labbgrejor på startsidan.
 3: Fundera på storstädningen....

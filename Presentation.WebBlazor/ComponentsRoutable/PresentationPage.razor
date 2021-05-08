@@ -24,6 +24,8 @@
 @inject Presentation.WebBlazor.ComponentCreation.ImgSrcComponents _ImgSrcComponents
 @inject Presentation.WebBlazor.ComponentCreation.TreeViewComponents _TreeViewComponents
 @inject Presentation.WebBlazor.ComponentCreation.ClickableListComponents _ClickableListComponents
+@inject Presentation.WebBlazor.ComponentCreation.DropDownMenuComponents _DropDownMenuComponents
+
 
 @inject Infrastructure.DataAccess.EFAccessCam1KeepTable eFAccessCam1KeepTable
 @inject Infrastructure.DataAccess.EFAccessCam2KeepTable eFAccessCam2KeepTable
@@ -321,7 +323,6 @@
         }
     }
 
-
     public void EventCallback_ButtonFullBack()
     {
         timeController.StartTimeUnix = timeController.StartTimeUnix - 1000;
@@ -351,15 +352,27 @@
     }
     public void EventCallback_ButtonFullForw()
     {
+        _ButtonUseCases.TestButtonClicked();
         //Debug.WriteLine("Kör testknapp 4");
-        timeController.StartTimeUnix = timeController.StartTimeUnix + 1000;
-        timeController.WriteUnixToSolartime_StartTime();
-        timeController.EndTimeUnix = timeController.EndTimeUnix + 1000;
-        timeController.WriteUnixToSolartime_EndTime();
-        WriteTimeControllerToNumericTextBoxes();
-        UpdatePlot();
+        //timeController.StartTimeUnix = timeController.StartTimeUnix + 1000;
+        //timeController.WriteUnixToSolartime_StartTime();
+        //timeController.EndTimeUnix = timeController.EndTimeUnix + 1000;
+        //timeController.WriteUnixToSolartime_EndTime();
+        //WriteTimeControllerToNumericTextBoxes();
+        //UpdatePlot();
     }
+
+    public void EventCallback_LeftPictureDropDownMenu(string UserSelection)
+    {
+        Debug.WriteLine($"EventCallback_LeftPictureDropDownMenu click: {UserSelection}");
     }
+    public void EventCallback_RightPictureDropDownMenu(string UserSelection)
+    {
+        Debug.WriteLine($"EventCallback_RightPictureDropDownMenu : {UserSelection}");
+    }
+}
+
+
 
 <div class="MySaveToUrl">
     <a href="PresentationPage/@URLParameters">
@@ -405,7 +418,11 @@
             <ParagraphComponent CssClassStyle="MyBackgroundColor" @ref="_ParagraphComponents.LeftPictureTimeStamp" />
         </div>
         <div class="Row2Col5 MyRadialBackground">
-            <!-- Space -->
+            <DropDownMenu Cssdropbtn="dropbtn"
+                          Cssdropdown="dropdown"
+                          CssdropdownContent="dropdowncontent"
+                          @ref="_DropDownMenuComponents.LeftPictureDropDownMenu"
+                          MyCallback="EventCallback_LeftPictureDropDownMenu" />
         </div>
         <div class="Row2Col6 MyRadialBackground">
             <ParagraphComponent CssClassStyle="MyBackgroundColor" @ref="_ParagraphComponents.LeftPictureShowNumberOfTotal" />
@@ -414,7 +431,12 @@
             <ParagraphComponent CssClassStyle="MyBackgroundColor" @ref="_ParagraphComponents.RightPictureTimeStamp" />
         </div>
         <div class="Row2Col8 MyRadialBackground">
-            <!-- Space -->
+            <DropDownMenu Cssdropbtn="dropbtn"
+                          Cssdropdown="dropdown"
+                          CssdropdownContent="dropdowncontent"
+                          @ref="_DropDownMenuComponents.RightPictureDropDownMenu" 
+                          MyCallback="EventCallback_RightPictureDropDownMenu"
+            />
         </div>
         <div class="Row2Col9 MyRadialBackground">
             <ParagraphComponent CssClassStyle="MyBackgroundColor" @ref="_ParagraphComponents.RightPictureShowNumberOfTotal" />

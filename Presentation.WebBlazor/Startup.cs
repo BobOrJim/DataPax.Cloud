@@ -79,6 +79,8 @@ namespace Presentation.WebBlazor
 
             services.AddSingleton<Presentation.WebBlazor.ComponentCreation.ClickableListComponents>(); //JIMMY
 
+            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.DropDownMenuComponents>(); //JIMMY
+
             //MyInit myInit = new MyInit();
 
 
