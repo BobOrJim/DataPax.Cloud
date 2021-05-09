@@ -15,14 +15,11 @@
 @using Application.Utils
 @using System.Drawing.Imaging;
 @using System.Drawing;
-@using System.IO;
+
 
 @inject Presentation.WebBlazor.ComponentCreation.NumericTextBoxComponents _NumericTextBoxComponents
-@inject Application.UseCases.NumericTextBoxUseCases _NumericTextBoxUseCases
 @inject Presentation.WebBlazor.ComponentCreation.ButtonComponents _ButtonComponents
-@inject Application.UseCases.ButtonUseCases _ButtonUseCases
 @inject Presentation.WebBlazor.ComponentCreation.RangeSliderComponents _RangeSliderComponents
-@inject Application.UseCases.RangeSliderUseCases _RangeSliderUseCases
 @inject Presentation.WebBlazor.ComponentCreation.ParagraphComponents _ParagraphComponents
 @inject Presentation.WebBlazor.ComponentCreation.ImgSrcComponents _ImgSrcComponents
 @inject Presentation.WebBlazor.ComponentCreation.TreeViewComponents _TreeViewComponents
@@ -49,8 +46,9 @@
     private List<ListItem> ListItemList = new List<ListItem>(); //Kommer länkas ihop med denna blazor komponent: _ClickableListComponents.DeviationListViewComponent
     private TimeController timeController = new TimeController();
     private FixedSizedQueue<string> signalsToPlotQueue = new FixedSizedQueue<string>(4);
-    private ActivateFilterUseCase activateFilterUseCaseCam1 = new ActivateFilterUseCase();
-    private ActivateFilterUseCase activateFilterUseCaseCam2 = new ActivateFilterUseCase();
+    private ActivateImageFilterUseCase activateImageFilterUseCaseCam1 = new ActivateImageFilterUseCase();
+    private ActivateImageFilterUseCase activateImageFilterUseCaseCam2 = new ActivateImageFilterUseCase();
+    private PathRelatedImageUtils pathRelatedImageUtils = new PathRelatedImageUtils();
 
     //Method invoked when the component is ready to start, having recieved its initial parameters from its parrent renderer tree
     //1: protected override void OnInitialized()
@@ -69,13 +67,9 @@
         iODeviationService = new IODeviationService(new IODeviationDataAccess(eFAccessIODeviationTable));
         plotService = new PlotService();
         treeUpdateUtils = new TreeUpdateUtils();
-
     }
     protected override async Task OnInitializedAsync()
     {
-        _NumericTextBoxUseCases.Hej();
-        _NumericTextBoxUseCases.DepInjection(_NumericTextBoxComponents);
-        _ButtonUseCases.DepInjection(_NumericTextBoxComponents);
 
     }
     protected override void OnAfterRender(bool firstRender)
@@ -84,8 +78,8 @@
         {
             //Tilldelar träd data från db
             TreeNodeList = iOKeepTableService.IOColumnNamesAsTreeNodes();
-            _TreeViewComponents.IOTreeView2Component.TreeNodes = TreeNodeList;
-            _TreeViewComponents.IOTreeView2Component.UpdateState();
+            _TreeViewComponents.IOTreeViewComponent.TreeNodes = TreeNodeList;
+            _TreeViewComponents.IOTreeViewComponent.UpdateState();
             //Tilldelar trigger list data från db
             ListItemList = iODeviationService.DeviationListItemList();
             _ClickableListComponents.DeviationListViewComponent.ListItems = ListItemList;
@@ -127,8 +121,8 @@
         else //This is a Parent. I.E we invert "IsExpanded"
         {
             //Debug.WriteLine($"In EventCallback_TreeView. Denna sträng/nod kommer toggla expanded = {UserClickedOnThisTreeNode.Name} ");
-            _TreeViewComponents.IOTreeView2Component.TreeNodes = treeUpdateUtils.UpdateNodesToExpandInTree(TreeNodeList, UserClickedOnThisTreeNode);
-            _TreeViewComponents.IOTreeView2Component.UpdateState();
+            _TreeViewComponents.IOTreeViewComponent.TreeNodes = treeUpdateUtils.UpdateNodesToExpandInTree(TreeNodeList, UserClickedOnThisTreeNode);
+            _TreeViewComponents.IOTreeViewComponent.UpdateState();
         }
     }
     public void EventCallback_ListView(ListItem UserClickedOnThisListItem)
@@ -159,10 +153,10 @@
             //try catch här
             string path1 = pictureServiceCam1.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue);
             string path2 = pictureServiceCam1.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue - 1);
-            Bitmap BitmapFromPath1 = ConvertToBitmap(path1);
-            Bitmap BitmapFromPath2 = ConvertToBitmap(path2);
-            Bitmap MotionBitmap = activateFilterUseCaseCam1.ActivateThisFilterOnThesePictures("Motion", BitmapFromPath1, BitmapFromPath2);
-            SaveToDisk(MotionBitmap, "Cam1MotionFilterOnPictures/MotionImage.jpeg");
+            Bitmap BitmapFromPath1 = pathRelatedImageUtils.ConvertToBitmap(path1);
+            Bitmap BitmapFromPath2 = pathRelatedImageUtils.ConvertToBitmap(path2);
+            Bitmap MotionBitmap = activateImageFilterUseCaseCam1.ActivateThisFilterOnThesePictures("Motion", BitmapFromPath1, BitmapFromPath2);
+            pathRelatedImageUtils.SaveToDisk(MotionBitmap, "Cam1MotionFilterOnPictures/MotionImage.jpeg");
             _ImgSrcComponents.LeftPicture.PicturePathString = "Cam1MotionFilterOnPictures/MotionImage.jpeg" + "?" + DateTime.Now.Ticks; //To force refresh
         }
         _ImgSrcComponents.LeftPicture.UpdateState();
@@ -182,53 +176,17 @@
 
         if ((_DropDownMenuComponents.RightPictureDropDownMenu.CurrentValue == "Motion") && (_RangeSliderComponents.RightPictureRangeSlider.CurrentValue < _RangeSliderComponents.RightPictureRangeSlider.MaxValue))
         {
-            Debug.WriteLine($"In ActionEventCallback_RightPictureRangeSlider:  Trying for fk sake");
             //try catch här
             string path1 = pictureServiceCam2.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
             string path2 = pictureServiceCam2.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue - 1);
-            Bitmap BitmapFromPath1 = ConvertToBitmap(path1);
-            Bitmap BitmapFromPath2 = ConvertToBitmap(path2);
-            Debug.WriteLine($"In ActionEventCallback_RightPictureRangeSlider:  Trying for fk sake");
-
-            Bitmap MotionBitmap = activateFilterUseCaseCam2.ActivateThisFilterOnThesePictures("Motion", BitmapFromPath1, BitmapFromPath2);
-            SaveToDisk(MotionBitmap, "Cam2MotionFilterOnPictures/MotionImage.jpeg");
+            Bitmap BitmapFromPath1 = pathRelatedImageUtils.ConvertToBitmap(path1);
+            Bitmap BitmapFromPath2 = pathRelatedImageUtils.ConvertToBitmap(path2);
+            Bitmap MotionBitmap = activateImageFilterUseCaseCam2.ActivateThisFilterOnThesePictures("Motion", BitmapFromPath1, BitmapFromPath2);
+            pathRelatedImageUtils.SaveToDisk(MotionBitmap, "Cam2MotionFilterOnPictures/MotionImage.jpeg");
             _ImgSrcComponents.RightPicture.PicturePathString = "Cam2MotionFilterOnPictures/MotionImage.jpeg" + "?" + DateTime.Now.Ticks; //To force refresh
         }
 
         _ImgSrcComponents.RightPicture.UpdateState();
-    }
-    private void SaveToDisk(Bitmap bitmap, string filePath)
-    {
-        //Hmm, och vart skall jag lägga denna. Jag tycker det känns lämpligt att bara arbeta med relativa paths från ett ställe.
-        filePath = "wwwroot/" + filePath;  //src in markup, and Image.FromFile(filePath); use a different relative path system.
-        try
-        {
-            if (true) //if (Directory.Exists(path))
-            {
-                //Debug.WriteLine($"Försöker spara bild till path {filePath}");
-                bitmap.Save(filePath, ImageFormat.Jpeg);
-            }
-        }
-        catch (Exception e)
-        {
-            System.Diagnostics.Debug.WriteLine($"Exception in MotionFilter:SaveToDisk : " + e);
-        }
-    }
-    private Bitmap ConvertToBitmap(string filePath)
-    {
-        //hmm, vart skall jag lägga denna. Jag vill inte skicka en path ned till Application->Domain. Kanske egen klass i PresentaionWebblazor.
-        //Dessutom känns det olämpligt att skicka relativa paths, när de skickas till andra projekt.
-        filePath = "wwwroot/" + filePath;  //src in markup, and Image.FromFile(filePath); use a different relative path system.
-        Bitmap bitmap = null;
-        try
-        {
-            bitmap = (Bitmap)Image.FromFile(filePath);
-        }
-        catch (Exception e)
-        {
-            Debug.WriteLine($"In ConvertToBitmap. Exception = {e} ");
-        }
-        return bitmap;
     }
     public void EventCallback_NumericTextBoxesStartAndStopTime()
     {
@@ -402,14 +360,13 @@
     }
     public void EventCallback_ButtonFullForw()
     {
-        _ButtonUseCases.TestButtonClicked();
-        //Debug.WriteLine("Kör testknapp 4");
-        //timeController.StartTimeUnix = timeController.StartTimeUnix + 1000;
-        //timeController.WriteUnixToSolartime_StartTime();
-        //timeController.EndTimeUnix = timeController.EndTimeUnix + 1000;
-        //timeController.WriteUnixToSolartime_EndTime();
-        //WriteTimeControllerToNumericTextBoxes();
-        //UpdatePlot();
+        Debug.WriteLine("Kör testknapp 4");
+        timeController.StartTimeUnix = timeController.StartTimeUnix + 1000;
+        timeController.WriteUnixToSolartime_StartTime();
+        timeController.EndTimeUnix = timeController.EndTimeUnix + 1000;
+        timeController.WriteUnixToSolartime_EndTime();
+        WriteTimeControllerToNumericTextBoxes();
+        UpdatePlot();
     }
     public void EventCallback_LeftPictureDropDownMenu(string UserSelection)
     {
@@ -434,8 +391,8 @@
     <div class="Row1">
         <div class="Row1Col1 MyRadialBackground">
             <!-- SignalTreeView -->
-            <TreeView2Component CssClassStyle="MyInvisibleButton"
-                                @ref="_TreeViewComponents.IOTreeView2Component"
+            <TreeViewComponent CssClassStyle="MyInvisibleButton"
+                                @ref="_TreeViewComponents.IOTreeViewComponent"
                                 MyCallback="EventCallback_TreeView" />
         </div>
         <div class="Row1Col2 MyRadialBackground">
@@ -499,7 +456,7 @@
                                      ThisComponentInstanceName="_NumericTextBoxComponents.DeviationYear"
                                      MinValue="20"
                                      MaxValue="30"
-                                     ActionEventCallback="_NumericTextBoxUseCases.DeviationYearValueChangedEvent">
+                                     >
             </NumericTextBoxComponent>
         </div>
         <div class="Row3Col3 MyRadialBackground">
@@ -509,7 +466,7 @@
                                      ThisComponentInstanceName="_NumericTextBoxComponents.DeviationYear"
                                      MinValue="1"
                                      MaxValue="12"
-                                     ActionEventCallback="_NumericTextBoxUseCases.DeviationMonthValueChangedEvent">
+                                     >
             </NumericTextBoxComponent>
         </div>
         <div class="Row3Col4 MyRadialBackground">
@@ -519,7 +476,7 @@
                                      ThisComponentInstanceName="_NumericTextBoxComponents.DeviationYear"
                                      MinValue="1"
                                      MaxValue="31"
-                                     ActionEventCallback="_NumericTextBoxUseCases.DeviationDayValueChangedEvent">
+                                     >
             </NumericTextBoxComponent>
         </div>
 

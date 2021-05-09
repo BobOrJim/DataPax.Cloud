@@ -11,7 +11,7 @@
     input[type=number]::-webkit-outer-spin-button {
         -webkit-appearance: none;
         margin: 0;*/
-    }
+    
 </style>
 
 <div>
@@ -51,12 +51,6 @@
         //Debug.WriteLine($"OnInput.....{CurrentValue}");
         //await LocalStorage.SetAsync(ThisComponentInstanceName, CurrentValue);
         ActionEventCallback?.Invoke();
-    }
-
-    public void ExternalUpdate()
-    {
-        //Debug.WriteLine($"ExternalUpdate.........and my name is {ThisComponentInstanceName} ");
-        //CurrentValue = 25;
     }
 
 }

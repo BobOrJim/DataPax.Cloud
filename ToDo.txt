@@ -1,27 +1,32 @@
+Gå igenom varje fil och gå igenom följande lista.
 
+0: Snygga till, och ta bort kommentarer mm
+1: Try/catch
+2: Kolla @using
 
-
-2: SaveToDisk och ConvertToBitmap skall brytas ut från presentationPage.
-
-
-
-
-11: Snyggare start url
-12: Ta bort nuvarande labbgrejor på startsidan.
-13: REFLEKTION map IOSample
-14: Städa use cases
-15: Städa varningar.
-16: Try/catch överallt, gå igenom varje fil.
-17: Ta bort alla External
-18: Ta bort template kod relaterad till wetherForcast.
-19: Ta en sista fuderar på de tre lådorna som inte används
 
 ###############################################################################################################################
 
 
+20: Ta en sista funderare på de tre lådorna som inte används
+15: Städa varningar.
 
-TROLIGEN UTGÅR:
+
+
+
+21: Linked<->Git. Linked text. Posta X, preppa X
+
+54 classer i detta projekt.
+
+###############################################################################################################################
+
+TROLIGEN UTGÅR då jag önskar prioritera docker, designpatterns o devops nu :
+* REFLEKTION map IOSample
 * plotta analoga signaler (tror denna utgår, det kommer ändå inte bli snyggt)
-* fråga jonathan efter kontakt till yrkeslivet, visa film och fråga...
 
-
+###############################################################################################################################
+Till nästa projekt:
+Corona Campfire, med en gästbook.
+CI/CD
+Azure Devops
+Docker.

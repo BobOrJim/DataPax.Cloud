@@ -1,12 +1,11 @@
 ﻿using Presentation.WebBlazor.ComponentsNonRoutable;
-using Presentation.WebBlazor.Interfaces;
 using System;
 using System.Diagnostics;
 
 
-namespace Presentation.WebBlazor.ComponentCreation //Stuff i denna fil aktiveras via User Events.
+namespace Presentation.WebBlazor.ComponentCreation
 {
-    public class NumericTextBoxComponents : INumericTextBoxComponents
+    public class NumericTextBoxComponents
     {
         //Rad 3
         public NumericTextBoxComponent DeviationYear = new NumericTextBoxComponent();
@@ -26,25 +25,6 @@ namespace Presentation.WebBlazor.ComponentCreation //Stuff i denna fil aktiveras
         public NumericTextBoxComponent EndTimeHour = new NumericTextBoxComponent();
         public NumericTextBoxComponent EndTimeMinute = new NumericTextBoxComponent();
         public NumericTextBoxComponent EndTimeSecond = new NumericTextBoxComponent();
-
-
-
-        DateTime currentDate = DateTime.Now;
-        public long elapsedTicks { get; private set; }
-        public NumericTextBoxComponents()
-        {
-            elapsedTicks = currentDate.Ticks;
-            //Debug.WriteLine($"Im a NumericTextBoxComponents and i was born on Tick: {elapsedTicks} ");
-        }
-
-        public void EndTimeYear_ExternalUpdate()
-        {
-            EndTimeYear.ExternalUpdate();
-
-            //long ticks = _NumericTextBoxComponents.EndTimeYear.ObjectCreatedAtTick();
-            //Debug.WriteLine($"Im a NumericTextBoxComponents and i was born on Tick: {ticks} ");
-        }
-
 
     }
 }

@@ -10,7 +10,7 @@ namespace Presentation.WebBlazor.ComponentCreation
 {
     public class TreeViewComponents
     {
-        public TreeView2Component IOTreeView2Component = new TreeView2Component();
+        public TreeViewComponent IOTreeViewComponent = new TreeViewComponent();
 
     }
 }

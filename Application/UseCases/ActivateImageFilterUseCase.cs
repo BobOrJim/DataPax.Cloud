@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace Application.UseCases
 {
-    public class ActivateFilterUseCase
+    public class ActivateImageFilterUseCase
     {
 
         MotionFilter motionFilter = new MotionFilter();

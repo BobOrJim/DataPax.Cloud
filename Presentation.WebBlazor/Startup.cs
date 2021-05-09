@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Presentation.WebBlazor.Data;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,19 +57,17 @@ namespace Presentation.WebBlazor
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+
 
             //JAG TROR ALLT NEDAN SKALL RENSAS BORT. DET ENDA SOM SKALL VARA HÄR, ÄR SÅDANT SOM BEHÖVS PÅ FLERA STÄLLEN.
 
             //Singleton objects are the same for every object and every request
             services.AddSingleton<Presentation.WebBlazor.ComponentCreation.NumericTextBoxComponents>(); //JIMMY
-            services.AddSingleton<Application.UseCases.NumericTextBoxUseCases>(); //JIMMY
+
 
             services.AddSingleton<Presentation.WebBlazor.ComponentCreation.ButtonComponents>(); //JIMMY
-            services.AddSingleton<Application.UseCases.ButtonUseCases>(); //JIMMY
 
             services.AddSingleton<Presentation.WebBlazor.ComponentCreation.RangeSliderComponents>(); //JIMMY
-            services.AddSingleton<Application.UseCases.RangeSliderUseCases>(); //JIMMY
 
             services.AddSingleton<Presentation.WebBlazor.ComponentCreation.ParagraphComponents>(); //JIMMY
 
@@ -81,7 +79,6 @@ namespace Presentation.WebBlazor
 
             services.AddSingleton<Presentation.WebBlazor.ComponentCreation.DropDownMenuComponents>(); //JIMMY
 
-            //MyInit myInit = new MyInit();
 
 
 
