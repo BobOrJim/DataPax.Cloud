@@ -49,44 +49,17 @@ namespace Presentation.WebBlazor
                 options.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
 
-
-
-
-
-
-
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-
-            //JAG TROR ALLT NEDAN SKALL RENSAS BORT. DET ENDA SOM SKALL VARA HÄR, ÄR SÅDANT SOM BEHÖVS PÅ FLERA STÄLLEN.
-
-            //Singleton objects are the same for every object and every request
-            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.NumericTextBoxComponents>(); //JIMMY
-
-
-            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.ButtonComponents>(); //JIMMY
-
-            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.RangeSliderComponents>(); //JIMMY
-
-            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.ParagraphComponents>(); //JIMMY
-
-            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.ImgSrcComponents>(); //Jimmy
-
-            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.TreeViewComponents>(); //JIMMY
-
-            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.ClickableListComponents>(); //JIMMY
-
-            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.DropDownMenuComponents>(); //JIMMY
-
-
-
-
-
-
-
-
-
+            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.NumericTextBoxComponents>(); 
+            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.ButtonComponents>(); 
+            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.RangeSliderComponents>(); 
+            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.ParagraphComponents>(); 
+            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.ImgSrcComponents>(); 
+            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.TreeViewComponents>(); 
+            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.ClickableListComponents>(); 
+            services.AddSingleton<Presentation.WebBlazor.ComponentCreation.DropDownMenuComponents>(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

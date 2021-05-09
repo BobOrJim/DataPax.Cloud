@@ -13,8 +13,7 @@ namespace Presentation.WebBlazor
     {
         public static void Main(string[] args)
         {
-            //okay....first thing first...
-            //Lets share a beer in Borås :) Jimmy.Nordin.1979@gmail.com
+            //Share a beer in Borås :) Jimmy.Nordin.1979@gmail.com
             CreateHostBuilder(args).Build().Run();
  
         }

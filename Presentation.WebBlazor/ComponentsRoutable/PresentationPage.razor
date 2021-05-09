@@ -1,7 +1,6 @@
 ﻿@page "/PresentationPage/"
 @page "/PresentationPage/{*URLParameters}"
 
-
 @using System
 @using System.Diagnostics
 @using Application.UseCases
@@ -16,7 +15,6 @@
 @using System.Drawing.Imaging;
 @using System.Drawing;
 
-
 @inject Presentation.WebBlazor.ComponentCreation.NumericTextBoxComponents _NumericTextBoxComponents
 @inject Presentation.WebBlazor.ComponentCreation.ButtonComponents _ButtonComponents
 @inject Presentation.WebBlazor.ComponentCreation.RangeSliderComponents _RangeSliderComponents
@@ -25,8 +23,6 @@
 @inject Presentation.WebBlazor.ComponentCreation.TreeViewComponents _TreeViewComponents
 @inject Presentation.WebBlazor.ComponentCreation.ClickableListComponents _ClickableListComponents
 @inject Presentation.WebBlazor.ComponentCreation.DropDownMenuComponents _DropDownMenuComponents
-
-
 @inject Infrastructure.DataAccess.EFAccessCam1KeepTable eFAccessCam1KeepTable
 @inject Infrastructure.DataAccess.EFAccessCam2KeepTable eFAccessCam2KeepTable
 @inject Infrastructure.DataAccess.EFAccessIODeviationTable eFAccessIODeviationTable
@@ -35,11 +31,11 @@
 @code{
     [Parameter]
     public string URLParameters { get; set; }
+
     private PictureServiceCam1 pictureServiceCam1;
     private PictureServiceCam2 pictureServiceCam2;
     private IOKeepTableService iOKeepTableService;
     private IODeviationService iODeviationService;
-
     private PlotService plotService;
     private TreeUpdateUtils treeUpdateUtils;
     private List<TreeNode> TreeNodeList = new List<TreeNode>(); //Kommer länkas ihop med denna blazor komponent: _TreeViewComponents.IOTreeView2Component
@@ -59,247 +55,304 @@
     //4: protected override Task OnParametersSetAsync()
     //Returns a flag to indicate wheter the component should renderer.
     //5: protected override bool ShouldRender()
+
     protected override void OnInitialized()
     {
-        pictureServiceCam1 = new PictureServiceCam1(new PictureDataAccessCam1(eFAccessCam1KeepTable));
-        pictureServiceCam2 = new PictureServiceCam2(new PictureDataAccessCam2(eFAccessCam2KeepTable));
-        iOKeepTableService = new IOKeepTableService(new IOKeepTableDataAccess(eFAccessIOKeepTable));
-        iODeviationService = new IODeviationService(new IODeviationDataAccess(eFAccessIODeviationTable));
-        plotService = new PlotService();
-        treeUpdateUtils = new TreeUpdateUtils();
+        try
+        {
+            pictureServiceCam1 = new PictureServiceCam1(new PictureDataAccessCam1(eFAccessCam1KeepTable));
+            pictureServiceCam2 = new PictureServiceCam2(new PictureDataAccessCam2(eFAccessCam2KeepTable));
+            iOKeepTableService = new IOKeepTableService(new IOKeepTableDataAccess(eFAccessIOKeepTable));
+            iODeviationService = new IODeviationService(new IODeviationDataAccess(eFAccessIODeviationTable));
+            plotService = new PlotService();
+            treeUpdateUtils = new TreeUpdateUtils();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in PresentationPage : OnInitialized: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : OnInitialized: ex.StackTrace = " + ex.StackTrace);
+        }
     }
     protected override async Task OnInitializedAsync()
     {
-
     }
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
         {
-            //Tilldelar träd data från db
-            TreeNodeList = iOKeepTableService.IOColumnNamesAsTreeNodes();
-            _TreeViewComponents.IOTreeViewComponent.TreeNodes = TreeNodeList;
-            _TreeViewComponents.IOTreeViewComponent.UpdateState();
-            //Tilldelar trigger list data från db
-            ListItemList = iODeviationService.DeviationListItemList();
-            _ClickableListComponents.DeviationListViewComponent.ListItems = ListItemList;
-            _ClickableListComponents.DeviationListViewComponent.UpdateState();
-            //Tilldelar bilder varsing startbild. Logga skall in här
-            _ImgSrcComponents.LeftPicture.PicturePathString = "Images/Logo.jpeg";
-            _ImgSrcComponents.LeftPicture.UpdateState();
-            _ImgSrcComponents.RightPicture.PicturePathString = "Images/Logo.jpeg";
-            _ImgSrcComponents.RightPicture.UpdateState();
+            try
+            {
+                //Tilldelar träd data från db
+                TreeNodeList = iOKeepTableService.IOColumnNamesAsTreeNodes();
+                _TreeViewComponents.IOTreeViewComponent.TreeNodes = TreeNodeList;
+                _TreeViewComponents.IOTreeViewComponent.UpdateState();
+                //Tilldelar trigger list data från db
+                ListItemList = iODeviationService.DeviationListItemList();
+                _ClickableListComponents.DeviationListViewComponent.ListItems = ListItemList;
+                _ClickableListComponents.DeviationListViewComponent.UpdateState();
+                //Tilldelar bilder varsing startbild. Logga skall in här
+                _ImgSrcComponents.LeftPicture.PicturePathString = "Images/Logo.jpeg";
+                _ImgSrcComponents.LeftPicture.UpdateState();
+                _ImgSrcComponents.RightPicture.PicturePathString = "Images/Logo.jpeg";
+                _ImgSrcComponents.RightPicture.UpdateState();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in PresentationPage : OnAfterRender: ex.Message = " + ex.Message);
+                Debug.WriteLine($"Exception in PresentationPage : OnAfterRender: ex.StackTrace = " + ex.StackTrace);
+            }
         }
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        try
         {
-            Debug.WriteLine($"These URL parameters will be read to the app {URLParameters}");
-            ReadParamsFromURL();
-            UpdatePlot();
-            StateHasChanged();
+            if (firstRender)
+            {
+                Debug.WriteLine($"These URL parameters will be read to the app {URLParameters}");
+                ReadParamsFromURL();
+                UpdatePlot();
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in PresentationPage : OnAfterRenderAsync: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : OnAfterRenderAsync: ex.StackTrace = " + ex.StackTrace);
         }
     }
     protected override void OnParametersSet()
     {
 
     }
-    //Denna funktion körs av rangeSlider eventCallback funktion. Eftersom jag har 2 objekt av alla objekt (ett som skapas av markup, och ett blazor som jag skapar
-    //så måste dessa kopplas samman. Detta görs med @ref, vilket innebär att markup objektet använder mitt objekts inställningar.
-    //Därför ligger merparten av denna kod här.
-    //Orsaken till att UpdateState ligger här, är för att det finns en bugg(?) i blazor, map på hur grejorna kopplas map lifecycle
-    //Dvs, enda sättet att få ett event i tex en rangeSlider, att trigga en rerender av ett paragraph objekt, är att anropa det via denna funktion.
     public void EventCallback_TreeView(TreeNode UserClickedOnThisTreeNode)
     {
-        if (UserClickedOnThisTreeNode.Level == 3) //This is a child/leaf.
+        try
         {
-            //Debug.WriteLine($"In EventCallback_TreeView. Denna sträng kommer skickas till RoundRobin = {UserClickedOnThisTreeNode.Name}");
-            signalsToPlotQueue.Push(UserClickedOnThisTreeNode.Name);
-            UpdatePlot();
+            if (UserClickedOnThisTreeNode.Level == 3) //This is a child/leaf.
+            {
+                //Debug.WriteLine($"In EventCallback_TreeView. Denna sträng kommer skickas till RoundRobin = {UserClickedOnThisTreeNode.Name}");
+                signalsToPlotQueue.Push(UserClickedOnThisTreeNode.Name);
+                UpdatePlot();
+            }
+            else //This is a Parent. I.E we invert "IsExpanded"
+            {
+                //Debug.WriteLine($"In EventCallback_TreeView. Denna sträng/nod kommer toggla expanded = {UserClickedOnThisTreeNode.Name} ");
+                _TreeViewComponents.IOTreeViewComponent.TreeNodes = treeUpdateUtils.UpdateNodesToExpandInTree(TreeNodeList, UserClickedOnThisTreeNode);
+                _TreeViewComponents.IOTreeViewComponent.UpdateState();
+            }
         }
-        else //This is a Parent. I.E we invert "IsExpanded"
+        catch (Exception ex)
         {
-            //Debug.WriteLine($"In EventCallback_TreeView. Denna sträng/nod kommer toggla expanded = {UserClickedOnThisTreeNode.Name} ");
-            _TreeViewComponents.IOTreeViewComponent.TreeNodes = treeUpdateUtils.UpdateNodesToExpandInTree(TreeNodeList, UserClickedOnThisTreeNode);
-            _TreeViewComponents.IOTreeViewComponent.UpdateState();
+            Debug.WriteLine($"Exception in PresentationPage : EventCallback_TreeView: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : EventCallback_TreeView: ex.StackTrace = " + ex.StackTrace);
         }
     }
     public void EventCallback_ListView(ListItem UserClickedOnThisListItem)
     {
-        //Debug.WriteLine($"Listview klick, user clicked on {UserClickedOnThisListItem.Name}");
-        timeController.StartTimeUnix = UserClickedOnThisListItem.Timestamp_unix_BIGINT - 500;
-        timeController.WriteUnixToSolartime_StartTime();
-        timeController.EndTimeUnix = UserClickedOnThisListItem.Timestamp_unix_BIGINT + 500;
-        timeController.WriteUnixToSolartime_EndTime();
-        WriteTimeControllerToNumericTextBoxes();
-        UpdatePlot();
+        try
+        {
+            //Debug.WriteLine($"Listview klick, user clicked on {UserClickedOnThisListItem.Name}");
+            timeController.StartTimeUnix = UserClickedOnThisListItem.Timestamp_unix_BIGINT - 500;
+            timeController.WriteUnixToSolartime_StartTime();
+            timeController.EndTimeUnix = UserClickedOnThisListItem.Timestamp_unix_BIGINT + 500;
+            timeController.WriteUnixToSolartime_EndTime();
+            WriteTimeControllerToNumericTextBoxes();
+            UpdatePlot();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in PresentationPage : EventCallback_ListView: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : EventCallback_ListView: ex.StackTrace = " + ex.StackTrace);
+        }
     }
     public void ActionEventCallback_LeftPictureRangeSlider()
     {
-        //Text bild nr vänster underfönster 1
-        _ParagraphComponents.LeftPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue.ToString() + " / " + pictureServiceCam1.NumberOfPicturesInStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
-        _ParagraphComponents.LeftPictureShowNumberOfTotal.UpdateState();
-        //Text tidstämpel vänster underfönster 2
-        _ParagraphComponents.LeftPictureTimeStamp.FirstString = pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(0, 10);
-        _ParagraphComponents.LeftPictureTimeStamp.SecondString = pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Length - 13);
-        pictureServiceCam1.UpdatePictureStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
-
-        _ParagraphComponents.LeftPictureTimeStamp.UpdateState();
-        _ImgSrcComponents.LeftPicture.PicturePathString = pictureServiceCam1.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue);
-
-        if ( (_DropDownMenuComponents.LeftPictureDropDownMenu.CurrentValue == "Motion") && (_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue < _RangeSliderComponents.LeftPictureRangeSlider.MaxValue) )
+        try
         {
-            //try catch här
-            string path1 = pictureServiceCam1.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue);
-            string path2 = pictureServiceCam1.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue - 1);
-            Bitmap BitmapFromPath1 = pathRelatedImageUtils.ConvertToBitmap(path1);
-            Bitmap BitmapFromPath2 = pathRelatedImageUtils.ConvertToBitmap(path2);
-            Bitmap MotionBitmap = activateImageFilterUseCaseCam1.ActivateThisFilterOnThesePictures("Motion", BitmapFromPath1, BitmapFromPath2);
-            pathRelatedImageUtils.SaveToDisk(MotionBitmap, "Cam1MotionFilterOnPictures/MotionImage.jpeg");
-            _ImgSrcComponents.LeftPicture.PicturePathString = "Cam1MotionFilterOnPictures/MotionImage.jpeg" + "?" + DateTime.Now.Ticks; //To force refresh
+            //Text bild nr vänster underfönster 1
+            _ParagraphComponents.LeftPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue.ToString() + " / " + pictureServiceCam1.NumberOfPicturesInStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
+            _ParagraphComponents.LeftPictureShowNumberOfTotal.UpdateState();
+            //Text tidstämpel vänster underfönster 2
+            _ParagraphComponents.LeftPictureTimeStamp.FirstString = pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(0, 10);
+            _ParagraphComponents.LeftPictureTimeStamp.SecondString = pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Length - 13);
+            pictureServiceCam1.UpdatePictureStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
+
+            _ParagraphComponents.LeftPictureTimeStamp.UpdateState();
+            _ImgSrcComponents.LeftPicture.PicturePathString = pictureServiceCam1.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue);
+
+            if ((_DropDownMenuComponents.LeftPictureDropDownMenu.CurrentValue == "Motion") && (_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue < _RangeSliderComponents.LeftPictureRangeSlider.MaxValue))
+            {
+                string path1 = pictureServiceCam1.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue);
+                string path2 = pictureServiceCam1.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue - 1);
+                Bitmap BitmapFromPath1 = pathRelatedImageUtils.ConvertToBitmap(path1);
+                Bitmap BitmapFromPath2 = pathRelatedImageUtils.ConvertToBitmap(path2);
+                Bitmap MotionBitmap = activateImageFilterUseCaseCam1.ActivateThisFilterOnThesePictures("Motion", BitmapFromPath1, BitmapFromPath2);
+                pathRelatedImageUtils.SaveToDisk(MotionBitmap, "Cam1MotionFilterOnPictures/MotionImage.jpeg");
+                _ImgSrcComponents.LeftPicture.PicturePathString = "Cam1MotionFilterOnPictures/MotionImage.jpeg" + "?" + DateTime.Now.Ticks; //To force refresh
+            }
+            _ImgSrcComponents.LeftPicture.UpdateState();
         }
-        _ImgSrcComponents.LeftPicture.UpdateState();
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in PresentationPage : ActionEventCallback_LeftPictureRangeSlider: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : ActionEventCallback_LeftPictureRangeSlider: ex.StackTrace = " + ex.StackTrace);
+        }
     }
     public void ActionEventCallback_RightPictureRangeSlider()
     {
-        //Text höger underfönster 1
-        _ParagraphComponents.RightPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.RightPictureRangeSlider.CurrentValue.ToString() + " / " + pictureServiceCam2.NumberOfPicturesInStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
-        _ParagraphComponents.RightPictureShowNumberOfTotal.UpdateState();
-        //Text höger underfönster 2
-        _ParagraphComponents.RightPictureTimeStamp.FirstString = pictureServiceCam2.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Substring(0, 10);
-        _ParagraphComponents.RightPictureTimeStamp.SecondString = pictureServiceCam2.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Substring(pictureServiceCam2.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Length - 13);
-        _ParagraphComponents.RightPictureTimeStamp.UpdateState();
-
-        _ImgSrcComponents.RightPicture.PicturePathString = pictureServiceCam2.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
-        //Debug.WriteLine($"In ActionEventCallback_RightPictureRangeSlider:  numbers of picture in stack = {pictureServiceCam2.NumberOfPicturesInStack(timeController.StartTimeUnix, timeController.EndTimeUnix)}");
-
-        if ((_DropDownMenuComponents.RightPictureDropDownMenu.CurrentValue == "Motion") && (_RangeSliderComponents.RightPictureRangeSlider.CurrentValue < _RangeSliderComponents.RightPictureRangeSlider.MaxValue))
+        try
         {
-            //try catch här
-            string path1 = pictureServiceCam2.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
-            string path2 = pictureServiceCam2.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue - 1);
-            Bitmap BitmapFromPath1 = pathRelatedImageUtils.ConvertToBitmap(path1);
-            Bitmap BitmapFromPath2 = pathRelatedImageUtils.ConvertToBitmap(path2);
-            Bitmap MotionBitmap = activateImageFilterUseCaseCam2.ActivateThisFilterOnThesePictures("Motion", BitmapFromPath1, BitmapFromPath2);
-            pathRelatedImageUtils.SaveToDisk(MotionBitmap, "Cam2MotionFilterOnPictures/MotionImage.jpeg");
-            _ImgSrcComponents.RightPicture.PicturePathString = "Cam2MotionFilterOnPictures/MotionImage.jpeg" + "?" + DateTime.Now.Ticks; //To force refresh
-        }
+            //Text höger underfönster 1
+            _ParagraphComponents.RightPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.RightPictureRangeSlider.CurrentValue.ToString() + " / " + pictureServiceCam2.NumberOfPicturesInStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
+            _ParagraphComponents.RightPictureShowNumberOfTotal.UpdateState();
+            //Text höger underfönster 2
+            _ParagraphComponents.RightPictureTimeStamp.FirstString = pictureServiceCam2.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Substring(0, 10);
+            _ParagraphComponents.RightPictureTimeStamp.SecondString = pictureServiceCam2.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Substring(pictureServiceCam2.RightPictureTimestampToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue).Length - 13);
+            _ParagraphComponents.RightPictureTimeStamp.UpdateState();
 
-        _ImgSrcComponents.RightPicture.UpdateState();
+            _ImgSrcComponents.RightPicture.PicturePathString = pictureServiceCam2.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
+            //Debug.WriteLine($"In ActionEventCallback_RightPictureRangeSlider:  numbers of picture in stack = {pictureServiceCam2.NumberOfPicturesInStack(timeController.StartTimeUnix, timeController.EndTimeUnix)}");
+
+            if ((_DropDownMenuComponents.RightPictureDropDownMenu.CurrentValue == "Motion") && (_RangeSliderComponents.RightPictureRangeSlider.CurrentValue < _RangeSliderComponents.RightPictureRangeSlider.MaxValue))
+            {
+                string path1 = pictureServiceCam2.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
+                string path2 = pictureServiceCam2.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue - 1);
+                Bitmap BitmapFromPath1 = pathRelatedImageUtils.ConvertToBitmap(path1);
+                Bitmap BitmapFromPath2 = pathRelatedImageUtils.ConvertToBitmap(path2);
+                Bitmap MotionBitmap = activateImageFilterUseCaseCam2.ActivateThisFilterOnThesePictures("Motion", BitmapFromPath1, BitmapFromPath2);
+                pathRelatedImageUtils.SaveToDisk(MotionBitmap, "Cam2MotionFilterOnPictures/MotionImage.jpeg");
+                _ImgSrcComponents.RightPicture.PicturePathString = "Cam2MotionFilterOnPictures/MotionImage.jpeg" + "?" + DateTime.Now.Ticks; //To force refresh
+            }
+
+            _ImgSrcComponents.RightPicture.UpdateState();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in PresentationPage : ActionEventCallback_RightPictureRangeSlider: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : ActionEventCallback_RightPictureRangeSlider: ex.StackTrace = " + ex.StackTrace);
+        }
     }
     public void EventCallback_NumericTextBoxesStartAndStopTime()
     {
-        WriteNumericTextBoxesToTimeController();
-        UpdatePlot();
+        try
+        {
+            WriteNumericTextBoxesToTimeController();
+            UpdatePlot();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in PresentationPage : EventCallback_NumericTextBoxesStartAndStopTime: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : EventCallback_NumericTextBoxesStartAndStopTime: ex.StackTrace = " + ex.StackTrace);
+        }
     }
     public void WriteTimeControllerToNumericTextBoxes()
     {
-        _NumericTextBoxComponents.StartTimeYear.CurrentValue = timeController.StartYear;
-        _NumericTextBoxComponents.StartTimeMonth.CurrentValue = timeController.StartMonth;
-        _NumericTextBoxComponents.StartTimeDay.CurrentValue = timeController.StartDay;
-        _NumericTextBoxComponents.StartTimeHour.CurrentValue = timeController.StartHour;
-        _NumericTextBoxComponents.StartTimeMinute.CurrentValue = timeController.StartMinute;
-        _NumericTextBoxComponents.StartTimeSecond.CurrentValue = timeController.StartSecond;
-        _NumericTextBoxComponents.EndTimeYear.CurrentValue = timeController.EndYear;
-        _NumericTextBoxComponents.EndTimeMonth.CurrentValue = timeController.EndMonth;
-        _NumericTextBoxComponents.EndTimeDay.CurrentValue = timeController.EndDay;
-        _NumericTextBoxComponents.EndTimeHour.CurrentValue = timeController.EndHour;
-        _NumericTextBoxComponents.EndTimeMinute.CurrentValue = timeController.EndMinute;
-        _NumericTextBoxComponents.EndTimeSecond.CurrentValue = timeController.EndSecond;
+        try
+        {
+            _NumericTextBoxComponents.StartTimeYear.CurrentValue = timeController.StartYear;
+            _NumericTextBoxComponents.StartTimeMonth.CurrentValue = timeController.StartMonth;
+            _NumericTextBoxComponents.StartTimeDay.CurrentValue = timeController.StartDay;
+            _NumericTextBoxComponents.StartTimeHour.CurrentValue = timeController.StartHour;
+            _NumericTextBoxComponents.StartTimeMinute.CurrentValue = timeController.StartMinute;
+            _NumericTextBoxComponents.StartTimeSecond.CurrentValue = timeController.StartSecond;
+            _NumericTextBoxComponents.EndTimeYear.CurrentValue = timeController.EndYear;
+            _NumericTextBoxComponents.EndTimeMonth.CurrentValue = timeController.EndMonth;
+            _NumericTextBoxComponents.EndTimeDay.CurrentValue = timeController.EndDay;
+            _NumericTextBoxComponents.EndTimeHour.CurrentValue = timeController.EndHour;
+            _NumericTextBoxComponents.EndTimeMinute.CurrentValue = timeController.EndMinute;
+            _NumericTextBoxComponents.EndTimeSecond.CurrentValue = timeController.EndSecond;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in PresentationPage : WriteTimeControllerToNumericTextBoxes: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : WriteTimeControllerToNumericTextBoxes: ex.StackTrace = " + ex.StackTrace);
+        }
     }
     public void WriteNumericTextBoxesToTimeController()
     {
-        //Debug.WriteLine($"In WriteNumericTextBoxesToTimeController. timeController.StartTimeUnix = {timeController.StartTimeUnix}");
-        timeController.StartYear = _NumericTextBoxComponents.StartTimeYear.CurrentValue;
-        timeController.StartMonth = _NumericTextBoxComponents.StartTimeMonth.CurrentValue;
-        timeController.StartDay = _NumericTextBoxComponents.StartTimeDay.CurrentValue;
-        timeController.StartHour = _NumericTextBoxComponents.StartTimeHour.CurrentValue;
-        timeController.StartMinute = _NumericTextBoxComponents.StartTimeMinute.CurrentValue;
-        timeController.StartSecond = _NumericTextBoxComponents.StartTimeSecond.CurrentValue;
-        timeController.WriteSolarTimeToUnix_StartTime();
-        //Debug.WriteLine($"In WriteNumericTextBoxesToTimeController. timeController.StartTimeUnix = {timeController.StartTimeUnix}");
-        timeController.EndYear = _NumericTextBoxComponents.EndTimeYear.CurrentValue;
-        timeController.EndMonth = _NumericTextBoxComponents.EndTimeMonth.CurrentValue;
-        timeController.EndDay = _NumericTextBoxComponents.EndTimeDay.CurrentValue;
-        timeController.EndHour = _NumericTextBoxComponents.EndTimeHour.CurrentValue;
-        timeController.EndMinute = _NumericTextBoxComponents.EndTimeMinute.CurrentValue;
-        timeController.EndSecond = _NumericTextBoxComponents.EndTimeSecond.CurrentValue;
-        timeController.WriteSolarTimeToUnix_EndTime();
-        //Debug.WriteLine($"In WriteNumericTextBoxesToTimeController. timeController.EndTimeUnix = {timeController.EndTimeUnix}");
+        try
+        {
+            //Debug.WriteLine($"In WriteNumericTextBoxesToTimeController. timeController.StartTimeUnix = {timeController.StartTimeUnix}");
+            timeController.StartYear = _NumericTextBoxComponents.StartTimeYear.CurrentValue;
+            timeController.StartMonth = _NumericTextBoxComponents.StartTimeMonth.CurrentValue;
+            timeController.StartDay = _NumericTextBoxComponents.StartTimeDay.CurrentValue;
+            timeController.StartHour = _NumericTextBoxComponents.StartTimeHour.CurrentValue;
+            timeController.StartMinute = _NumericTextBoxComponents.StartTimeMinute.CurrentValue;
+            timeController.StartSecond = _NumericTextBoxComponents.StartTimeSecond.CurrentValue;
+            timeController.WriteSolarTimeToUnix_StartTime();
+            //Debug.WriteLine($"In WriteNumericTextBoxesToTimeController. timeController.StartTimeUnix = {timeController.StartTimeUnix}");
+            timeController.EndYear = _NumericTextBoxComponents.EndTimeYear.CurrentValue;
+            timeController.EndMonth = _NumericTextBoxComponents.EndTimeMonth.CurrentValue;
+            timeController.EndDay = _NumericTextBoxComponents.EndTimeDay.CurrentValue;
+            timeController.EndHour = _NumericTextBoxComponents.EndTimeHour.CurrentValue;
+            timeController.EndMinute = _NumericTextBoxComponents.EndTimeMinute.CurrentValue;
+            timeController.EndSecond = _NumericTextBoxComponents.EndTimeSecond.CurrentValue;
+            timeController.WriteSolarTimeToUnix_EndTime();
+            //Debug.WriteLine($"In WriteNumericTextBoxesToTimeController. timeController.EndTimeUnix = {timeController.EndTimeUnix}");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in PresentationPage : WriteNumericTextBoxesToTimeController: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : WriteNumericTextBoxesToTimeController: ex.StackTrace = " + ex.StackTrace);
+        }
     }
     public void UpdatePlot()
     {
-        pictureServiceCam1.UpdatePictureStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
-        //Debug.WriteLine($"In updateplot. Number of pictures in stack = {pictureServiceCam1.NumberOfPicturesInStack(timeController.StartTimeUnix, timeController.EndTimeUnix)}");
-        ActionEventCallback_LeftPictureRangeSlider();
-
-        pictureServiceCam2.UpdatePictureStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
-        ActionEventCallback_RightPictureRangeSlider();
-
-
-        //Debug.WriteLine("UpdatePlot körs");
-        //Debug.WriteLine(timeController.StartTimeUnix);
-        //Debug.WriteLine(timeController.EndTimeUnix);
-
-        plotService.ResetPlot();
-        Int64 First = timeController.StartTimeUnix;                                                                         //Text utmed X-axel
-        Int64 Second = timeController.StartTimeUnix + (timeController.EndTimeUnix - timeController.StartTimeUnix) / 2;      //Text utmed X-axel
-        Int64 Third = timeController.EndTimeUnix;                                                                           //Text utmed X-axel
-
-        //Debug.WriteLine($" first second third {First} {Second} {Third}");
-        plotService.PlotXAxisTo(First, Second, Third, "wwwroot/Images/PlotWorkCanvas.jpeg");
-
-        //Debug.WriteLine($"In UpdatePlot. Queue.Count = {signalsToPlotQueue.Queue.Count}");
-        List<string> SignalsToPlot = signalsToPlotQueue.ContentsInQueue();
-        //Debug.WriteLine($"In UpdatePlot. Queue.Count = {signalsToPlotQueue.Queue.Count}");
-        int NextSlot = 0;
-        foreach (string SignalName in SignalsToPlot)
+        try
         {
-            Debug.WriteLine($"item = {SignalName}");
-            List<XYValuePair> XYValuePairsList = iOKeepTableService.GetXYValuePairFromSignalBetween(SignalName, timeController.StartTimeUnix, timeController.EndTimeUnix);
-            List<Coordinate> CoordinateList = plotService.CreateCoordinateList(XYValuePairsList, timeController.StartTimeUnix, timeController.EndTimeUnix); //IMPORTANT, THIS FUNCTION INJECT FAKE CORDINATES TO MAKE A STEP CURVE
-            plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/Images/PlotWorkCanvas.jpeg", NextSlot, SignalName);
-            NextSlot += 1;
+            pictureServiceCam1.UpdatePictureStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
+            ActionEventCallback_LeftPictureRangeSlider();
+            pictureServiceCam2.UpdatePictureStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
+            ActionEventCallback_RightPictureRangeSlider();
+            plotService.ResetPlot();
+            Int64 First = timeController.StartTimeUnix;                                                                         //Text utmed X-axel
+            Int64 Second = timeController.StartTimeUnix + (timeController.EndTimeUnix - timeController.StartTimeUnix) / 2;      //Text utmed X-axel
+            Int64 Third = timeController.EndTimeUnix;                                                                           //Text utmed X-axel
+                                                                                                                                //Debug.WriteLine($" first second third {First} {Second} {Third}");
+            plotService.PlotXAxisTo(First, Second, Third, "wwwroot/Images/PlotWorkCanvas.jpeg");
+            //Debug.WriteLine($"In UpdatePlot. Queue.Count = {signalsToPlotQueue.Queue.Count}");
+            List<string> SignalsToPlot = signalsToPlotQueue.ContentsInQueue();
+            //Debug.WriteLine($"In UpdatePlot. Queue.Count = {signalsToPlotQueue.Queue.Count}");
+            int NextSlot = 0;
+            foreach (string SignalName in SignalsToPlot)
+            {
+                Debug.WriteLine($"item = {SignalName}");
+                List<XYValuePair> XYValuePairsList = iOKeepTableService.GetXYValuePairFromSignalBetween(SignalName, timeController.StartTimeUnix, timeController.EndTimeUnix);
+                List<Coordinate> CoordinateList = plotService.CreateCoordinateList(XYValuePairsList, timeController.StartTimeUnix, timeController.EndTimeUnix); //IMPORTANT, THIS FUNCTION INJECT FAKE CORDINATES TO MAKE A STEP CURVE
+                plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/Images/PlotWorkCanvas.jpeg", NextSlot, SignalName);
+                NextSlot += 1;
+            }
+            _ImgSrcComponents.Plot.PicturePathString = "Images/PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
+            _ImgSrcComponents.Plot.UpdateState();
+            WriteParamsToURL();
         }
-
-
-        //foreach (var item in XYValuePairsList)
-        //{
-        //    Debug.WriteLine($" item.XCoordinateInt64 = {item.XCoordinateInt64} item.YCoordinateBoolean = {item.YCoordinateBoolean}");
-        //}
-
-
-        //Debug.WriteLine($"In UpdatePlot. XYValuePairsList.Count = {XYValuePairsList.Count}");
-        //Debug.WriteLine($"In UpdatePlot. CoordinateList.Count = {CoordinateList.Count}");
-
-        //foreach (var item in CoordinateList)
-        //{
-        //    Debug.WriteLine($" item.XCoordinatePixel = {item.XCoordinatePixel} item.YCoordinatePixel = {item.YCoordinatePixel}");
-        //}
-
-        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/Images/PlotWorkCanvas.jpeg", 0, "Hub2Hub_KKS123_SystemVolt_Erratic");
-        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/Images/PlotWorkCanvas.jpeg", 1, "Hub2Hub_KKS123_SystemVolt_Low");
-        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/Images/PlotWorkCanvas.jpeg", 2, "Hub2Hub_KKS123_Retarder_LowCurrent");
-        //plotService.PlotGraphToWithLabel(CoordinateList, "wwwroot/Images/PlotWorkCanvas.jpeg", 3, "Hub2Hub_KKS123_AuxPressure_Low");
-        _ImgSrcComponents.Plot.PicturePathString = "Images/PlotWorkCanvas.jpeg" + "?" + DateTime.Now.Ticks;
-        _ImgSrcComponents.Plot.UpdateState();
-
-
-        WriteParamsToURL();
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in PresentationPage : UpdatePlot: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : UpdatePlot: ex.StackTrace = " + ex.StackTrace);
+        }
     }
     private void WriteParamsToURL()
     {
-        URLParameters = timeController.StartTimeUnix.ToString() + "-" + timeController.EndTimeUnix.ToString();
-        List<string> SignalsToWriteToURL = signalsToPlotQueue.ContentsInQueue();
-        foreach (string s in SignalsToWriteToURL)
+        try
         {
-            URLParameters = URLParameters + "-" + s;
+            URLParameters = timeController.StartTimeUnix.ToString() + "-" + timeController.EndTimeUnix.ToString();
+            List<string> SignalsToWriteToURL = signalsToPlotQueue.ContentsInQueue();
+            foreach (string s in SignalsToWriteToURL)
+            {
+                URLParameters = URLParameters + "-" + s;
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in PresentationPage : WriteParamsToURL: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : WriteParamsToURL: ex.StackTrace = " + ex.StackTrace);
         }
     }
     private void ReadParamsFromURL()
     {
-        Debug.WriteLine("ReadParamsFromURL körs");
+        //Debug.WriteLine("ReadParamsFromURL körs");
         try
         {
             if (URLParameters is not null)
@@ -326,56 +379,87 @@
                     signalsToPlotQueue.Push(URLParametersArray[5]);
             }
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Debug.WriteLine($"Exception In ReadParamsFromURL. Exception = {e}");
+            Debug.WriteLine($"Exception in PresentationPage : ReadParamsFromURL: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : ReadParamsFromURL: ex.StackTrace = " + ex.StackTrace);
         }
     }
     public void EventCallback_ButtonFullBack()
     {
-        timeController.StartTimeUnix = timeController.StartTimeUnix - 1000;
-        timeController.WriteUnixToSolartime_StartTime();
-        timeController.EndTimeUnix = timeController.EndTimeUnix - 1000;
-        timeController.WriteUnixToSolartime_EndTime();
-        WriteTimeControllerToNumericTextBoxes();
-        UpdatePlot();
+        try
+        {
+            timeController.StartTimeUnix = timeController.StartTimeUnix - 1000;
+            timeController.WriteUnixToSolartime_StartTime();
+            timeController.EndTimeUnix = timeController.EndTimeUnix - 1000;
+            timeController.WriteUnixToSolartime_EndTime();
+            WriteTimeControllerToNumericTextBoxes();
+            UpdatePlot();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in PresentationPage : EventCallback_ButtonFullBack: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : EventCallback_ButtonFullBack: ex.StackTrace = " + ex.StackTrace);
+        }
     }
     public void EventCallback_ButtonHalfBack()
     {
-        timeController.StartTimeUnix = timeController.StartTimeUnix - 500;
-        timeController.WriteUnixToSolartime_StartTime();
-        timeController.EndTimeUnix = timeController.EndTimeUnix - 500;
-        timeController.WriteUnixToSolartime_EndTime();
-        WriteTimeControllerToNumericTextBoxes();
-        UpdatePlot();
+        try
+        {
+            timeController.StartTimeUnix = timeController.StartTimeUnix - 500;
+            timeController.WriteUnixToSolartime_StartTime();
+            timeController.EndTimeUnix = timeController.EndTimeUnix - 500;
+            timeController.WriteUnixToSolartime_EndTime();
+            WriteTimeControllerToNumericTextBoxes();
+            UpdatePlot();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in PresentationPage : EventCallback_ButtonHalfBack: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : EventCallback_ButtonHalfBack: ex.StackTrace = " + ex.StackTrace);
+        }
     }
     public void EventCallback_ButtonHalfForw()
     {
-        timeController.StartTimeUnix = timeController.StartTimeUnix + 500;
-        timeController.WriteUnixToSolartime_StartTime();
-        timeController.EndTimeUnix = timeController.EndTimeUnix + 500;
-        timeController.WriteUnixToSolartime_EndTime();
-        WriteTimeControllerToNumericTextBoxes();
-        UpdatePlot();
+        try
+        {
+            timeController.StartTimeUnix = timeController.StartTimeUnix + 500;
+            timeController.WriteUnixToSolartime_StartTime();
+            timeController.EndTimeUnix = timeController.EndTimeUnix + 500;
+            timeController.WriteUnixToSolartime_EndTime();
+            WriteTimeControllerToNumericTextBoxes();
+            UpdatePlot();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in PresentationPage : EventCallback_ButtonHalfForw: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : EventCallback_ButtonHalfForw: ex.StackTrace = " + ex.StackTrace);
+        }
     }
     public void EventCallback_ButtonFullForw()
     {
-        Debug.WriteLine("Kör testknapp 4");
-        timeController.StartTimeUnix = timeController.StartTimeUnix + 1000;
-        timeController.WriteUnixToSolartime_StartTime();
-        timeController.EndTimeUnix = timeController.EndTimeUnix + 1000;
-        timeController.WriteUnixToSolartime_EndTime();
-        WriteTimeControllerToNumericTextBoxes();
-        UpdatePlot();
+        try
+        {
+            timeController.StartTimeUnix = timeController.StartTimeUnix + 1000;
+            timeController.WriteUnixToSolartime_StartTime();
+            timeController.EndTimeUnix = timeController.EndTimeUnix + 1000;
+            timeController.WriteUnixToSolartime_EndTime();
+            WriteTimeControllerToNumericTextBoxes();
+            UpdatePlot();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in PresentationPage : EventCallback_ButtonFullForw: ex.Message = " + ex.Message);
+            Debug.WriteLine($"Exception in PresentationPage : EventCallback_ButtonFullForw: ex.StackTrace = " + ex.StackTrace);
+        }
     }
     public void EventCallback_LeftPictureDropDownMenu(string UserSelection)
     {
-
-        Debug.WriteLine($"EventCallback_LeftPictureDropDownMenu click: {UserSelection}");
+        //Debug.WriteLine($"EventCallback_LeftPictureDropDownMenu click: {UserSelection}");
     }
     public void EventCallback_RightPictureDropDownMenu(string UserSelection)
     {
-        Debug.WriteLine($"EventCallback_RightPictureDropDownMenu : {UserSelection}");
+        //Debug.WriteLine($"EventCallback_RightPictureDropDownMenu : {UserSelection}");
     }
 }
 

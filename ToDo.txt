@@ -1,11 +1,5 @@
-Gå igenom varje fil och gå igenom följande lista.
-
-0: Snygga till, och ta bort kommentarer mm
-1: Try/catch
-2: Kolla @using
 
 
-###############################################################################################################################
 
 
 20: Ta en sista funderare på de tre lådorna som inte används
@@ -15,8 +9,6 @@ Gå igenom varje fil och gå igenom följande lista.
 
 
 21: Linked<->Git. Linked text. Posta X, preppa X
-
-54 classer i detta projekt.
 
 ###############################################################################################################################
 

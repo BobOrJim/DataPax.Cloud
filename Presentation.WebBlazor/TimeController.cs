@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Presentation.WebBlazor
 {
@@ -45,58 +42,90 @@ namespace Presentation.WebBlazor
 
         public void WriteUnixToSolartime_StartTime()
         {
-            dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            DateTime time = dateTime.AddMilliseconds(StartTimeUnix);
-            StartYear = time.Year;
-            StartMonth = time.Month;
-            StartDay = time.Day;
-            StartHour = time.Hour;
-            StartMinute = time.Minute;
-            StartSecond = time.Second;
-            StartMilliseconds = time.Millisecond;
-            //Debug.WriteLine($"In WriteUnixToSolartime_StartTime: {StartYear} {StartMonth} {StartDay} {StartHour} {StartMinute} {StartSecond} {StartMilliseconds} ");
+            try
+            {
+                dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+                DateTime time = dateTime.AddMilliseconds(StartTimeUnix);
+                StartYear = time.Year;
+                StartMonth = time.Month;
+                StartDay = time.Day;
+                StartHour = time.Hour;
+                StartMinute = time.Minute;
+                StartSecond = time.Second;
+                StartMilliseconds = time.Millisecond;
+                //Debug.WriteLine($"In WriteUnixToSolartime_StartTime: {StartYear} {StartMonth} {StartDay} {StartHour} {StartMinute} {StartSecond} {StartMilliseconds} ");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in TimeController : WriteUnixToSolartime_StartTime: ex.Message = " + ex.Message);
+                Debug.WriteLine($"Exception in TimeController : WriteUnixToSolartime_StartTime: ex.StackTrace = " + ex.StackTrace);
+            }
         }
 
         public void WriteUnixToSolartime_EndTime()
         {
-            dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            DateTime time = dateTime.AddMilliseconds(EndTimeUnix);
-            EndYear = time.Year;
-            EndMonth = time.Month;
-            EndDay = time.Day;
-            EndHour = time.Hour;
-            EndMinute = time.Minute;
-            EndSecond = time.Second;
-            EndMilliseconds = time.Millisecond;
-            //Debug.WriteLine($"In WriteUnixToSolartime_EndTime: {StartYear} {StartMonth} {StartDay} {StartHour} {StartMinute} {StartSecond} {StartMilliseconds} ");
+            try
+            {
+                dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+                DateTime time = dateTime.AddMilliseconds(EndTimeUnix);
+                EndYear = time.Year;
+                EndMonth = time.Month;
+                EndDay = time.Day;
+                EndHour = time.Hour;
+                EndMinute = time.Minute;
+                EndSecond = time.Second;
+                EndMilliseconds = time.Millisecond;
+                //Debug.WriteLine($"In WriteUnixToSolartime_EndTime: {StartYear} {StartMonth} {StartDay} {StartHour} {StartMinute} {StartSecond} {StartMilliseconds} ");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in TimeController : WriteUnixToSolartime_EndTime: ex.Message = " + ex.Message);
+                Debug.WriteLine($"Exception in TimeController : WriteUnixToSolartime_EndTime: ex.StackTrace = " + ex.StackTrace);
+            }
         }
 
         public void WriteSolarTimeToUnix_StartTime()
         {
-            //StartYear = 2014;
-            //StartMonth = 11;
-            //StartDay = 4;
-            //StartHour = 15;
-            //StartMinute = 35;
-            //StartSecond = 3;
-            //StartMilliseconds = 410;
-            dateTime = new DateTime(StartYear, StartMonth, StartDay, StartHour, StartMinute, StartSecond, StartMilliseconds, System.DateTimeKind.Utc);
-            StartTimeUnix = (long)(dateTime - new DateTime(1970, 1, 1)).TotalMilliseconds;
-            //Debug.WriteLine($"In WriteSolarTimeToUnix_StartTime: {StartTimeUnix}");
+            try
+            {
+                //StartYear = 2014;
+                //StartMonth = 11;
+                //StartDay = 4;
+                //StartHour = 15;
+                //StartMinute = 35;
+                //StartSecond = 3;
+                //StartMilliseconds = 410;
+                dateTime = new DateTime(StartYear, StartMonth, StartDay, StartHour, StartMinute, StartSecond, StartMilliseconds, System.DateTimeKind.Utc);
+                StartTimeUnix = (long)(dateTime - new DateTime(1970, 1, 1)).TotalMilliseconds;
+                //Debug.WriteLine($"In WriteSolarTimeToUnix_StartTime: {StartTimeUnix}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in TimeController : WriteSolarTimeToUnix_StartTime: ex.Message = " + ex.Message);
+                Debug.WriteLine($"Exception in TimeController : WriteSolarTimeToUnix_StartTime: ex.StackTrace = " + ex.StackTrace);
+            }
         }
 
         public void WriteSolarTimeToUnix_EndTime()
         {
-            //StartYear = 2014;
-            //StartMonth = 11;
-            //StartDay = 4;
-            //StartHour = 15;
-            //StartMinute = 35;
-            //StartSecond = 3;
-            //StartMilliseconds = 410;
-            dateTime = new DateTime(EndYear, EndMonth, EndDay, EndHour, EndMinute, EndSecond, EndMilliseconds, System.DateTimeKind.Utc);
-            EndTimeUnix = (long)(dateTime - new DateTime(1970, 1, 1)).TotalMilliseconds;
-            //Debug.WriteLine($"In WriteSolarTimeToUnix_EndTime: {EndTimeUnix}");
+            try
+            {
+                //StartYear = 2014;
+                //StartMonth = 11;
+                //StartDay = 4;
+                //StartHour = 15;
+                //StartMinute = 35;
+                //StartSecond = 3;
+                //StartMilliseconds = 410;
+                dateTime = new DateTime(EndYear, EndMonth, EndDay, EndHour, EndMinute, EndSecond, EndMilliseconds, System.DateTimeKind.Utc);
+                EndTimeUnix = (long)(dateTime - new DateTime(1970, 1, 1)).TotalMilliseconds;
+                //Debug.WriteLine($"In WriteSolarTimeToUnix_EndTime: {EndTimeUnix}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in TimeController : WriteSolarTimeToUnix_EndTime: ex.Message = " + ex.Message);
+                Debug.WriteLine($"Exception in TimeController : WriteSolarTimeToUnix_EndTime: ex.StackTrace = " + ex.StackTrace);
+            }
         }
 
 

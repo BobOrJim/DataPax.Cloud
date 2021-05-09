@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Diagnostics;
@@ -22,9 +19,10 @@ namespace Presentation.WebBlazor
                     bitmap.Save(filePath, ImageFormat.Jpeg);
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Debug.WriteLine($"Exception in PathRelatedImageUtils:SaveToDisk : " + e);
+                Debug.WriteLine($"Exception in PathRelatedImageUtils : SaveToDisk: ex.Message = " + ex.Message);
+                Debug.WriteLine($"Exception in PathRelatedImageUtils : SaveToDisk: ex.StackTrace = " + ex.StackTrace);
             }
         }
         public Bitmap ConvertToBitmap(string filePath)
@@ -35,9 +33,10 @@ namespace Presentation.WebBlazor
             {
                 bitmap = (Bitmap)Image.FromFile(filePath);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Debug.WriteLine($"Exception in PathRelatedImageUtils:ConvertToBitmap : " + e);
+                Debug.WriteLine($"Exception in PathRelatedImageUtils : ConvertToBitmap: ex.Message = " + ex.Message);
+                Debug.WriteLine($"Exception in PathRelatedImageUtils : ConvertToBitmap: ex.StackTrace = " + ex.StackTrace);
             }
             return bitmap;
         }
