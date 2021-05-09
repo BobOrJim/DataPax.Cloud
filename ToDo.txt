@@ -30,3 +30,6 @@ Corona Campfire, med en gästbook.
 CI/CD
 Azure Devops
 Docker.
+
+kanske köra detta i grupp.
+

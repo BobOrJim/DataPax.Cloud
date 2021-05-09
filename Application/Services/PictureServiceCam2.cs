@@ -12,7 +12,7 @@ namespace Application.Services
         private string[] PicturePathsArray;
         private List<string> PictureTimeStampStringList = new List<string>();
         private string[] PictureTimeStampStringArray;
-        public IPictureDataAccessCam2 iPictureDataAccessCam2;
+        private IPictureDataAccessCam2 iPictureDataAccessCam2;
 
         public PictureServiceCam2(IPictureDataAccessCam2 _iPictureDataAccessCam2)
         {
@@ -20,30 +20,65 @@ namespace Application.Services
         }
         public int NumberOfPicturesInStack(Int64 StartTime, Int64 EndTime)
         {
-            return iPictureDataAccessCam2.PicturePathsStringList_FromCam2KeepTable(StartTime, EndTime).Count();
+            int result = -1;
+            try
+            {
+                return result = iPictureDataAccessCam2.PicturePathsStringList_FromCam2KeepTable(StartTime, EndTime).Count();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in PictureServiceCam2 : NumberOfPicturesInStack: ex.Message = " + ex.Message);
+                Debug.WriteLine($"Exception in PictureServiceCam2 : NumberOfPicturesInStack: ex.StackTrace = " + ex.StackTrace);
+            }
+            return result;
         }
+
         public void UpdatePictureStack(Int64 StartTime, Int64 EndTime)
         {
-            PicturePathsList = iPictureDataAccessCam2.PicturePathsStringList_FromCam2KeepTable(StartTime, EndTime);
-            PicturePathsArray = PicturePathsList.ToArray();
-            PictureTimeStampStringList = iPictureDataAccessCam2.PictureTimeStampStringList_FromCam2KeepTable(StartTime, EndTime);
-            PictureTimeStampStringArray = PictureTimeStampStringList.ToArray();
+            try
+            {
+                PicturePathsList = iPictureDataAccessCam2.PicturePathsStringList_FromCam2KeepTable(StartTime, EndTime);
+                PicturePathsArray = PicturePathsList.ToArray();
+                PictureTimeStampStringList = iPictureDataAccessCam2.PictureTimeStampStringList_FromCam2KeepTable(StartTime, EndTime);
+                PictureTimeStampStringArray = PictureTimeStampStringList.ToArray();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in PictureServiceCam2 : UpdatePictureStack: ex.Message = " + ex.Message);
+                Debug.WriteLine($"Exception in PictureServiceCam2 : UpdatePictureStack: ex.StackTrace = " + ex.StackTrace);
+            }
         }
 
 
         public string RightPicturePathToShow(int RightPictureNumberInStackToShow)
         {
-            if (PicturePathsArray != null && RightPictureNumberInStackToShow < PicturePathsArray.Length)
+            try
             {
-                return PicturePathsArray[RightPictureNumberInStackToShow];
+                if (PicturePathsArray != null && RightPictureNumberInStackToShow < PicturePathsArray.Length)
+                {
+                    return PicturePathsArray[RightPictureNumberInStackToShow];
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in PictureServiceCam2 : RightPicturePathToShow: ex.Message = " + ex.Message);
+                Debug.WriteLine($"Exception in PictureServiceCam2 : RightPicturePathToShow: ex.StackTrace = " + ex.StackTrace);
             }
             return "Images/Logo.jpeg";
         }
         public string RightPictureTimestampToShow(int RightPictureNumberInStackToShow)
         {
-            if (PictureTimeStampStringArray != null && RightPictureNumberInStackToShow < PicturePathsArray.Length)
+            try
             {
-                return PictureTimeStampStringArray[RightPictureNumberInStackToShow];
+                if (PictureTimeStampStringArray != null && RightPictureNumberInStackToShow < PicturePathsArray.Length)
+                {
+                    return PictureTimeStampStringArray[RightPictureNumberInStackToShow];
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in PictureServiceCam2 : RightPictureTimestampToShow: ex.Message = " + ex.Message);
+                Debug.WriteLine($"Exception in PictureServiceCam2 : RightPictureTimestampToShow: ex.StackTrace = " + ex.StackTrace);
             }
             return "No picture found";
         }

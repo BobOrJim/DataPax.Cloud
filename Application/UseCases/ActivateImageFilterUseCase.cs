@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Domain.ImageProcessing;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace Application.UseCases
 {
@@ -15,16 +12,24 @@ namespace Application.UseCases
 
         public Bitmap ActivateThisFilterOnThesePictures(string Filter, Bitmap BitmapFromPath1, Bitmap BitmapFromPath2)
         {
-            if (Filter == "Motion")
+            try
             {
-                return motionFilter.CreateMotionImage(BitmapFromPath1, BitmapFromPath2);
-
+                if (Filter == "Motion")
+                {
+                    return motionFilter.CreateMotionImage(BitmapFromPath1, BitmapFromPath2);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in ActivateImageFilterUseCase : ActivateThisFilterOnThesePictures: ex.Message = " + ex.Message);
+                Debug.WriteLine($"Exception in ActivateImageFilterUseCase : ActivateThisFilterOnThesePictures: ex.StackTrace = " + ex.StackTrace);
             }
             return null;
-
-            // Future image processing filters goes here.
-
         }
+
+
+        // Future image processing filters goes here.
+
 
     }
 }
