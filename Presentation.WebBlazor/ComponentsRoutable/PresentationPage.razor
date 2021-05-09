@@ -13,6 +13,9 @@
 @using Application.Models
 @using Application
 @using Application.Utils
+@using System.Drawing.Imaging;
+@using System.Drawing;
+@using System.IO;
 
 @inject Presentation.WebBlazor.ComponentCreation.NumericTextBoxComponents _NumericTextBoxComponents
 @inject Application.UseCases.NumericTextBoxUseCases _NumericTextBoxUseCases
@@ -35,7 +38,6 @@
 @code{
     [Parameter]
     public string URLParameters { get; set; }
-
     private PictureServiceCam1 pictureServiceCam1;
     private PictureServiceCam2 pictureServiceCam2;
     private IOKeepTableService iOKeepTableService;
@@ -47,6 +49,8 @@
     private List<ListItem> ListItemList = new List<ListItem>(); //Kommer länkas ihop med denna blazor komponent: _ClickableListComponents.DeviationListViewComponent
     private TimeController timeController = new TimeController();
     private FixedSizedQueue<string> signalsToPlotQueue = new FixedSizedQueue<string>(4);
+    private ActivateFilterUseCase activateFilterUseCaseCam1 = new ActivateFilterUseCase();
+    private ActivateFilterUseCase activateFilterUseCaseCam2 = new ActivateFilterUseCase();
 
     //Method invoked when the component is ready to start, having recieved its initial parameters from its parrent renderer tree
     //1: protected override void OnInitialized()
@@ -112,7 +116,6 @@
     //Därför ligger merparten av denna kod här.
     //Orsaken till att UpdateState ligger här, är för att det finns en bugg(?) i blazor, map på hur grejorna kopplas map lifecycle
     //Dvs, enda sättet att få ett event i tex en rangeSlider, att trigga en rerender av ett paragraph objekt, är att anropa det via denna funktion.
-
     public void EventCallback_TreeView(TreeNode UserClickedOnThisTreeNode)
     {
         if (UserClickedOnThisTreeNode.Level == 3) //This is a child/leaf.
@@ -128,7 +131,6 @@
             _TreeViewComponents.IOTreeView2Component.UpdateState();
         }
     }
-
     public void EventCallback_ListView(ListItem UserClickedOnThisListItem)
     {
         //Debug.WriteLine($"Listview klick, user clicked on {UserClickedOnThisListItem.Name}");
@@ -139,27 +141,32 @@
         WriteTimeControllerToNumericTextBoxes();
         UpdatePlot();
     }
-
     public void ActionEventCallback_LeftPictureRangeSlider()
     {
-        //Text vänster underfönster 1
+        //Text bild nr vänster underfönster 1
         _ParagraphComponents.LeftPictureShowNumberOfTotal.FirstString = _RangeSliderComponents.LeftPictureRangeSlider.CurrentValue.ToString() + " / " + pictureServiceCam1.NumberOfPicturesInStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
         _ParagraphComponents.LeftPictureShowNumberOfTotal.UpdateState();
-        //Text vänster underfönster 2
+        //Text tidstämpel vänster underfönster 2
         _ParagraphComponents.LeftPictureTimeStamp.FirstString = pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(0, 10);
         _ParagraphComponents.LeftPictureTimeStamp.SecondString = pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Length - 13);
         pictureServiceCam1.UpdatePictureStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
 
-        //string test = pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Substring(pictureServiceCam1.LeftPictureTimestampToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue).Length - 13);
-        //Debug.WriteLine($"test = {test}");
-
         _ParagraphComponents.LeftPictureTimeStamp.UpdateState();
-
         _ImgSrcComponents.LeftPicture.PicturePathString = pictureServiceCam1.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue);
 
+        if ( (_DropDownMenuComponents.LeftPictureDropDownMenu.CurrentValue == "Motion") && (_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue < _RangeSliderComponents.LeftPictureRangeSlider.MaxValue) )
+        {
+            //try catch här
+            string path1 = pictureServiceCam1.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue);
+            string path2 = pictureServiceCam1.LeftPicturePathToShow(_RangeSliderComponents.LeftPictureRangeSlider.CurrentValue - 1);
+            Bitmap BitmapFromPath1 = ConvertToBitmap(path1);
+            Bitmap BitmapFromPath2 = ConvertToBitmap(path2);
+            Bitmap MotionBitmap = activateFilterUseCaseCam1.ActivateThisFilterOnThesePictures("Motion", BitmapFromPath1, BitmapFromPath2);
+            SaveToDisk(MotionBitmap, "Cam1MotionFilterOnPictures/MotionImage.jpeg");
+            _ImgSrcComponents.LeftPicture.PicturePathString = "Cam1MotionFilterOnPictures/MotionImage.jpeg" + "?" + DateTime.Now.Ticks; //To force refresh
+        }
         _ImgSrcComponents.LeftPicture.UpdateState();
     }
-
     public void ActionEventCallback_RightPictureRangeSlider()
     {
         //Text höger underfönster 1
@@ -172,15 +179,62 @@
 
         _ImgSrcComponents.RightPicture.PicturePathString = pictureServiceCam2.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
         //Debug.WriteLine($"In ActionEventCallback_RightPictureRangeSlider:  numbers of picture in stack = {pictureServiceCam2.NumberOfPicturesInStack(timeController.StartTimeUnix, timeController.EndTimeUnix)}");
+
+        if ((_DropDownMenuComponents.RightPictureDropDownMenu.CurrentValue == "Motion") && (_RangeSliderComponents.RightPictureRangeSlider.CurrentValue < _RangeSliderComponents.RightPictureRangeSlider.MaxValue))
+        {
+            Debug.WriteLine($"In ActionEventCallback_RightPictureRangeSlider:  Trying for fk sake");
+            //try catch här
+            string path1 = pictureServiceCam2.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
+            string path2 = pictureServiceCam2.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue - 1);
+            Bitmap BitmapFromPath1 = ConvertToBitmap(path1);
+            Bitmap BitmapFromPath2 = ConvertToBitmap(path2);
+            Debug.WriteLine($"In ActionEventCallback_RightPictureRangeSlider:  Trying for fk sake");
+
+            Bitmap MotionBitmap = activateFilterUseCaseCam2.ActivateThisFilterOnThesePictures("Motion", BitmapFromPath1, BitmapFromPath2);
+            SaveToDisk(MotionBitmap, "Cam2MotionFilterOnPictures/MotionImage.jpeg");
+            _ImgSrcComponents.RightPicture.PicturePathString = "Cam2MotionFilterOnPictures/MotionImage.jpeg" + "?" + DateTime.Now.Ticks; //To force refresh
+        }
+
         _ImgSrcComponents.RightPicture.UpdateState();
     }
-
+    private void SaveToDisk(Bitmap bitmap, string filePath)
+    {
+        //Hmm, och vart skall jag lägga denna. Jag tycker det känns lämpligt att bara arbeta med relativa paths från ett ställe.
+        filePath = "wwwroot/" + filePath;  //src in markup, and Image.FromFile(filePath); use a different relative path system.
+        try
+        {
+            if (true) //if (Directory.Exists(path))
+            {
+                //Debug.WriteLine($"Försöker spara bild till path {filePath}");
+                bitmap.Save(filePath, ImageFormat.Jpeg);
+            }
+        }
+        catch (Exception e)
+        {
+            System.Diagnostics.Debug.WriteLine($"Exception in MotionFilter:SaveToDisk : " + e);
+        }
+    }
+    private Bitmap ConvertToBitmap(string filePath)
+    {
+        //hmm, vart skall jag lägga denna. Jag vill inte skicka en path ned till Application->Domain. Kanske egen klass i PresentaionWebblazor.
+        //Dessutom känns det olämpligt att skicka relativa paths, när de skickas till andra projekt.
+        filePath = "wwwroot/" + filePath;  //src in markup, and Image.FromFile(filePath); use a different relative path system.
+        Bitmap bitmap = null;
+        try
+        {
+            bitmap = (Bitmap)Image.FromFile(filePath);
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine($"In ConvertToBitmap. Exception = {e} ");
+        }
+        return bitmap;
+    }
     public void EventCallback_NumericTextBoxesStartAndStopTime()
     {
         WriteNumericTextBoxesToTimeController();
         UpdatePlot();
     }
-
     public void WriteTimeControllerToNumericTextBoxes()
     {
         _NumericTextBoxComponents.StartTimeYear.CurrentValue = timeController.StartYear;
@@ -196,7 +250,6 @@
         _NumericTextBoxComponents.EndTimeMinute.CurrentValue = timeController.EndMinute;
         _NumericTextBoxComponents.EndTimeSecond.CurrentValue = timeController.EndSecond;
     }
-
     public void WriteNumericTextBoxesToTimeController()
     {
         //Debug.WriteLine($"In WriteNumericTextBoxesToTimeController. timeController.StartTimeUnix = {timeController.StartTimeUnix}");
@@ -217,7 +270,6 @@
         timeController.WriteSolarTimeToUnix_EndTime();
         //Debug.WriteLine($"In WriteNumericTextBoxesToTimeController. timeController.EndTimeUnix = {timeController.EndTimeUnix}");
     }
-
     public void UpdatePlot()
     {
         pictureServiceCam1.UpdatePictureStack(timeController.StartTimeUnix, timeController.EndTimeUnix);
@@ -278,7 +330,6 @@
 
         WriteParamsToURL();
     }
-
     private void WriteParamsToURL()
     {
         URLParameters = timeController.StartTimeUnix.ToString() + "-" + timeController.EndTimeUnix.ToString();
@@ -322,7 +373,6 @@
             Debug.WriteLine($"Exception In ReadParamsFromURL. Exception = {e}");
         }
     }
-
     public void EventCallback_ButtonFullBack()
     {
         timeController.StartTimeUnix = timeController.StartTimeUnix - 1000;
@@ -361,9 +411,9 @@
         //WriteTimeControllerToNumericTextBoxes();
         //UpdatePlot();
     }
-
     public void EventCallback_LeftPictureDropDownMenu(string UserSelection)
     {
+
         Debug.WriteLine($"EventCallback_LeftPictureDropDownMenu click: {UserSelection}");
     }
     public void EventCallback_RightPictureDropDownMenu(string UserSelection)
@@ -418,11 +468,9 @@
             <ParagraphComponent CssClassStyle="MyBackgroundColor" @ref="_ParagraphComponents.LeftPictureTimeStamp" />
         </div>
         <div class="Row2Col5 MyRadialBackground">
-            <DropDownMenu Cssdropbtn="dropbtn"
-                          Cssdropdown="dropdown"
-                          CssdropdownContent="dropdowncontent"
+            <DropDownMenu CssClassStyle="My5"
                           @ref="_DropDownMenuComponents.LeftPictureDropDownMenu"
-                          MyCallback="EventCallback_LeftPictureDropDownMenu" />
+                          MyCallback="ActionEventCallback_LeftPictureRangeSlider" /> <!-- Note: This component call the range slinder callbackEvent -->
         </div>
         <div class="Row2Col6 MyRadialBackground">
             <ParagraphComponent CssClassStyle="MyBackgroundColor" @ref="_ParagraphComponents.LeftPictureShowNumberOfTotal" />
@@ -431,12 +479,9 @@
             <ParagraphComponent CssClassStyle="MyBackgroundColor" @ref="_ParagraphComponents.RightPictureTimeStamp" />
         </div>
         <div class="Row2Col8 MyRadialBackground">
-            <DropDownMenu Cssdropbtn="dropbtn"
-                          Cssdropdown="dropdown"
-                          CssdropdownContent="dropdowncontent"
-                          @ref="_DropDownMenuComponents.RightPictureDropDownMenu" 
-                          MyCallback="EventCallback_RightPictureDropDownMenu"
-            />
+            <DropDownMenu CssClassStyle="My5"
+                          @ref="_DropDownMenuComponents.RightPictureDropDownMenu"
+                          MyCallback="ActionEventCallback_RightPictureRangeSlider" />  <!-- Note: This component call the range slinder callbackEvent -->
         </div>
         <div class="Row2Col9 MyRadialBackground">
             <ParagraphComponent CssClassStyle="MyBackgroundColor" @ref="_ParagraphComponents.RightPictureShowNumberOfTotal" />

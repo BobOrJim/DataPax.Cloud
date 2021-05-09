@@ -38,6 +38,7 @@ namespace Application.Services
                 return PicturePathsArray[LeftPictureNumberInStackToShow];
             }
             return "Images/Logo.jpeg";
+            
         }
         public string LeftPictureTimestampToShow(int LeftPictureNumberInStackToShow)
         {
@@ -47,7 +48,6 @@ namespace Application.Services
             }
             return "No picture found";
         }
-
     }
 }
 

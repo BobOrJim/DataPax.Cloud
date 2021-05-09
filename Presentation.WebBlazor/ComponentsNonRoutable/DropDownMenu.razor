@@ -1,23 +1,28 @@
 ﻿
-<label for="filter"></label>
+<div class=@CssClassStyle>
+    @*<label for="filter"></label>*@
 
-<select id="filter" @onclick="@(() => MyCallback.InvokeAsync(CurrentValue))"
-        @bind="@CurrentValue">
+    <select class=@CssClassStyle @onclick="@(() => MyCallback.InvokeAsync(CurrentValue))"
+            @bind="@CurrentValue">
 
-    <option value="None">None</option>
-    <option value="Motion">Motion</option>
+        <option class=@CssClassStyle value="None">None</option>
+        <option class=@CssClassStyle value="Motion">Motion</option>
 
-</select>
-
+    </select>
+</div>
 
 @code {
 
+    [Parameter]
+    public string CssClassStyle { get; set; }
     [Parameter]
     public string Cssdropdown { get; set; }
     [Parameter]
     public string Cssdropbtn { get; set; }
     [Parameter]
     public string CssdropdownContent { get; set; }
+
+
     [Parameter]
     public string CurrentValue { get; set; } = "None";
 

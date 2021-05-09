@@ -1,66 +1,23 @@
 
-Arbetspaket.
 
 
-2: Om Motion är vald skall jag försöka plocka fram två bilder med nedan
-_ImgSrcComponents.RightPicture.PicturePathString = pictureServiceCam2.RightPicturePathToShow(_RangeSliderComponents.RightPictureRangeSlider.CurrentValue);
-
-3: Dessa bilder skall skapa en Motion bild, som alltid ligger på samma plats, och är hårdkodad.
-Typ nåt sånthär:
-PicturePathsStringList.Add("Cam1KeepPictures/" + picture.FileNameCurrent_TEXT + ".jpeg");
-Om det trasslar så kan jag tjuvkolla i denna fil PictureDataAccessCam1.
-
-
-4: När range slider rör på sig, och Motion är vald, så skall nu min hårdkodade bild/path läsas in.
+2: SaveToDisk och ConvertToBitmap skall brytas ut från presentationPage.
 
 
 
 
-
-vid skapa en Motion bild, som är hårdkodad på en fast plats.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-rensa drop down skräpet i site.css som är relaterat till dropDownMenu.
-fixa någon CSS på dropDown.
-
-
-
-
-
-1: Start url
-2: Ta bort nuvarande labbgrejor på startsidan.
-3: Fundera på storstädningen....
-4: 
-
-1: Det hade varit läckert med picture filter.....rörelse alltså. då får jag även min första useCase + att jag kan använda Domain.
-
-3: REFLEKTION map IOSample
-
-
-
-
-
+11: Snyggare start url
+12: Ta bort nuvarande labbgrejor på startsidan.
+13: REFLEKTION map IOSample
+14: Städa use cases
+15: Städa varningar.
+16: Try/catch överallt, gå igenom varje fil.
+17: Ta bort alla External
+18: Ta bort template kod relaterad till wetherForcast.
+19: Ta en sista fuderar på de tre lådorna som inte används
 
 ###############################################################################################################################
 
-
-Inför storstädningen:
-* Fyll detta prog med try/catch. och sök på det, just nu finns det ingenting. Gör fil för fil på slutet så jag inte missar något.
-* OBS: kanske kan alla external uppdate utgå...städa kod...
-* Städa bort template kod.
-* Kanske ta bort de tre ful lådorna som inte används. Svårt val, det blir tomt utan dem.
 
 
 TROLIGEN UTGÅR:

@@ -24,7 +24,6 @@ namespace Application.UseCases
 
         public void TestButtonClicked()
         {
-            motionFilter.run();
             Debug.WriteLine($"TestButtonClicked Event firing:    ");
         }
     }
