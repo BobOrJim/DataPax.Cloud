@@ -1,14 +1,11 @@
 
 
 
-
-20: Ta en sista funderare på de tre lådorna som inte används
-15: Städa varningar.
+KLAR
 
 
 
 
-21: Linked<->Git. Linked text. Posta X, preppa X
 
 ###############################################################################################################################
 
