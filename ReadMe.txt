@@ -1,11 +1,11 @@
+# Datapax.Cloud
+
+Presentation av mig h√§r:
+
+https://www.linkedin.com/in/jimmy-nordin-8902b317b/
 
 
-[LinkedL‰nk]
 
 jimmy.nordin.1979@gmail.com
-
-
-
-
 
 
